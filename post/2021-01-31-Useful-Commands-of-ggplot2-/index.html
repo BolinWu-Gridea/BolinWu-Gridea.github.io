@@ -1,0 +1,312 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Data Visualization with ggplot2 | Bolin Wu</title>
+
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico?v=1614355283758">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Bolin Wu
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            Homepage
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            Archives
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            Tags
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            About
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1614355283758" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Data Visualization with ggplot2
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-01-30 ·
+                    </time>
+                    
+                        <a href="https://BolinWu-Gridea.github.io/tag/3NvdI79lVT/" class="post-tags">
+                            # data visualization
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="introduction">Introduction</h2>
+<p>In this post I will share some frequently used ggplot2 commands when<br>
+making data visualization.<br>
+To make it easy to replicate, I will use the built-in <strong>iris</strong> and<br>
+<strong>titanic</strong> dataset, which consists of numeric variable and categorical<br>
+variable, for illustration.</p>
+<h2 id="load-the-data-and-package">Load the data and package</h2>
+<pre><code class="language-r">library(ggplot2)
+library(tidyverse)
+data(iris)
+data(&quot;Titanic&quot;)
+df = iris
+df_titanic = as_data_frame(Titanic)
+</code></pre>
+<pre><code class="language-r"># take a look at iris
+head(df)
+</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa
+</code></pre>
+<pre><code class="language-r">head(df_titanic)
+</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   Class Sex    Age   Survived     n
+##   &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
+## 1 1st   Male   Child No           0
+## 2 2nd   Male   Child No           0
+## 3 3rd   Male   Child No          35
+## 4 Crew  Male   Child No           0
+## 5 1st   Female Child No           0
+## 6 2nd   Female Child No           0
+</code></pre>
+<h2 id="scatter-plots">Scatter plots</h2>
+<p>We can use <strong>ggplot</strong> to create the coordinate system and use<br>
+<strong>geom_point()</strong> to add a layer of points to the graph.</p>
+<pre><code class="language-r">ggplot(data = df) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width))
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-2-1.png" alt="Accuracy Comparison">
+<p>We can use <strong>size</strong> to change the dots size. Use <strong>color</strong> and <strong>shape</strong><br>
+to make the scatter plots more informative.</p>
+<pre><code class="language-r"># change the size
+ggplot(data = df) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width), size = 1)
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-3-1.png" alt="Accuracy Comparison">
+<pre><code class="language-r"># add color and shape
+ggplot(data = df) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width, shape = Species, color = Species))
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-3-2.png" alt="Accuracy Comparison">
+<p>Sometimes we may only interested in visualizing a data in certain scale.<br>
+It can be easily done with the help of filter function in tidyverse<br>
+package.</p>
+<pre><code class="language-r"># visualiza data in certain scale
+ggplot(data = filter(df, Sepal.Length &gt; 5)) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width), size = 1)
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-4-1.png" alt="unknown">
+<p>If we want to group by categories, we simply add <strong>facet_wrap()</strong><br>
+function.</p>
+<pre><code class="language-r"># group by category
+ggplot(data = df) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width,color = Species), size = 1) +
+  facet_wrap(~Species)
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-5-1.png" alt="unknown">
+<h2 id="bar-charts">Bar charts</h2>
+<p>Here we will start to use titanic dataset. A basic bar chart can be made<br>
+like this:</p>
+<pre><code class="language-r">ggplot(df_titanic) + geom_bar(aes(x = Age))
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-6-1.png" alt="unknown">
+<p>By applying <strong>fill</strong> a tacked bar can be created:</p>
+<pre><code class="language-r">ggplot(df_titanic) + geom_bar(aes(x = Age, fill = Survived) )
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-7-1.png" alt="unknown">
+<p>If we do not want the bar to be stacked:</p>
+<pre><code class="language-r">ggplot(df_titanic) + geom_bar(aes(x = Age, fill = Survived), position = &quot;dodge&quot; )
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-8-1.png" alt="unknown">
+<h2 id="customization-titles-and-labels">Customization: Titles and labels</h2>
+<p>A formal plot needs to have proper titles, axis label and legend titles,<br>
+etc. These can be set by using <strong>labs</strong>:</p>
+<pre><code class="language-r">bar_titanic = ggplot(df_titanic) +
+                geom_bar(aes(x = Age, fill = Survived) )
+
+bar_titanic +
+  labs(title = &quot;Survival Age&quot;,
+       subtitle = &quot;Same survival number of adult and child&quot;,
+       caption = &quot;Source: R built-in dataset&quot;,
+       x = &quot;Passenger age&quot;,
+       y = &quot;Number&quot;,
+       fill = &quot;Survived or not&quot;)
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-9-1.png" alt="unknown">
+<h2 id="customization-scales">Customization: Scales</h2>
+<p><strong>Scales</strong> can map values in the data space to the “aesthetic space”. It<br>
+allows us to adjust the plot aesthetically.</p>
+<pre><code class="language-r">bar_titanic + scale_fill_discrete(labels = c(&quot;Did not survived&quot;, &quot;Survived&quot;))
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-10-1.png" alt="unknown">
+<p>Note that in the example, fill = Survived which is a discrete variable<br>
+that is why we use <strong>scale_fill_discrete</strong>. Otherwise we may use<br>
+scale_fill_continuous() if it is a continuous data or<br>
+scale_fill_date() if it is date data./</p>
+<p>The colors can be changed manually:</p>
+<pre><code class="language-r">bar_titanic + scale_fill_manual(labels = c(&quot;Did not survived&quot;, &quot;Survived&quot;),
+                                values = c(&quot;grey&quot;, &quot;blue&quot;))
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-11-1.png" alt="unknown">
+<p>Please be cautious that many times we need to use <a href="http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette">color-blind friendly<br>
+color<br>
+palette</a>.<br>
+So instead of using value = “color name”, we should use the pre-set<br>
+palette:</p>
+<pre><code class="language-r"># The palette with grey:
+cbPalette &lt;- c(&quot;#999999&quot;, &quot;#E69F00&quot;, &quot;#56B4E9&quot;, &quot;#009E73&quot;, &quot;#F0E442&quot;, &quot;#0072B2&quot;, &quot;#D55E00&quot;, &quot;#CC79A7&quot;)
+
+bar_titanic + scale_fill_manual(labels = c(&quot;Did not survived&quot;, &quot;Survived&quot;),
+                                values = c(cbPalette[1], cbPalette[2]))
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-12-1.png" alt="unknown">
+<pre><code class="language-r">ggplot(data = df) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width)) +
+  scale_y_continuous(breaks = c(2,3,4), labels = c (&quot;2&quot;,&quot;3&quot;, &quot;4&quot;))+
+  labs(title = &quot;Set y-axis to be looser&quot;)
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-13-1.png" alt="unknown">
+<pre><code class="language-r">ggplot(data = df) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width)) +
+  scale_y_continuous(breaks = seq(0,5,0.1))+
+  labs(title = &quot;Set y-axis to be more compact&quot;)
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-14-1.png" alt="unknown">
+<h2 id="other-resources-for-reference">Other resources for reference</h2>
+<h2 id="ggplot-2-is-a-powerful-package-and-it-is-constantly-evolving-there-aresome-useful-resouces-online">ggplot 2 is a powerful package and it is constantly evolving, there are<br>
+some useful resouces online:</h2>
+<h2 id="a-hrefhttpwwwcookbook-rcomgraphs-classurihttpwwwcookbook-rcomgraphsashows-lots-of-graphing-basics"><a href="http://www.cookbook-r.com/Graphs/" class="uri">http://www.cookbook-r.com/Graphs/</a><br>
+shows lots of graphing basics.</h2>
+<p><a href="https://exts.ggplot2.tidyverse.org/gallery/" class="uri">https://exts.ggplot2.tidyverse.org/gallery/</a><br>
+gives some fancy extensions.</p>
+<p>In the end I would like to say that in the real word, it is more time<br>
+consuming to clean the data than to visualize them therefore it is<br>
+important to learn how to impute the dataset as well.<br>
+And the best way to master data visualization is to learn what we need<br>
+when encountering problems.</p>
+<p>Thank you for reading!</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://BolinWu-Gridea.github.io/post/about/" class="post-title gt-a-link">
+                    关于
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Data Science Blog
+</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://BolinWu-Gridea.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

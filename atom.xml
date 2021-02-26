@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2021-02-26T15:56:03.306Z</updated>
+    <updated>2021-02-26T16:01:39.504Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -25,7 +25,7 @@
         <id>https://BolinWu-Gridea.github.io/post/2020-02-18-DecisionTree/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2020-02-18-DecisionTree/">
         </link>
-        <updated>2021-02-09T09:00:00.000Z</updated>
+        <updated>2021-02-09T02:00:00.000Z</updated>
         <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
 <p>Tree-based methods are conceptually easy to comprehend and they render advantages like easy visualization and data-preprocessing. It is a powerful tool for classification. In this post I will introduce how to classify baseball player technical statistics by  Decision Tree and Random Forest from algorithm coding to  package usage.</p>
 <h2 id="content">Content:</h2>
@@ -437,7 +437,7 @@ However, it is better than the bagged tree model.</p>
 Nevertheless, the struggling process does help me to understand the algorithm better. I would encourage the reader to get your hand dirty by starting from scratch despite the fact that there are packages which can make it work easily.</p>
 <h2 id="tips">Tips</h2>
 <ul>
-<li>The graphic illustration of how tree-based methods partitioning feature into a set of rectangles is pretty good. Please check out on <a href="(https://web.stanford.edu/~hastie/ElemStatLearn/)">ESL</a> P306.</li>
+<li>The graphic illustration of how tree-based methods partitioning feature into a set of rectangles is pretty good. Please check out on <a href="https://web.stanford.edu/~hastie/ElemStatLearn/">ESL</a> P306.</li>
 </ul>
 ]]></content>
     </entry>
@@ -871,6 +871,179 @@ In the future I will share how to use EM algorithm in general.
 
 Thank you for reading!
 </p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Data Visualization with ggplot2]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/2021-01-31-Useful-Commands-of-ggplot2-/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/2021-01-31-Useful-Commands-of-ggplot2-/">
+        </link>
+        <updated>2021-01-30T09:00:00.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>In this post I will share some frequently used ggplot2 commands when<br>
+making data visualization.<br>
+To make it easy to replicate, I will use the built-in <strong>iris</strong> and<br>
+<strong>titanic</strong> dataset, which consists of numeric variable and categorical<br>
+variable, for illustration.</p>
+<h2 id="load-the-data-and-package">Load the data and package</h2>
+<pre><code class="language-r">library(ggplot2)
+library(tidyverse)
+data(iris)
+data(&quot;Titanic&quot;)
+df = iris
+df_titanic = as_data_frame(Titanic)
+</code></pre>
+<pre><code class="language-r"># take a look at iris
+head(df)
+</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa
+</code></pre>
+<pre><code class="language-r">head(df_titanic)
+</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   Class Sex    Age   Survived     n
+##   &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
+## 1 1st   Male   Child No           0
+## 2 2nd   Male   Child No           0
+## 3 3rd   Male   Child No          35
+## 4 Crew  Male   Child No           0
+## 5 1st   Female Child No           0
+## 6 2nd   Female Child No           0
+</code></pre>
+<h2 id="scatter-plots">Scatter plots</h2>
+<p>We can use <strong>ggplot</strong> to create the coordinate system and use<br>
+<strong>geom_point()</strong> to add a layer of points to the graph.</p>
+<pre><code class="language-r">ggplot(data = df) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width))
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-2-1.png" alt="Accuracy Comparison">
+<p>We can use <strong>size</strong> to change the dots size. Use <strong>color</strong> and <strong>shape</strong><br>
+to make the scatter plots more informative.</p>
+<pre><code class="language-r"># change the size
+ggplot(data = df) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width), size = 1)
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-3-1.png" alt="Accuracy Comparison">
+<pre><code class="language-r"># add color and shape
+ggplot(data = df) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width, shape = Species, color = Species))
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-3-2.png" alt="Accuracy Comparison">
+<p>Sometimes we may only interested in visualizing a data in certain scale.<br>
+It can be easily done with the help of filter function in tidyverse<br>
+package.</p>
+<pre><code class="language-r"># visualiza data in certain scale
+ggplot(data = filter(df, Sepal.Length &gt; 5)) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width), size = 1)
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-4-1.png" alt="unknown">
+<p>If we want to group by categories, we simply add <strong>facet_wrap()</strong><br>
+function.</p>
+<pre><code class="language-r"># group by category
+ggplot(data = df) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width,color = Species), size = 1) +
+  facet_wrap(~Species)
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-5-1.png" alt="unknown">
+<h2 id="bar-charts">Bar charts</h2>
+<p>Here we will start to use titanic dataset. A basic bar chart can be made<br>
+like this:</p>
+<pre><code class="language-r">ggplot(df_titanic) + geom_bar(aes(x = Age))
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-6-1.png" alt="unknown">
+<p>By applying <strong>fill</strong> a tacked bar can be created:</p>
+<pre><code class="language-r">ggplot(df_titanic) + geom_bar(aes(x = Age, fill = Survived) )
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-7-1.png" alt="unknown">
+<p>If we do not want the bar to be stacked:</p>
+<pre><code class="language-r">ggplot(df_titanic) + geom_bar(aes(x = Age, fill = Survived), position = &quot;dodge&quot; )
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-8-1.png" alt="unknown">
+<h2 id="customization-titles-and-labels">Customization: Titles and labels</h2>
+<p>A formal plot needs to have proper titles, axis label and legend titles,<br>
+etc. These can be set by using <strong>labs</strong>:</p>
+<pre><code class="language-r">bar_titanic = ggplot(df_titanic) +
+                geom_bar(aes(x = Age, fill = Survived) )
+
+bar_titanic +
+  labs(title = &quot;Survival Age&quot;,
+       subtitle = &quot;Same survival number of adult and child&quot;,
+       caption = &quot;Source: R built-in dataset&quot;,
+       x = &quot;Passenger age&quot;,
+       y = &quot;Number&quot;,
+       fill = &quot;Survived or not&quot;)
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-9-1.png" alt="unknown">
+<h2 id="customization-scales">Customization: Scales</h2>
+<p><strong>Scales</strong> can map values in the data space to the “aesthetic space”. It<br>
+allows us to adjust the plot aesthetically.</p>
+<pre><code class="language-r">bar_titanic + scale_fill_discrete(labels = c(&quot;Did not survived&quot;, &quot;Survived&quot;))
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-10-1.png" alt="unknown">
+<p>Note that in the example, fill = Survived which is a discrete variable<br>
+that is why we use <strong>scale_fill_discrete</strong>. Otherwise we may use<br>
+scale_fill_continuous() if it is a continuous data or<br>
+scale_fill_date() if it is date data./</p>
+<p>The colors can be changed manually:</p>
+<pre><code class="language-r">bar_titanic + scale_fill_manual(labels = c(&quot;Did not survived&quot;, &quot;Survived&quot;),
+                                values = c(&quot;grey&quot;, &quot;blue&quot;))
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-11-1.png" alt="unknown">
+<p>Please be cautious that many times we need to use <a href="http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette">color-blind friendly<br>
+color<br>
+palette</a>.<br>
+So instead of using value = “color name”, we should use the pre-set<br>
+palette:</p>
+<pre><code class="language-r"># The palette with grey:
+cbPalette &lt;- c(&quot;#999999&quot;, &quot;#E69F00&quot;, &quot;#56B4E9&quot;, &quot;#009E73&quot;, &quot;#F0E442&quot;, &quot;#0072B2&quot;, &quot;#D55E00&quot;, &quot;#CC79A7&quot;)
+
+bar_titanic + scale_fill_manual(labels = c(&quot;Did not survived&quot;, &quot;Survived&quot;),
+                                values = c(cbPalette[1], cbPalette[2]))
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-12-1.png" alt="unknown">
+<pre><code class="language-r">ggplot(data = df) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width)) +
+  scale_y_continuous(breaks = c(2,3,4), labels = c (&quot;2&quot;,&quot;3&quot;, &quot;4&quot;))+
+  labs(title = &quot;Set y-axis to be looser&quot;)
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-13-1.png" alt="unknown">
+<pre><code class="language-r">ggplot(data = df) +
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width)) +
+  scale_y_continuous(breaks = seq(0,5,0.1))+
+  labs(title = &quot;Set y-axis to be more compact&quot;)
+</code></pre>
+<img src="{{ site.url }}{{ site.baseurl }}/images/2021-01-31-Useful-Commands-of-ggplot2-_files/figure-markdown_github/unnamed-chunk-14-1.png" alt="unknown">
+<h2 id="other-resources-for-reference">Other resources for reference</h2>
+<h2 id="ggplot-2-is-a-powerful-package-and-it-is-constantly-evolving-there-aresome-useful-resouces-online">ggplot 2 is a powerful package and it is constantly evolving, there are<br>
+some useful resouces online:</h2>
+<h2 id="a-hrefhttpwwwcookbook-rcomgraphs-classurihttpwwwcookbook-rcomgraphsashows-lots-of-graphing-basics"><a href="http://www.cookbook-r.com/Graphs/" class="uri">http://www.cookbook-r.com/Graphs/</a><br>
+shows lots of graphing basics.</h2>
+<p><a href="https://exts.ggplot2.tidyverse.org/gallery/" class="uri">https://exts.ggplot2.tidyverse.org/gallery/</a><br>
+gives some fancy extensions.</p>
+<p>In the end I would like to say that in the real word, it is more time<br>
+consuming to clean the data than to visualize them therefore it is<br>
+important to learn how to impute the dataset as well.<br>
+And the best way to master data visualization is to learn what we need<br>
+when encountering problems.</p>
+<p>Thank you for reading!</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[关于]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/about/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/about/">
+        </link>
+        <updated>2019-01-25T04:09:48.000Z</updated>
+        <content type="html"><![CDATA[<blockquote>
+<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
+</blockquote>
+<p>test</p>
 ]]></content>
     </entry>
     <entry>
