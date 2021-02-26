@@ -1,0 +1,650 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>关于 | Bolin Wu</title>
+
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico?v=1614353280928">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Bolin Wu
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            Homepage
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            Archives
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            Tags
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            About
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1614353280928" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    关于
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2019-01-25 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <h1 id="introduction">Introduction</h1>
+<p>Intuitively, simple neural network is a combination of many (linear) transformations, which is similar to mixture model in some way. It allows to transform the input data in a more sophisticated way that a single linear model could not achieve. Simple neural network is the foundation for many other more advanced neural network models e.g., Recurrent Neural Network and Long Short Term Memory (LSTM). By the way, I posted a project of LSTM <a href="https://bolinwu.org/ML-Wine/">here</a> please feel free to check it out if you are interested.</p>
+<p>If you have not heard of neural network before, this video may help you to easily grasp the idea:<br>
+<a href="http://www.youtube.com/watch?v=CqOfi41LfDw" title="StatQuest"><img src="http://img.youtube.com/vi/CqOfi41LfDw/0.jpg" alt="" loading="lazy"></a></p>
+<p>The content of this post includes:</p>
+<ol>
+<li>The basics of <strong>feedforward neural network</strong>.</li>
+<li>The application of it with the help of TensorFlow and Keras.</li>
+<li>Several useful parameter tunings.</li>
+</ol>
+<p>The main reference is <a href="https://www.deeplearningbook.org">Deep Learning, Goodfellow et al</a>, Chapter 6.</p>
+<h1 id="neural-network-basics">Neural Network Basics</h1>
+<p>At first, let us implement a straight forward neural network mathematically. We assume our single hidden layer network to be:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo separator="true">,</mo><mi>W</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>w</mi><mo separator="true">,</mo><mi>b</mi><mo>)</mo><mo>=</mo><msup><mi>w</mi><mi>T</mi></msup><mi>m</mi><mi>a</mi><mi>x</mi><mo>(</mo><mn>0</mn><mo separator="true">,</mo><msup><mi>W</mi><mi>T</mi></msup><mi>x</mi><mo>+</mo><mi>c</mi><mo>)</mo><mo>+</mo><mi>b</mi></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+f(x,W,c,w,b) = w^{T} max(0,W^{T}x+c)+b
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.551331em;vertical-align:-0.5256654999999999em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0256655000000001em;"><span style="top:-3.1343345000000005em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">b</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span><span class="mord mathdefault">m</span><span class="mord mathdefault">a</span><span class="mord mathdefault">x</span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault">c</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5256654999999999em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>Where X is the input data, W,w,are the weight matrix, c,b are the interceps, for hidden layer and output layer respectively. These parameters are usually estimated by the backpropagation algorithm. Here for illustration we just assume:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>W</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">W = \begin{bmatrix}1 &amp; 1\\
+1 &amp; 1
+\end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9500000000000004em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9500000000000004em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span></span></p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">c = \begin{bmatrix}0 \\
+-1
+\end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">c</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">0</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">−</span><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9500000000000004em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span></span></p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>w</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>2</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">w = \begin{bmatrix}1 \\
+-2
+\end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">−</span><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9500000000000004em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span></span></p>
+<p>and b =0.</p>
+<p>The input data:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>X</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">X = \begin{bmatrix}0 &amp; 0\\
+0 &amp; 1\\
+1 &amp; 0\\
+1 &amp; 1
+\end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:4.80204em;vertical-align:-2.15003em;"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.6520099999999998em;"><span style="top:-1.6499900000000003em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎣</span></span></span><span style="top:-2.80499em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎢</span></span></span><span style="top:-3.40599em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎢</span></span></span><span style="top:-4.65201em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎡</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.15003em;"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.6500000000000004em;"><span style="top:-4.8100000000000005em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">0</span></span></span><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">0</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-1.2099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.1500000000000004em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.6500000000000004em;"><span style="top:-4.8100000000000005em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">0</span></span></span><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">0</span></span></span><span style="top:-1.2099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.1500000000000004em;"><span></span></span></span></span></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.6520099999999998em;"><span style="top:-1.6499900000000003em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎦</span></span></span><span style="top:-2.80499em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎥</span></span></span><span style="top:-3.40599em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎥</span></span></span><span style="top:-4.65201em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎤</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.15003em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>The basic steps of implementing the network above:</p>
+<ol>
+<li>Transform the original data X by using weight W and intercept c.</li>
+<li>Send the transformed data into activation function, get output X'.</li>
+<li>Transform the X' by using the weight w and intercept b. Then get the final output.</li>
+</ol>
+<p>The max() function part is actually a ReLU activation function and this example is a realization of XOR logic gate.</p>
+<p>R Code:</p>
+<pre><code class="language-r"># load the package
+library(sigmoid)
+library(keras)
+library(kerasR)
+library(tensorflow)
+
+W = matrix(rep(1,4),nrow = 2); c = matrix(c(0,-1), nrow = 2);
+w = matrix(c(1,-2), nrow = 2)
+X = matrix(c(0,0,0,1,1,0,1,1), byrow = T, nrow = 4, ncol = 2)
+
+network = function(x_input,W_input, c_input, w_input, b_input){
+  # transfor c_input so that it can be used for addition in the next step
+  c_trans = matrix(NA, nrow =  nrow(x_input %*% W_input), ncol = nrow(c_input))
+  for (i in 1: nrow(c_input) ) {
+    c_trans[,i] = rep(c_input[i],nrow(x_input %*% W_input) )
+
+  }
+
+  # (6.8) and (6.9)
+  layer_trans1  = x_input %*% W_input + c_trans
+  # put into activation function, (6.10)
+  activation_1 = relu(layer_trans1)
+  # output, (6.11)
+  out_1 = activation_1 %*% w + b_input
+  return(out_1)
+
+}
+
+
+network(X,W_input = W,c_input = c,w_input = w,b_input =0)
+
+     [,1]
+[1,]    0
+[2,]    1
+[3,]    1
+[4,]    0
+</code></pre>
+<h1 id="feed-forward-neural-network-using-keras-and-tensorflow">Feed-Forward Neural Network using Keras and TensorFlow</h1>
+<p>Now let us step into the application part. You can find find how to install keras and tensorflow in R <a href="https://tensorflow.rstudio.com/installation/">here</a>.<br>
+The data that we will use is the classic MNIST dataset from keras which contains a huge amount of hand-written digits. The data could be easiliy loaded as follows:</p>
+<pre><code class="language-r">library(keras)
+mnist &lt;- dataset_mnist()
+# scale the dataset
+mnist$train$x &lt;- mnist$train$x/255
+mnist$test$x &lt;- mnist$test$x/255
+</code></pre>
+<h2 id="1-have-a-grasp-of-mnist">1. Have a grasp of MNIST</h2>
+<p>Let us first have a grasp about the dataset by visualizing a digit. You could play around the code and explore the dataset in your own way.</p>
+<pre><code class="language-r">idx &lt;- 3
+im &lt;- mnist$train$x[idx,,]
+# Transpose the image
+im &lt;- t(apply(im, 2, rev))
+image(1:28, 1:28, im, col=gray((0:255)/255), xlab = &quot;&quot;, ylab = &quot;&quot;,
+        xaxt='n', yaxt='n', main=paste(mnist$train$y[idx]))
+</code></pre>
+<figure>
+  <img src="{{ site.url }}{{ site.baseurl }}/images/NNfig/digit_visualization.png" alt="none" style="width:100%">
+  <figcaption>Fig.1 Digit Visualization </figcaption>
+</figure>
+<p>And we can also use object.size()function to see the size of MNIST dataset:</p>
+<pre><code class="language-r">cat(&quot;The training data set is&quot;,object.size(mnist$train),&quot;bytes;&quot;,&quot;\n&quot;,
+    &quot;The test data set is&quot;,object.size(mnist$test),&quot;bytes.&quot;)
+
+The training data set is 376560792 bytes;
+ The test data set is 62760792 bytes.
+</code></pre>
+<h2 id="2-implementation">2. Implementation</h2>
+<p>Next, we will start with on hidden layer with 16 units and the sigmoid as the avtivation function, without any regularization.</p>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 16, activation = &quot;sigmoid&quot;)
+  %&gt;%
+# ouput layer
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;adam&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 5,
+    validation_split = 0.3,
+    verbose = 2
+  )
+
+Epoch 1/5
+1313/1313 - 1s - loss: 0.5673 - accuracy: 0.8667
+1313/1313 - 2s - loss: 0.5673 - accuracy: 0.8667 - val_loss: 0.3418 - val_accuracy: 0.9087
+Epoch 2/5
+1313/1313 - 1s - loss: 0.3237 - accuracy: 0.9125
+1313/1313 - 2s - loss: 0.3237 - accuracy: 0.9125 - val_loss: 0.3124 - val_accuracy: 0.9139
+Epoch 3/5
+1313/1313 - 1s - loss: 0.2981 - accuracy: 0.9174
+1313/1313 - 2s - loss: 0.2981 - accuracy: 0.9174 - val_loss: 0.2998 - val_accuracy: 0.9169
+Epoch 4/5
+1313/1313 - 1s - loss: 0.2841 - accuracy: 0.9212
+1313/1313 - 2s - loss: 0.2841 - accuracy: 0.9212 - val_loss: 0.2951 - val_accuracy: 0.9199
+Epoch 5/5
+1313/1313 - 1s - loss: 0.2753 - accuracy: 0.9235
+1313/1313 - 2s - loss: 0.2753 - accuracy: 0.9235 - val_loss: 0.2874 - val_accuracy: 0.9236
+
+</code></pre>
+<figure>
+  <img src="{{ site.url }}{{ site.baseurl }}/images/NNfig/question3.jpeg" alt="none" style="width:100%">
+  <figcaption> Training Process </figcaption>
+</figure>
+<p>The accuracy after 5 epochs is 0.9235.</p>
+<p>Please note that in the setup part, the last dense layer is an ouput layer. Its units number has to be 10 because there are ten digits and we are interested to classyfy these 10 circumstances. If in the future we would like to do yes/no classification, then the unit should be 1.</p>
+<h2 id="3-parameter-tuning">3. Parameter Tuning</h2>
+<p>The default epoch number is 5, hidden layer is 16 units and the activation function is sigmoid.</p>
+<h3 id="a-increase-the-number-of-hidden-units-to-128">(a) Increase the number of hidden units to 128</h3>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 128, activation = &quot;sigmoid&quot;) %&gt;% # increase unit to 128
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;adam&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 5,
+    validation_split = 0.3,
+    verbose = 2
+  )
+
+
+</code></pre>
+<figure>
+  <img src="{{ site.url }}{{ site.baseurl }}/images/NNfig/a.jpeg" alt="none" style="width:100%">
+  <figcaption> Training Process </figcaption>
+</figure>
+<p>The validation accuracy after 5 epochs is around 0.9607.</p>
+<h3 id="b-change-the-activation-function-to-relu">(b) Change the activation function to reLU</h3>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;% # change to ReLU
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;adam&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 5,
+    validation_split = 0.3,
+    verbose = 2
+  )
+
+
+</code></pre>
+<figure>
+  <img src="{{ site.url }}{{ site.baseurl }}/images/NNfig/b.jpeg" alt="none" style="width:100%">
+  <figcaption> Training Process </figcaption>
+</figure>
+<p>The validation accuracy after 5 epochs is around 0.9708.</p>
+<h3 id="c-change-the-optimizer-to-rmsprop">(c) Change the optimizer to RMSprop</h3>
+<p>Sebastian Ruder has an excellent papper <a href="https://arxiv.org/abs/1609.04747">An overview of gradient descent optimization algorithms</a> which illustrates the different optimizers. If you would like to know what are optimizers and the differences between them, please take a look.</p>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;%
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;RMSprop&quot;, # change to RMSprop
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 5,
+    validation_split = 0.3,
+    verbose = 2
+  )
+</code></pre>
+<figure>
+  <img src="{{ site.url }}{{ site.baseurl }}/images/NNfig/c.jpeg" alt="none" style="width:100%">
+  <figcaption> Training Process </figcaption>
+</figure>
+<p>The validation accuracy after 5 epochs is around 0.9678, not changed much.</p>
+<h3 id="d-try-to-run-the-net-for-ten-epochs-and-use-early-stopping-for-regularization">(d) Try to run the net for ten epochs and use early stopping for regularization</h3>
+<p>The early stopping means that the process stops training when a monitored metric has stopped improving. We can do so by adding <em>&quot;callbacks = callback_early_stopping(monitor = &quot;val_loss&quot;,patience = 3)&quot;</em> in the model fitting sequence as is shown above. The <em>&quot;patience&quot;</em> parameter is the number of epochs with no improvement after which training will be stopped.</p>
+<p>The early stopping is one of the remedies for overfitting.</p>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;%
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;RMSprop&quot;, # change to RMSprop
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 10,
+    validation_split = 0.3,
+    verbose = 2,
+      # early stopping
+    callbacks = callback_early_stopping(monitor = &quot;val_loss&quot;,patience = 3)
+  )
+
+</code></pre>
+<figure>
+  <img src="{{ site.url }}{{ site.baseurl }}/images/NNfig/d.jpeg" alt="none" style="width:100%">
+  <figcaption> Training Process </figcaption>
+</figure>
+<p>The validation accuracy after 5 epochs is around 0.9716 which is slightly improved.</p>
+<h3 id="e-add-a-second-layer-with-128-hidden-units">(e) Add a second layer with 128 hidden units.</h3>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;%
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;% # add a second layer
+  layer_dense(10, activation = &quot;softmax&quot;)
+ # add a second layer
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;RMSprop&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 10,
+    validation_split = 0.3,
+    verbose = 2
+  )
+
+summary(model)
+
+Model: &quot;sequential_15&quot;
+_________________________________________________________________________________
+Layer (type)                        Output Shape                    Param #      
+=================================================================================
+flatten_15 (Flatten)                (None, 784)                     0            
+_________________________________________________________________________________
+dense_37 (Dense)                    (None, 128)                     100480       
+_________________________________________________________________________________
+dense_38 (Dense)                    (None, 128)                     16512        
+_________________________________________________________________________________
+dense_39 (Dense)                    (None, 10)                      1290         
+=================================================================================
+Total params: 118,282
+Trainable params: 118,282
+Non-trainable params: 0
+_________________________________________________________________________________
+
+</code></pre>
+<figure>
+  <img src="{{ site.url }}{{ site.baseurl }}/images/NNfig/e.jpeg" alt="none" style="width:100%">
+  <figcaption> Training Process </figcaption>
+</figure>
+<p>The validation accuracy after 10 epochs is around 0.9750. If we use the summary function we can see that the number of total parameters with two hidden layers is 118,282, which is pretty huge compared with normal statistical models. One benefit is that it gives a pretty high classification accuracy, but the disadvantages could be the long time consumption of model training as well as potential overfitting problem. Next I will introduce <strong>dropout</strong> which could be a remedy for the mentioned disadvantages.</p>
+<h3 id="f-add-dropout">(f) Add dropout.</h3>
+<p>In practice you could choose what layers you want to implement dropout. Here I introduce dropout (p=0.2) to the first layer and dropout (p=0.5) to the second layer.</p>
+<p>Without dropout, <strong>every</strong> node in a hidden layer is connected with <strong>every</strong> node in the next hidden layer. With dropout,the nodes in a hidden layer will be <strong>excluded</strong> with a given probability therefore it will fasten the training process as well as preventing overfitting to some extent.</p>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;%
+  layer_dropout(0.2) %&gt;%  # introduce dropout
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;%
+  layer_dropout(0.5) %&gt;%
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;RMSprop&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 10,
+    validation_split = 0.3,
+    verbose = 2
+  )
+
+</code></pre>
+<figure>
+  <img src="{{ site.url }}{{ site.baseurl }}/images/NNfig/f.jpeg" alt="none" style="width:100%">
+  <figcaption> Training Process </figcaption>
+</figure>
+<p>The validation accuracy after 10 epochs is around 0.9701.</p>
+<h2 id="3-try-to-improve-the-network-architecture-yourself">3. Try to improve the network architecture yourself</h2>
+<p>Now, with all the tuning methods given above, you could play round and build a network that gives best accuracy.</p>
+<p>After many trials of different parameters, I found the network with the best validation accuracy = 0.9725.<br>
+The architecture is:</p>
+<ol>
+<li>Two hidden layers with the first activation function to be sigmoid and the second to be softmax. Both units are 128. The output layer has softmax activation function with 10 units.</li>
+<li>Add drop out with 0.3 probability for each hidden layer. This can help accelerate the training process and prevent overfitting to some extent.</li>
+<li>The optimizer is Adam method.</li>
+<li>Set epochs = 50 and use early stopping (patiece = 3). I increase the number of epoch in case that the net work fails to get to its optimal model for lack of iteration. And the early stopping is used so that it can stop when its accuracy stop growing for three consecutive epochs.</li>
+</ol>
+<p>The code is listed below:</p>
+<pre><code class="language-r"># change apoch, drop layout, add early stopping
+# add another layer
+# library(kerasR)
+# set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+
+  layer_dense(units = 128, activation = &quot;sigmoid&quot;) %&gt;%
+  layer_dropout(0.3)%&gt;%
+  layer_dense(units = 128, activation = &quot;softmax&quot;) %&gt;%
+  layer_dropout(0.3)%&gt;%
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;adam&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 50,
+    validation_split = 0.3,
+    verbose = 2,
+    callbacks = callback_early_stopping(monitor = &quot;val_loss&quot;,patience = 3)
+  )
+
+</code></pre>
+<h2 id="compute-the-accuracy-precision-and-recall-of-the-designed-model">Compute the accuracy, precision, and recall of the designed model</h2>
+<p>Here we can use evaluate() funciton to get the accuracy directly. <br>
+And to get precision and recall, I need to first use predict_classes() funciton to get the prediction in integer, and then use confutionMatrix in caret package.</p>
+<p>The accuracy = 0.9741;</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:right">Precision</th>
+<th style="text-align:right">Recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Class:0</td>
+<td style="text-align:right">0.9807</td>
+<td style="text-align:right">0.9867</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 1</td>
+<td style="text-align:right">0.9852</td>
+<td style="text-align:right">0.9938</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 2</td>
+<td style="text-align:right">0.9748</td>
+<td style="text-align:right">0.9748</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 3</td>
+<td style="text-align:right">0.9546</td>
+<td style="text-align:right">0.9792</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 4</td>
+<td style="text-align:right">0.9845</td>
+<td style="text-align:right">0.9715</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 5</td>
+<td style="text-align:right">0.9664</td>
+<td style="text-align:right">0.9686</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 6</td>
+<td style="text-align:right">0.9792</td>
+<td style="text-align:right">0.9812</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 7</td>
+<td style="text-align:right">0.9718</td>
+<td style="text-align:right">0.9718</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 8</td>
+<td style="text-align:right">0.9733</td>
+<td style="text-align:right">0.9713</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 9</td>
+<td style="text-align:right">0.9806</td>
+<td style="text-align:right">0.9504</td>
+</tr>
+</tbody>
+</table>
+<h1 id="ending">Ending</h1>
+<h2 id="challenges">Challenges</h2>
+<p>In the end I would like to share some challenges that I met when I was implementing neural network (NN). <br>
+First, understanding the feedforward NN structure in tensorflow. Before I ommited the fact that the last dense layer should be output layer and thought it was set up by the API by default. It is important to read documentation carefully. <br>
+Second, we only need to use pipeline when compiling and fitting model. I did not understand why in the compliling part and fitting part, only pipeline is needed but we do not need to store it. I guess the reason could be that the tensorflow API is developped by Python or some other language as foundation therefore it does not follow our intuition of using R.</p>
+<pre><code class="language-r">model  %&gt;% compile()
+model %&gt;% fit()
+# but we do not need to use
+model = model  %&gt;% compile()
+# or
+model = model %&gt;% fit()
+</code></pre>
+<h2 id="tips">Tips</h2>
+<ul>
+<li>This post does not discuss some important concepts e.g., backpropagation and gradient descent, but they are worth checking out.</li>
+<li>It is beneficial to read the summary of compiled model and calculate the number of parameters again by hand. This could help you comprehend the setup better.</li>
+</ul>
+<p>Hopefully this post can be helpful to you. Thank you for reading.</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Data Science Blog
+</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://BolinWu-Gridea.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
