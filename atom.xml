@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2021-05-07T09:36:05.822Z</updated>
+    <updated>2021-05-07T09:39:42.771Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -25,7 +25,7 @@
         <id>https://BolinWu-Gridea.github.io/post/2020-02-18-DecisionTree/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2020-02-18-DecisionTree/">
         </link>
-        <updated>2021-02-09T02:00:00.000Z</updated>
+        <updated>2021-02-08T19:00:00.000Z</updated>
         <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
 <p>Tree-based methods are conceptually easy to comprehend and they render advantages like easy visualization and data-preprocessing. It is a powerful tool for classification. In this post I will introduce how to classify baseball player technical statistics by  Decision Tree and Random Forest from algorithm coding to  package usage.</p>
 <h2 id="content">Content:</h2>
