@@ -6,7 +6,7 @@
 
 <title>An Overview of Causal Inference (Part 1: Causal Effects and Confounding) | Bolin Wu</title>
 
-<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico?v=1621676485971">
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico?v=1621679490649">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
@@ -77,7 +77,7 @@
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1621676485971" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1621679490649" action="/search/index.html">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
@@ -93,7 +93,7 @@
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
-                        · 2021-04-19 ·
+                        · 2021-04-18 ·
                     </time>
                     
                         <a href="https://BolinWu-Gridea.github.io/tag/ZBshjYFjk/" class="post-tags">
@@ -201,7 +201,7 @@ Outcome example: Y = 1 if develop cardiovascular disease within 2 years; Y = 0 o
 <li>They are potentially actionable.</li>
 </ol>
 <h2 id="what-are-causal-effects">What are causal effects?</h2>
-<p>In general: A had a <strong>causal effect</strong> on Y if $$Y^{1}$$ differs from $$Y^{0}$$.<br>
+<p>In general: A had a <strong>causal effect</strong> on Y if <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>Y</mi><mn>1</mn></msup></mrow><annotation encoding="application/x-tex">Y^{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span> differs from <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>Y</mi><mn>0</mn></msup></mrow><annotation encoding="application/x-tex">Y^{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span></span></span></span>.<br>
 The <em>foundamental problem of causal inference</em> is that we can only observe one potential outcome for each person. However, with certain assumptions, we can estimate pupulation level (average) causal effects. That is, rather than think if the causal effect work for individual, we think of the population as a whole. Therefore we never know the unit level causal effect.</p>
 <ul>
 <li>Hopeless: What would have happened to me had I not taken ibuprofen? (unit elvel causal effect)</li>
@@ -282,8 +282,8 @@ SUTVA allows us to write potential outcome for the ith person in terms of only t
 <p>Here I would not explain all the details about DAGs, more information about compatibility between DAGs and distributions can be found <a href="https://www.stat.cmu.edu/~cshalizi/uADA/12/lectures/ch22.pdf">here</a>.</p>
 <p>Instead, I would like to note down some interesting facts when learning DAGs path and associations.</p>
 <ol>
-<li>For a fork path $$A &lt;-E-&gt; B$$, A and B are dependent because the information from E flows to both A and B.</li>
-<li>For colliders $$A-&gt;G&lt;-B$$, A and B are independent. However, if we control forff G, then A and B are dependent.</li>
+<li>For a fork path <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>&lt;</mo><mo>−</mo><mi>E</mi><mo>−</mo><mo>&gt;</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A &lt;-E-&gt; B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72243em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord">−</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span></span></span></span>, A and B are dependent because the information from E flows to both A and B.</li>
+<li>For colliders <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>−</mo><mo>&gt;</mo><mi>G</mi><mo>&lt;</mo><mo>−</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A-&gt;G&lt;-B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">A</span><span class="mord">−</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72243em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">G</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span></span></span></span>, A and B are independent. However, if we control forff G, then A and B are dependent.</li>
 </ol>
 <h1 id="ending">Ending</h1>
 <p>Now we have an overview of the causal effects and we know that DAGs is an important method to identify the variables need to be controlled in order to achieve ignorability assumption. Next we will proceed to see how to <strong>control</strong> the counfounders. The two of the general approaches are <em>matching</em> and <em>inverse probability of treatment weighting</em>.</p>
@@ -295,8 +295,8 @@ SUTVA allows us to write potential outcome for the ith person in terms of only t
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="https://BolinWu-Gridea.github.io/post/test/" class="post-title gt-a-link">
-                    test
+                <a href="https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/" class="post-title gt-a-link">
+                    An Overview of Causal Inference (Part 2: Propensity Score and Matching)
                 </a>
             </div>
         
@@ -313,6 +313,10 @@ SUTVA allows us to write potential outcome for the ith person in terms of only t
     <div class="social-container">
         
             
+                <a href="https://github.com/Bolin-Wu" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
         
             
         
@@ -326,7 +330,7 @@ SUTVA allows us to write potential outcome for the ith person in terms of only t
         
     </div>
     <div class="footer-info">
-        Footer information
+        Be better every day
     </div>
     <div>
         Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a

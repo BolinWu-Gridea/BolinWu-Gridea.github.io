@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2021-05-22T09:41:30.330Z</updated>
+    <updated>2021-05-22T10:31:42.063Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -16,7 +16,7 @@
         <id>https://BolinWu-Gridea.github.io/post/2021-04-20-CausalityIntroductionP1/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2021-04-20-CausalityIntroductionP1/">
         </link>
-        <updated>2021-04-19T10:00:00.000Z</updated>
+        <updated>2021-04-18T16:00:00.000Z</updated>
         <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
 <p>Causal inference has been a heated field in statistics. It has great application for observational data. In this post I will shares some key concepts of causal inference:</p>
 <ul>
@@ -116,7 +116,7 @@ Outcome example: Y = 1 if develop cardiovascular disease within 2 years; Y = 0 o
 <li>They are potentially actionable.</li>
 </ol>
 <h2 id="what-are-causal-effects">What are causal effects?</h2>
-<p>In general: A had a <strong>causal effect</strong> on Y if $$Y^{1}$$ differs from $$Y^{0}$$.<br>
+<p>In general: A had a <strong>causal effect</strong> on Y if <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>Y</mi><mn>1</mn></msup></mrow><annotation encoding="application/x-tex">Y^{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span> differs from <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>Y</mi><mn>0</mn></msup></mrow><annotation encoding="application/x-tex">Y^{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span></span></span></span>.<br>
 The <em>foundamental problem of causal inference</em> is that we can only observe one potential outcome for each person. However, with certain assumptions, we can estimate pupulation level (average) causal effects. That is, rather than think if the causal effect work for individual, we think of the population as a whole. Therefore we never know the unit level causal effect.</p>
 <ul>
 <li>Hopeless: What would have happened to me had I not taken ibuprofen? (unit elvel causal effect)</li>
@@ -197,11 +197,509 @@ SUTVA allows us to write potential outcome for the ith person in terms of only t
 <p>Here I would not explain all the details about DAGs, more information about compatibility between DAGs and distributions can be found <a href="https://www.stat.cmu.edu/~cshalizi/uADA/12/lectures/ch22.pdf">here</a>.</p>
 <p>Instead, I would like to note down some interesting facts when learning DAGs path and associations.</p>
 <ol>
-<li>For a fork path $$A &lt;-E-&gt; B$$, A and B are dependent because the information from E flows to both A and B.</li>
-<li>For colliders $$A-&gt;G&lt;-B$$, A and B are independent. However, if we control forff G, then A and B are dependent.</li>
+<li>For a fork path <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>&lt;</mo><mo>−</mo><mi>E</mi><mo>−</mo><mo>&gt;</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A &lt;-E-&gt; B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72243em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord">−</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span></span></span></span>, A and B are dependent because the information from E flows to both A and B.</li>
+<li>For colliders <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>−</mo><mo>&gt;</mo><mi>G</mi><mo>&lt;</mo><mo>−</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A-&gt;G&lt;-B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">A</span><span class="mord">−</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72243em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">G</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span></span></span></span>, A and B are independent. However, if we control forff G, then A and B are dependent.</li>
 </ol>
 <h1 id="ending">Ending</h1>
 <p>Now we have an overview of the causal effects and we know that DAGs is an important method to identify the variables need to be controlled in order to achieve ignorability assumption. Next we will proceed to see how to <strong>control</strong> the counfounders. The two of the general approaches are <em>matching</em> and <em>inverse probability of treatment weighting</em>.</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[An Overview of Causal Inference (Part 2: Propensity Score and Matching)]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/">
+        </link>
+        <updated>2021-04-17T22:00:00.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
+<p>In the <a href="https://bolinwu.org/CausalityIntroductionP1/">Part 1</a> we talked about the basic concepts of causal effect and confounding. In this post we will proceeed with discussing about how to control the confounders with matching. The main content consists of:</p>
+<ul>
+<li>The concept of matching.</li>
+<li>The concept of propensity score.</li>
+<li>Demonstrate how to match on propensity score in R.</li>
+<li>Analyze the outcome after matching.</li>
+</ul>
+<h1 id="matching">Matching</h1>
+<h2 id="randomized-trials">Randomized trials</h2>
+<p>In a randomized trial, treatment assignment A would be determined by a coin toss, in order to erase the effect of X to A. It is a good way to get rid of confounding. However, the researchers may not always use randomized trials for the following reasons:</p>
+<ul>
+<li>Randomized trials are expensive.</li>
+<li>Sometimes randomizing treatment/exposure is unethical.</li>
+<li>Some people may refuse to participate in trials.</li>
+<li>Randomized trials take time.<br>
+And that brings us the observational studies.</li>
+</ul>
+<p>Observational studies are planned, prospective, observational studies with active data collection:</p>
+<ul>
+<li>Like trials: data collected on a common set of variables at planned times; outcomes carefully measured; study protocols.</li>
+<li>Unlike trials: regulations much weaker, since not intervening; broader population eligible for the study.</li>
+</ul>
+<h2 id="what-is-matching">What is matching?</h2>
+<p>Matching is a method that attempts to make an observational study more like a randomized trial.<br>
+Main idea: Match individuals in the treated group A = 1 to individuals in the control group A = 0 on the covariates X.<br>
+<strong>Advantages</strong> of matching:</p>
+<ul>
+<li>Controlling for confounders is achieved at the design phase.</li>
+<li>Matching will reveal lack of overlap in covariate distribution. The positivity assumption will hold in the population that can be matched.</li>
+<li>Once data are matched, essentially treated as if from a randomized trial.</li>
+</ul>
+<h2 id="fine-balance">Fine balance</h2>
+<p>Sometimes it is difficult to find great matches. We may be willing to accept some non-ideal matches if treated and control groups have same distribution of covariates. For example:</p>
+<ul>
+<li>Match 1: treated, male, age 40 and control, female, age 45</li>
+<li>Match 2: treated, female, age 45 and control, male, age 40</li>
+</ul>
+<p>We can see that the neighter match 1 nor match 2 is a good match. However, if we look at them together, we will find that the average age and percent of male/female are the same. Therefore it is a <strong>fine balance</strong>. There is a lot of software that can impose fine balance.</p>
+<h2 id="how-to-match">How to match?</h2>
+<p>Since in real data, we typically can not match exactly, we first need to choose some metric of closeness. There are two common options:</p>
+<ol>
+<li>Mahalanobis distance</li>
+<li>Robust Mahalanobis distance</li>
+</ol>
+<p>Mahalanobis distance is defined as follows.<br>
+Denote the value of a vector of covariates for subject j by <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>X</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">X_{j}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> and the covariance matrix by S. <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>D</mi><mo>(</mo><msub><mi>X</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>X</mi><mi>j</mi></msub><mo>)</mo><mo>=</mo><msqrt><mrow><mo>(</mo><msub><mi>X</mi><mi>i</mi></msub><mo>−</mo><msub><mi>X</mi><mi>j</mi></msub><msup><mo>)</mo><mi>T</mi></msup><msup><mi>S</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>(</mo><msub><mi>X</mi><mi>i</mi></msub><mo>−</mo><msub><mi>X</mi><mi>j</mi></msub><mo>)</mo></mrow></msqrt></mrow><annotation encoding="application/x-tex">D(X_{i}, X_{j}) = \sqrt{(X_{i} - X_{j})^{T}S^{-1}(X_{i} - X_{j})}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">D</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.24em;vertical-align:-0.31438849999999996em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9256115em;"><span class="svg-align" style="top:-3.2em;"><span class="pstrut" style="height:3.2em;"></span><span class="mord" style="padding-left:1em;"><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.767331em;"><span style="top:-2.9890000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.740108em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-2.8856115000000004em;"><span class="pstrut" style="height:3.2em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.28em;"><svg width='400em' height='1.28em' viewBox='0 0 400000 1296' preserveAspectRatio='xMinYMin slice'><path d='M263,681c0.7,0,18,39.7,52,119c34,79.3,68.167,
+158.7,102.5,238c34.3,79.3,51.8,119.3,52.5,120c340,-704.7,510.7,-1060.3,512,-1067
+c4.7,-7.3,11,-11,19,-11H40000v40H1012.3s-271.3,567,-271.3,567c-38.7,80.7,-84,
+175,-136,283c-52,108,-89.167,185.3,-111.5,232c-22.3,46.7,-33.8,70.3,-34.5,71
+c-4.7,4.7,-12.3,7,-23,7s-12,-1,-12,-1s-109,-253,-109,-253c-72.7,-168,-109.3,
+-252,-110,-252c-10.7,8,-22,16.7,-34,26c-22,17.3,-33.3,26,-34,26s-26,-26,-26,-26
+s76,-59,76,-59s76,-60,76,-60z M1001 80H40000v40H1012z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.31438849999999996em;"><span></span></span></span></span></span></span></span></span></p>
+<p>Robust Mahalanobis distance is aiming at solving the outliers problem. Outliers can creat large distances between subjects, even if the covariates are otherwise similar. Its application is as follows.</p>
+<ul>
+<li>Replace each covariate value with its rank. For example, we set the rank of the youngest age as 1, the second youngest as 2, etc. So the difference between the youngest and the second youngest is only 1.</li>
+<li>Constant diagonal on covariance matrix. Now ranks should all be on the same scale now, so that we do not want to weigh one variable more than the other.</li>
+<li>Calculate the usual Mahalanobis distance on the ranks.</li>
+</ul>
+<h2 id="greedy-nearest-neighbor-matching">Greedy (nearest-neighbor) matching</h2>
+<p>Steps:</p>
+<ol>
+<li>Randomly order list of treated subjects and control subjects.</li>
+<li>Start with the first treated subject. Match to the control with the smallest distance. This is called greedy.</li>
+<li>Remove the matched control from the list of available matches.</li>
+<li>Move on to the next treated subject. Match to the control with the smallest distance.</li>
+<li>Repeat steps 3 and 4 until you have matched all treated subjects.<br>
+In R, this can be done by R package &quot;MatchIt&quot;.</li>
+</ol>
+<h3 id="caliper">Caliper</h3>
+<p>We might prefer to exclude treated subject for whom there does not exist a good match. A bad match can be defined by using a <strong>caliper</strong> --- maximum acceptable distance. Main idea:</p>
+<ul>
+<li>Only matcha treated subject if the best match has distance less than the caliper.</li>
+<li>If no matches within caliper, it is a sign that positivity assumption would be violated. Excluding these subjects makes assumption more realistic.</li>
+</ul>
+<h2 id="optimal-matching">Optimal matching</h2>
+<p>Why greedy matching is not optimal? Greedy matching does not lead to the smallest total distance.</p>
+<p>The optimal matching minizes global distance measure. It is conputationally demanding. Whether it is feasible to perform depends on the size of the problem, which is measured by the number of posdsible treatment-control pairings. R package &quot;optmatch&quot; and &quot;rcbalance&quot; can do the work.</p>
+<p>Consatraints can be imposed to make optimal matching computationally feasible for larger data sets. And that brings us to the <strong>sparse optimal matching</strong>.</p>
+<h3 id="sparce-optimal-matching">Sparce optimal matching</h3>
+<ol>
+<li>We could match treated and control subjects within primary disease category.</li>
+<li>Or we focus on achieving optimal matching withing a subgroup of the treated or control subjects.</li>
+<li>Also, we can tolarate mismatches as long as fine balance can still be achieved.</li>
+</ol>
+<h2 id="assessing-balance">Assessing balance</h2>
+<p>After we have matched, we should access whether matching seemed to work. We can look at a couple of things.</p>
+<ul>
+<li>Covariate balance
+<ul>
+<li>standardied differemces.  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>m</mi><mi>d</mi><mo>=</mo><mfrac><mrow><msub><mover accent="true"><mi>X</mi><mo>ˉ</mo></mover><mrow><mi>t</mi><mi>r</mi><mi>e</mi><mi>a</mi><mi>t</mi><mi>m</mi><mi>e</mi><mi>n</mi><mi>t</mi></mrow></msub><mo>−</mo><msub><mover accent="true"><mi>X</mi><mo>ˉ</mo></mover><mrow><mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>r</mi><mi>o</mi><mi>l</mi></mrow></msub></mrow><msqrt><mrow><mo>(</mo><msubsup><mi>s</mi><mrow><mi>t</mi><mi>r</mi><mi>e</mi><mi>a</mi><mi>t</mi><mi>m</mi><mi>e</mi><mi>n</mi><mi>t</mi></mrow><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>s</mi><mrow><mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>r</mi><mi>o</mi><mi>l</mi></mrow><mn>2</mn></msubsup><mo>)</mo><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msqrt></mfrac></mrow><annotation encoding="application/x-tex">smd = \frac{\bar{X}_{treatment} - \bar{X}_{control}}{\sqrt{(s_{treatment}^{2} + s_{control}^{2}) / 2 }}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">m</span><span class="mord mathdefault">d</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.819537em;vertical-align:-0.8296em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9899369999999998em;"><span style="top:-2.4789025em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord sqrt mtight"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0158535714285715em;"><span class="svg-align" style="top:-3.428571428571429em;"><span class="pstrut" style="height:3.428571428571429em;"></span><span class="mord mtight" style="padding-left:1.19em;"><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8051142857142858em;"><span style="top:-2.209457142857143em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mord mathdefault mtight">e</span><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight">m</span><span class="mord mathdefault mtight">e</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">t</span></span></span></span><span style="top:-2.8448em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29054285714285716em;"><span></span></span></span></span></span></span><span class="mbin mtight">+</span><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8051142857142858em;"><span style="top:-2.1527714285714286em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">c</span><span class="mord mathdefault mtight">o</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mord mathdefault mtight">o</span><span class="mord mathdefault mtight" style="margin-right:0.01968em;">l</span></span></span></span><span style="top:-2.8448em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3472285714285714em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span><span class="mord mtight">/</span><span class="mord mtight">2</span></span></span><span style="top:-2.9878535714285714em;"><span class="pstrut" style="height:3.428571428571429em;"></span><span class="hide-tail mtight" style="min-width:0.853em;height:1.5428571428571431em;"><svg width='400em' height='1.5428571428571431em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,
+-10,-9.5,-14c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54c44.2,-33.3,65.8,
+-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10s173,378,173,378c0.7,0,
+35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429c69,-144,104.5,-217.7,106.5,
+-221c5.3,-9.3,12,-14,20,-14H400000v40H845.2724s-225.272,467,-225.272,467
+s-235,486,-235,486c-2.7,4.7,-9,7,-19,7c-6,0,-10,-1,-12,-3s-194,-422,-194,-422
+s-65,47,-65,47z M834 80H400000v40H845z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.44071785714285716em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.41586em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord accent mtight"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201099999999999em;"><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.07847em;">X</span></span></span><span style="top:-2.9523300000000003em;"><span class="pstrut" style="height:2.7em;"></span><span class="accent-body" style="left:-0.16666em;"><span class="mtight">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.29634285714285713em;"><span style="top:-2.357em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mord mathdefault mtight">e</span><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight">m</span><span class="mord mathdefault mtight">e</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mbin mtight">−</span><span class="mord mtight"><span class="mord accent mtight"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201099999999999em;"><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.07847em;">X</span></span></span><span style="top:-2.9523300000000003em;"><span class="pstrut" style="height:2.7em;"></span><span class="accent-body" style="left:-0.16666em;"><span class="mtight">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">c</span><span class="mord mathdefault mtight">o</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mord mathdefault mtight">o</span><span class="mord mathdefault mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8296em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></li>
+<li>Wheter the means between the two groups are similar?</li>
+</ul>
+</li>
+<li>Hypothesis tests: Test for a difference in means between treated and controls for each convariate.
+<ul>
+<li>Two sample t-tests</li>
+<li>Report p-value for each test. Please note that the p-value is dependent on the sample size.</li>
+</ul>
+</li>
+</ul>
+<h2 id="analyzing-data-after-matching">Analyzing data after matching</h2>
+<p>After successfully matching and achieving adequate balance, proceed with outcome analysis.</p>
+<h3 id="randomization-tests">Randomization tests</h3>
+<p>The main idea is as follows:</p>
+<ol>
+<li>Compute test statistics from observed data</li>
+<li>Assume null hypothesis of no treatment effect is true</li>
+<li>Randomly permute treatment assignment within pairs and recompute test statistic.</li>
+<li>Repeat many times and see how unusual observed statistic is.</li>
+</ol>
+<p>This procedure is equivalent to the McNemar test for paried data or paired t-test for continuous data.</p>
+<h2 id="sensitivity-analysis">Sensitivity analysis</h2>
+<p>The previous mentioned matching aims to achieve balance on <em>observed</em> covariates. If there was imbalance on observed covariates, we call it <strong>overt bias</strong>. However, if there was imbalance on the variables that we did not match on (including unobserved variables), then we have <strong>hidden bias</strong>. Then the ignorability assumption violated. The main idea of sensitivity analysis is that if there is hidden bias, determine how severe it would have to be <strong>change conclusions</strong>.</p>
+<p>Let $$\pi_{j}$$ be the probability that person j receives treatment. <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>π</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\pi_{k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> be be the probability that person k receives treatment. Suppose person j and k are perfectly matched, so that their observed covariates <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>X</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">X_{j}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>X</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">X_{k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> are the same. If <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>π</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\pi_{j}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> = <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>π</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\pi_{k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, then there is no hidden bias. Consider the follow following inequality <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mn>1</mn><mi mathvariant="normal">Γ</mi></mfrac><mo>≤</mo><mfrac><mrow><msub><mi>π</mi><mi>j</mi></msub><mi mathvariant="normal">/</mi><mo>(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mi>j</mi></msub><mo>)</mo></mrow><mrow><msub><mi>π</mi><mi>k</mi></msub><mi mathvariant="normal">/</mi><mo>(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mi>k</mi></msub><mo>)</mo></mrow></mfrac><mo>≤</mo><mi mathvariant="normal">Γ</mi></mrow><annotation encoding="application/x-tex">\frac{1}{\Gamma} \leq \frac{\pi_{j}/(1 - \pi_{j})} {\pi_{k} / (1 - \pi_{k})} \leq \Gamma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">Γ</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.55232em;vertical-align:-0.52em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.03232em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.03588em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mord mtight">/</span><span class="mopen mtight">(</span><span class="mord mtight">1</span><span class="mbin mtight">−</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.03588em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.50732em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:-0.03588em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2818857142857143em;"><span></span></span></span></span></span></span><span class="mord mtight">/</span><span class="mopen mtight">(</span><span class="mord mtight">1</span><span class="mbin mtight">−</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:-0.03588em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2818857142857143em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">Γ</span></span></span></span>. <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Γ</mi></mrow><annotation encoding="application/x-tex">\Gamma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">Γ</span></span></span></span> is the odds ratio. If <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Γ</mi></mrow><annotation encoding="application/x-tex">\Gamma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">Γ</span></span></span></span> = 1, then no overt bias. If <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Γ</mi></mrow><annotation encoding="application/x-tex">\Gamma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">Γ</span></span></span></span> &gt;1 implies hidden bias.</p>
+<h1 id="propensity-score">Propensity score</h1>
+<p>The propensity score is the probability of receiving treatment, rather than control, given covariates X. If we define A =1 for treatment and A = 0 for control. We will denote the propensity score for subject i by <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>π</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\pi_{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>.</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>π</mi><mi>i</mi></msub><mo>=</mo><mi>P</mi><mo>(</mo><mi>A</mi><mo>=</mo><mn>1</mn><mi mathvariant="normal">∣</mi><msub><mi>X</mi><mi>i</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">\pi_{i} = P(A = 1|X_{i})
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></p>
+<p>If a person i has a propensity score value of 0.3, that means, given their particular covariate values, there is a 30% chance they will be treated.</p>
+<h2 id="balancing-score">Balancing score</h2>
+<p>Suppose two subjects have the <strong>same</strong> value of the propensity score, but they possibly have <strong>different</strong> covariate values of X. Despite the different covariate values, they were both equally likely to have been treated. This means that both subjects X is just as likely to be found in the treatment group. If you restrict to a subpopulation of subjects who have the same value of the propensity score, there sould be balance in the two treatment groups. Then the propensity score is a <strong>balancing score</strong>. More formally,</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><mi>X</mi><mo>=</mo><mi>x</mi><mi mathvariant="normal">∣</mi><mi>π</mi><mo>(</mo><mi>X</mi><mo>)</mo><mo>=</mo><mi>p</mi><mo separator="true">,</mo><mi>A</mi><mo>=</mo><mn>1</mn><mo>)</mo><mo>=</mo><mi>P</mi><mo>(</mo><mi>X</mi><mo>=</mo><mi>x</mi><mi mathvariant="normal">∣</mi><mi>π</mi><mo>(</mo><mi>X</mi><mo>)</mo><mo>=</mo><mi>p</mi><mo separator="true">,</mo><mi>A</mi><mo>=</mo><mn>0</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">P(X=x|\pi(X) = p, A = 1) = P(X=x|\pi(X) = p, A = 0)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">x</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">x</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span></span></span></span></span></p>
+<p>Implication: if we match on the propensity score, we should achieve balance. Another way of thinking this is that, considering we assumed ignorability - that treatment is randomized given X. Then conditioning on the propensity score is the same as conditioning on an allocation probability.</p>
+<h2 id="estimated-propensity-score">Estimated propensity score</h2>
+<p>In a randomized trial, the propensity score is generally known. However, in an observational study, it will be unknown. Notice that the propensity score involves observed data: A and X. Therefore we can estimate it. Typically when people talk about a propensity score, they are referring to the estimated propensity score. We need to estimate $$P(A=1|X)$$ with outcome to be A. If A is binary, we can estimate the propensity score by using logistic regression.</p>
+<h2 id="propensity-score-matching">Propensity score matching</h2>
+<h3 id="trimming-tails">Trimming tails</h3>
+<p>If there is a lack of overlap, trimming the tails is an option. This means removing subjects who have extreme values of the propensity score. For example, removing control subjects whose propensity score is less than the minimum in the treatment group. Trimming can make the positivity assumption more reasonable.</p>
+<h3 id="matching-2">Matching</h3>
+<p>We can proceed by computing a distance between the propensity score for each treated subject with every control. Then we use the nearest neighbor or optimal matching as before. In practice, logit of the propensity score is often used, rather than the propensity score itself. The reason is that the propensity score is bounded between 0 and 1, making many values similar. However, the logit of the propensity score is unbounded. This transformation essentially stretches the distribution, while preserving ranks.</p>
+<p>To ensure that we do not accept any bad matches, a caliper can be used. In practice, a common choice for a caliper is the 0.2 times the standard deviation of logit of the propensity score. The procedure will be like as follows:</p>
+<ol>
+<li>Estiamte the propensity score (e.g. using logistic regression).</li>
+<li>Logit-transform the propensity score.</li>
+<li>Take the standard deviation of this transformed variable.</li>
+<li>Set the caliper to 0.2 times the value from step 3.</li>
+</ol>
+<p>Please note that the 0.2 can be set to an arbitrary number. This propensity score matching can be done by R package MatchIt.</p>
+<h1 id="analyze-data-in-r-using-propensity-score-matching">Analyze data in R using propensity score matching</h1>
+<p>we will use data from Lalonde (1986), that aimed to evaluate the impact of  National Supported Work (NSW) Demonstration, which is a labor training program, on post-intervention income levels. Interest is in estimating the causal effect of this training program on income.</p>
+<h2 id="load-package-and-data">Load package and data</h2>
+<p>First load the packages tableone and Matching:</p>
+<pre><code class="language-r"># install.packages(&quot;tableone&quot;)
+# install.packages(&quot;Matching&quot;)
+# install.packages(&quot;MatchIt&quot;)
+library(tidyverse)
+library(tableone)
+library(Matching)
+library(MatchIt)
+
+data(lalonde)
+str(lalonde)
+
+</code></pre>
+<p>The data have n=614 subjects and 9 variables:</p>
+<ul>
+<li>age: age in years.</li>
+<li>educ: years of schooling.</li>
+<li>race: indicator variable for races.</li>
+<li>hispan: indicator variable for Hispanics.</li>
+<li>married: indicator variable for marital status.</li>
+<li>nodegree: indicator variable for high school diploma.</li>
+<li>re74: real earnings in 1974.</li>
+<li>re75: real earnings in 1975.</li>
+<li>re78 real earnings in 1978.</li>
+<li>treat: an indicator variable for treatment status.</li>
+</ul>
+<p>The outcome is <em>re78</em> – post intervention income. The treatment is <em>treat</em> – which is equal to 1 if the subject received the labor training and equal to 0 otherwise.</p>
+<p>The potential confounding variables are: <em>age, educ, black, hispan, married, nodegree, re74, re75</em>.</p>
+<h2 id="pre-matching-examination">Pre-matching examination</h2>
+<p>Before mathching, let us find the standardized differences for all of the confounding variables.</p>
+<pre><code class="language-r">xvars = colnames(lalonde %&gt;% select(-c(&quot;treat&quot;,&quot;re78&quot;)))
+tabel1 = CreateTableOne(vars = xvars, strata = &quot;treat&quot;, data = lalonde, test = F)
+print(tabel1,smd = T)
+
+                      Stratified by treat
+                       0                 1                 SMD   
+  n                        429               185                 
+  age (mean (SD))        28.03 (10.79)     25.82 (7.16)     0.242
+  educ (mean (SD))       10.24 (2.86)      10.35 (2.01)     0.045
+  race (%)                                                  1.701
+     black                  87 (20.3)        156 (84.3)          
+     hispan                 61 (14.2)         11 ( 5.9)          
+     white                 281 (65.5)         18 ( 9.7)          
+  married (mean (SD))     0.51 (0.50)       0.19 (0.39)     0.719
+  nodegree (mean (SD))    0.60 (0.49)       0.71 (0.46)     0.235
+  re74 (mean (SD))     5619.24 (6788.75) 2095.57 (4886.62)  0.596
+  re75 (mean (SD))     2466.48 (3292.00) 1532.06 (3219.25)  0.287
+
+</code></pre>
+<p>Q1. What is the standardized difference for married (to nearest hundredth)?<br>
+Answer: From the printed table above we can see that the standardized difference for married is nearly 0.719.</p>
+<p>Q2. What is the raw (unadjusted) mean of real earnings in 1978 for treated subjects minus the mean of real earnings in 1978 for untreated subjects?</p>
+<pre><code class="language-r">re78_mean = lalonde %&gt;% group_by(treat) %&gt;% summarise_at(&quot;re78&quot;, .funs = mean)
+(re78_mean %&gt;% filter(treat ==1) - re78_mean %&gt;% filter(treat ==0))$re78
+# The difference is -635
+</code></pre>
+<h2 id="matching-on-propensity-score-without-caliper">Matching on propensity score (without caliper)</h2>
+<p>Now let us estimated a propensity score model by using the logistic regression mdoel, where the outcome is treatment. Obtain the propensity score for each subject.</p>
+<pre><code class="language-r">psmodel = glm(treat~.-re78, family = binomial(),data = lalonde)
+summary(psmodel)
+# find the propneisty scrore
+pscore = psmodel$fitted.values
+</code></pre>
+<p>Carry out propensity score by using the Match function</p>
+<pre><code class="language-r">psmatch = Match(Tr = lalonde$treat, M = 1, X = pscore, replace = F)
+matched = lalonde[unlist(psmatch[c(&quot;index.treated&quot;,&quot;index.control&quot;)]),]
+matchedtab1 = CreateTableOne(vars = xvars, strata = &quot;treat&quot;, data = matched, test = F)
+print(matchedtab1,smd = T)
+
+                      Stratified by treat
+                       0                 1                 SMD   
+  n                        185               185                 
+  age (mean (SD))        25.22 (10.57)     25.82 (7.16)     0.066
+  educ (mean (SD))       10.54 (2.72)      10.35 (2.01)     0.079
+  race (%)                                                  0.855
+     black                  87 (47.0)        156 (84.3)          
+     hispan                 41 (22.2)         11 ( 5.9)          
+     white                  57 (30.8)         18 ( 9.7)          
+  married (mean (SD))     0.21 (0.41)       0.19 (0.39)     0.041
+  nodegree (mean (SD))    0.64 (0.48)       0.71 (0.46)     0.139
+  re74 (mean (SD))     2383.67 (4287.87) 2095.57 (4886.62)  0.063
+  re75 (mean (SD))     1651.45 (2671.39) 1532.06 (3219.25)  0.040
+
+</code></pre>
+<p>From the column of SMD, we can see that the values are smaller. This is exactly what we want to see. Usually a boudnary value is 0.1. We would pay attention to the variates with SMD &gt; 0.1. If it is too big, then maybe there is imbalance.</p>
+<p>Q3. What is the standardized difference for married?<br>
+Answer: It is reduced to 0.041. We end up with better matching.</p>
+<p>We can also try carrying out the propensity score matching using the <strong>matchit</strong> function. And with this function we can easily find the propensity overlapping. The default measure is logistic regression propensity scores.</p>
+<pre><code class="language-r"># use matchit for propensity score, nearest neighbor matching
+# the default measure is logistic regression propensity scores.
+m.out = matchit(treat~. - re78, data = lalonde, method = &quot;nearest&quot;)
+summary(m.out)
+
+# propensity score plots
+plot(m.out, type = &quot;hist&quot;)
+plot(m.out, type = &quot;jitter&quot;)
+
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621678565216.jpeg" alt="test" loading="lazy"><br>
+<em>Check overlap by jitter plot</em></p>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621679096071.jpeg" alt="" loading="lazy"><br>
+<em>Check overlap by histogram</em></p>
+<h2 id="matching-on-propensity-score-with-caliper">Matching on propensity score (with caliper)</h2>
+<p>Re-do the matching and set the caliper = 0.1.</p>
+<pre><code class="language-r"># re-do matching using a caliper
+psmatch = Match(Tr = lalonde$treat, M = 1, X = pscore, replace = F,caliper = 0.1)
+matched = lalonde[unlist(psmatch[c(&quot;index.treated&quot;,&quot;index.control&quot;)]),]
+matchedtab1 = CreateTableOne(vars = xvars, strata = &quot;treat&quot;, data = matched, test = F)
+print(matchedtab1,smd = T)
+
+                      Stratified by treat
+                       0                 1                 SMD   
+  n                        111               111                 
+  age (mean (SD))        26.46 (11.39)     26.22 (7.18)     0.026
+  educ (mean (SD))       10.39 (2.70)      10.25 (2.31)     0.054
+  race (%)                                                  0.048
+     black                  80 (72.1)         82 (73.9)          
+     hispan                 11 ( 9.9)         11 ( 9.9)          
+     white                  20 (18.0)         18 (16.2)          
+  married (mean (SD))     0.22 (0.41)       0.24 (0.43)     0.064
+  nodegree (mean (SD))    0.63 (0.48)       0.65 (0.48)     0.037
+  re74 (mean (SD))     2545.63 (4347.60) 2250.49 (5746.14)  0.058
+  re75 (mean (SD))     1740.06 (2725.04) 1222.25 (3081.19)  0.178
+
+</code></pre>
+<p>Q4. For the matched data, what is the mean of real earnings in 1978 for treated subjects minus the mean of real earnings in 1978 for untreated subjects?</p>
+<pre><code class="language-r">y_trt = matched$re78[matched$treat==1]
+y_con = matched$re78[matched$treat==0]
+mean(y_trt) - mean(y_con)
+[1] 893.4831
+</code></pre>
+<p>The difference is around 893.</p>
+<p>Q5. Carry out a paired t-test for the effect of treatment on earnings. What are the values of the 95% confidence interval?</p>
+<pre><code class="language-r">diffy = y_trt - y_con
+
+# paired t-test
+t.test(diffy)
+
+One Sample t-test
+
+data:  diffy
+t = 1.0297, df = 110, p-value = 0.3054
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -826.1391 2613.1052
+sample estimates:
+mean of x
+  893.483
+</code></pre>
+<p>From the result we can not reject the null that there is no effect of treatment on earnings.</p>
+<h1 id="ending">Ending</h1>
+<p>In this post we have introduced the powerful method of controling confounders, matching on propensity score. We also have demonstrated how to implement the analysis in R. In general, propensity score matching involves the following steps:</p>
+<ol>
+<li>Estimate propensity score;</li>
+<li>Match on propensity score;</li>
+<li>Check propensity score overlap;</li>
+<li>Check covariate balance</li>
+</ol>
+<p>My personal biggest take away after learning this is that, it is not difficult to perform matching, however, we need to be careful when evaluating the outcomes of matching. How does the overlapping of matched propensity score looks like? Whether the covariates are balanced? What does the treatment difference test tells us? These questions need to be throughly considered.</p>
+<p>Next we will continue to share how to estimate the causal effect by inverse probability of treatment weighting. Thank you for reading.</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Prediction of Children Anaemia Rate by LASSO]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/2021-03-09-LASSO/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/2021-03-09-LASSO/">
+        </link>
+        <updated>2021-03-09T02:00:00.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
+<p>This post investigates the five factors that are related to anaemia in children by using the data collected from the <a href="https://www.who.int/data/gho/">World Health Organization</a>. The method we will use is LASSO, which is a classic penalized regression. In this post we will see how LASSO filter out the variable for us and its prediction performance compared with our baseline model, linear regression.<br>
+To implement LASSO in R, the package I used is &quot;glmnet&quot;.</p>
+<h1 id="data-description">Data Description</h1>
+<p>The variables are downloaded from different sections and countries on the website and then merged together manually. The cleaned data set is available <a href="https://drive.google.com/file/d/1JtU60kRqr5-qpPbvSXWu2oODAcnSrlEX/view?usp=sharing">here</a>.<br>
+Please note that usually people need to do descriptive analysis of all the variables before start modelling. However in this post we are focusing on the LASSO implementation therefore it is not shown here.</p>
+<h2 id="independent-variable">Independent Variable:</h2>
+<ul>
+<li><strong>Health Expenditure as percentage of GDP (<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">%</span></span></span></span>)</strong>: This factor measures government’s health expenditurea as percentage of GDP. This is a main factor to evaluate government’s influence on the prevalence of anaemia.</li>
+<li><strong>Antenatal care coverage - at least four visits (<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">%</span></span></span></span>)</strong>: Antenatal care coverage (at least one visit) is the percentage of women aged 15–49 with a live birth in a given time period that received antenatal care provided by skilled health personnel at least once during their pregnancy.</li>
+<li><strong>Prevalence of low birth weight (<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">%</span></span></span></span>)</strong>: Low birth weight is defined as weight at birth less than 2500h (5.5 lb).</li>
+<li><strong>Prevalence of anaemia in pregnant women (<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">%</span></span></span></span>)</strong>: It measures the occurrence of anaemia happen among pregnant women.</li>
+<li><strong>Nursing and midwifery personnel (per 10,000 population)</strong>: Nurses and midwives include professional nurses, professional midwives, auxiliary nurses, auxiliary midwives, enrolled nurses, enrolled midwives and other associated personnel, such as dental nurses and primary care nurses.</li>
+</ul>
+<h2 id="dependent-variables">Dependent Variables</h2>
+<ul>
+<li><strong>Prevalence of anaemia in children (<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">%</span></span></span></span>)</strong>: It measures the occurrence of anaemia happen among children who are under 6 months.</li>
+</ul>
+<p><em>All variables above are percentages/rate (per 10,000 population), so there is no measure of unit for each variable</em></p>
+<h1 id="lasso-intuition">LASSO Intuition</h1>
+<p>LASSO is one of the most popular regression analyses that perform variable selection in statistics and machine learning field. Different from linear regression, LASSO regression is biased but it provides a model with smaller variance, which makes it accurate in terms of doing prediction.</p>
+<p>The following equation is the expression of LASSO regression.</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><munder><mi>min</mi><mo>⁡</mo><msub><mi>β</mi><mi>j</mi></msub></munder><mo>(</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><munderover><mo>∑</mo><mi>j</mi><mi>p</mi></munderover><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>β</mi><mi>j</mi></msub><msup><mo>)</mo><mn>2</mn></msup><mo>+</mo><mi>λ</mi><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>p</mi></munderover><mi mathvariant="normal">∣</mi><msub><mi>β</mi><mi>j</mi></msub><mo>)</mo><mi mathvariant="normal">∣</mi><mo>)</mo></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+ 		\min_{\beta_{j}}(  \frac{1}{N} \sum_{i=1}^{n}(y_{i} - \sum_{j}^{p} x_{ij} \beta_{j})^2 + \lambda \sum_{j=1}^{p} |\beta_{j})| )
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.4122820000000003em;vertical-align:-1.4561410000000004em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.956141em;"><span style="top:-3.956141em;"><span class="pstrut" style="height:3.698505000000001em;"></span><span class="mord"><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.66786em;"><span style="top:-2.047892em;margin-left:0em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:-0.05278em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2818857142857143em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span><span class="mop">min</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9494279999999999em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10903em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6513970000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6985050000000006em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.347113em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4137769999999998em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault">λ</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6985050000000006em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.347113em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4137769999999998em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord">∣</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4561410000000004em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>From the equation we can see that the regression can be basically divided into two parts. One part is the OLS linear regression part. The other part to the right is what we called the penalty term. The bigger $$\lambda$$ is, the stronger restriction on $$\beta$$ will be.</p>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621679306572.png" alt="" loading="lazy"><br>
+<em>Fig.1 - Visualization of LASSO in two-dimemsion situation</em></p>
+<p>The Figure 1 above helps us better understand how the LASSO works in the two-dimension scenario. Notice that the point where the red circle touches the blue square, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>β</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\beta_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> equals zero. It means <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>β</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\beta_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is removed from our model. At the same time, on that point we can acquire the LASSO model with the smallest mean squared error.</p>
+<h1 id="implementation-in-r">Implementation in R</h1>
+<p>With the help of &quot;glmnet&quot; package in R, we can perform LASSO regression on our data.</p>
+<pre><code class="language-r"># function to calculate mse
+MSE &lt;- function(y,yhat){
+  mse = sum((y-yhat)^2) / nrow(y)
+  return(mse)
+}
+
+# data for following analysis
+datain &lt;- read_csv(&quot;Clean_dataset.csv&quot;, col_names = TRUE, na = c(&quot;NA&quot;)) %&gt;%
+  rename(child_anaemia = &quot;Prevalence of anaemia in children&quot;,
+         pregnant_anameia = &quot;Prevalence of anaemia in pregnant women&quot;,
+         low_weight = &quot;Low birth weight prevalence&quot;,
+         health_expdit = &quot;Health expenditure in GDP&quot;,
+         nurse_midwf = &quot;Nursing and midwifery personnel (per 10 000 population)&quot;,
+         antenatal = &quot;Antenatal care coverage&quot;,
+         breastfed = &quot;Infants breastfed for the first six months&quot;
+         )
+
+set.seed(2019)
+train_ids = sample(nrow(datain), size = 2/3 * nrow(datain), replace = FALSE)
+train = datain[train_ids, 3:8]
+test = datain[-train_ids, 3:8]
+
+
+#---------------------------------------------------------#
+#                    LASSO with glmnet                  #
+#---------------------------------------------------------#
+lasso = glmnet(y = as.matrix(train[, 1]),
+               x = as.matrix(train[, 2:6]),
+               alpha=1, standardize=T,
+               family='gaussian')
+lasso
+plot(lasso, xvar = &quot;lambda&quot;, label = TRUE)
+
+lasso_cv &lt;- cv.glmnet(y = as.matrix(train[,1]),
+                      x = as.matrix(train[, 2:6]),
+                      alpha=1, standardize=T,
+                      family='gaussian')
+plot(lasso_cv)
+
+# check coefficient
+coef1 &lt;- coef(lasso, s = lasso_cv$lambda.1se)
+coef2 &lt;- coef(lasso, s = lasso_cv$lambda.min)
+
+lasso_est &lt;-predict(lasso, newx=as.matrix(train[,2:6]),
+              s=lasso_cv$lambda.min)
+lasso_mse &lt;- MSE(train['child_anaemia'], lasso_est)
+lasso_mse
+
+# get the best lambda
+
+lasso_cv$lambda.min
+
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621679396406.jpeg" alt="" loading="lazy"><br>
+<em>Fig.2 - Change of MSE with different lambda</em></p>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621679420774.jpeg" alt="" loading="lazy"><br>
+<em>Fig.3 - Variable exclusion process of LASSO</em></p>
+<p>From Figure 2, we can see that when log(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">λ</span></span></span></span>) lies between -1.4 to 0, the model can have the smallest mean squared error. Besides, based on Figure 3, we can see the process of  the variables being removed regarding to different log(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">λ</span></span></span></span>).</p>
+<p>Furthermore, we find the best <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">λ</span></span></span></span> = 0.255 of our model by cross-validation method. The optimal output is listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>coefficient</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Intercept</td>
+<td>8.902</td>
+</tr>
+<tr>
+<td>Anaemia in pregnant</td>
+<td>1.112</td>
+</tr>
+<tr>
+<td>Low birth weight</td>
+<td><strong>0</strong></td>
+</tr>
+<tr>
+<td>Health expenditure in GDP</td>
+<td>0.680</td>
+</tr>
+<tr>
+<td>Nursing and midwifery personnel</td>
+<td>-0.081</td>
+</tr>
+<tr>
+<td>Antenatal care</td>
+<td>-0.164</td>
+</tr>
+</tbody>
+</table>
+<p>In the optimal model, the variable &quot;Low birth weight&quot; is removed out. The model's mean squared error is 69.345. &quot;Nursing and midwifery personnel&quot; and &quot;Antenatal care &quot; are negatively related to the occurrence of anaemia in children which is consistent to our expectation. The more health care personnel and antenatal care that pregnant women have, the less likely anaemia in children would happen. However, in this model , the positive relationship between &quot;Health expenditure in GDP&quot; and the occurrence of anaemia in children is not expected.</p>
+<h1 id="compare-with-linear-regression">Compare with Linear Regression</h1>
+<p>By using lm() function in R we can easily get the linear regression:</p>
+<pre><code class="language-r">
+#---------------------------------------------------------#
+#                    Linear Regression                  #
+#---------------------------------------------------------#
+
+lm_model &lt;- lm(formula = child_anaemia ~ ., data = train)
+summary(lm_model)
+
+# Predict and estimate the mse on test dataset
+lm_est &lt;- predict(lm_model, test1)
+lm_mse &lt;- MSE(test1['child_anaemia'], lm_est)
+cat(&quot;MSE of final linear model:&quot;, lm_mse)
+
+# MSE of final linear model: 61.5218
+
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621679471292.jpeg" alt="" loading="lazy"><br>
+*Fig.4 - Linear Regression Results *</p>
+<p>From Figure 4, we can see that not all the variables are significant.</p>
+<p>In terms of the explanatory power, linear regression and LASSO have a similar R-square value. In terms of prediction accuracy, linear regression has the better accuracy of this dataset.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Linear Regression</th>
+<th>LASSO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R-square on training data</td>
+<td>0.8216</td>
+<td><strong>0.8229</strong></td>
+</tr>
+<tr>
+<td>MSE on test data</td>
+<td><strong>61.5218</strong></td>
+<td>69.345</td>
+</tr>
+</tbody>
+</table>
+<h1 id="conclusion">Conclusion</h1>
+<p>In our case, the linear regression gives better prediction than LASSO regression. The reason could be that the number of independent variables is not big enough. <br>
+It is not uncommon that a simple regression may give better result than &quot;fancier&quot; models. Likewise, sometimes a logistic regression could perform better than Neural Network. The performance largely depends on the data. Therefore it is useful to make comparison between different models given a dataset.</p>
+<p>Thanks for reading!</p>
 ]]></content>
     </entry>
     <entry>
