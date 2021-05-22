@@ -1,0 +1,344 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>An Overview of Causal Inference (Part 1: Causal Effects and Confounding) | Bolin Wu</title>
+
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico?v=1621676485971">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Bolin Wu
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            Homepage
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            Archives
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            Tags
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            About
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1621676485971" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    An Overview of Causal Inference (Part 1: Causal Effects and Confounding)
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-04-19 ·
+                    </time>
+                    
+                        <a href="https://BolinWu-Gridea.github.io/tag/ZBshjYFjk/" class="post-tags">
+                            # causal inference
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <h1 id="introduction">Introduction</h1>
+<p>Causal inference has been a heated field in statistics. It has great application for observational data. In this post I will shares some key concepts of causal inference:</p>
+<ul>
+<li>The confusion over causal inference</li>
+<li>The important causal assumptions</li>
+<li>The concept of causal effects</li>
+<li>Confounding and Directed Acyclic Graphs</li>
+</ul>
+<p>Main reference:</p>
+<ul>
+<li><a href="https://www.coursera.org/learn/crash-course-in-causality/home/welcome">A Crash Course in Causality: Inferring Causal Effects from Observational Data</a> from Coursera.</li>
+</ul>
+<h2 id="confusion-over-causality">Confusion over causality</h2>
+<h3 id="spurious-correlation">Spurious correlation</h3>
+<p>Causally unrelated variables might happen to be highly correlated with each other over some period of time. E.g. Divorce rate in Marine correlates with Percapita consumtion of margarine.</p>
+<h3 id="anecdotes">Anecdotes</h3>
+<p>Example: Bill Smith lived to be 105 years old. He said the secret to his longevity was eating one turnip a day.</p>
+<ul>
+<li>All we know is that Bill Smith lived to be 105 years old <strong>AND</strong> he ate one turnip a day.</li>
+<li>We do not know if eating turnips <strong>contributed</strong> to his lifespan.</li>
+<li>We do not know what would happen if other people adopted this habbit.</li>
+</ul>
+<h3 id="science-reporting">Science reporting</h3>
+<p>Headlines often do not use the forms of the word cause, but do get interpreted causally.<br>
+Example: Positive link between video games and acedemic performance, study suggests.</p>
+<p>In reality, a lot of times how skeptically people view headlines depends on what their prior beliefs are. In causality analysis, we want to move away from that to a large degree. Instead, we want to look at the evidence as it is.</p>
+<p>Some key points:</p>
+<ol>
+<li>What statistical methods did they use?</li>
+<li>How was the study designed?</li>
+<li>What assumptions did they made?</li>
+</ol>
+<h3 id="reverse-causality">Reverse causality</h3>
+<p>Even if there is a causal relationship, sometimes the direction is unclear.<br>
+Example: Urban green space and exercise. Does green space in urban environments cause people to exercise more? Or the fact that more people come to exercise causes the govenment to build more gree space?</p>
+<h2 id="how-to-clear-up-confusion">How to clear up confusion?</h2>
+<p>The dield of causal inference attempts to do this by proposing:</p>
+<ul>
+<li>Formal definitions of causal effects.</li>
+<li>Assumptions necessary to identify causal effects from data.</li>
+<li>Rules about what variables need to be controlled for.</li>
+<li>Sensitivity analysis to determine the impact of violations of assumptions on conclusions.</li>
+</ul>
+<p>Statisticians started working on causal modeling as far back as the 1920s (Wright 1921; Neyman 1923)<br>
+It became its own area of statistical research since around 1970s.<br>
+<strong>Some highlights:</strong></p>
+<ul>
+<li>Re-introduction of potential outcomes: Rubin causal model (Rubin 1974).</li>
+<li>Causal diagrams (Greenland and Robins 1986; Pearl 2000).</li>
+<li>Propensity scores (Rosenbaum and Rubin 1983).</li>
+<li>Time-dependent confounding (Robins 1986; Robins 1997).</li>
+<li>Optimal dynamic treatment strategies (Murphy 2003; Robins 2004).</li>
+<li>Target learning (vander Laan 2009).</li>
+</ul>
+<p>As we dive deeper into causal modeling, it will be important to remember:</p>
+<ul>
+<li>Causal inference requires making some untestable assumptions (reffered to as <em>causal assumptions</em>)</li>
+<li>Cochran (1972) concludes:<br>
+&quot;...observational studies are an interesting and challenging field which demands a <strong>good quality of humility</strong>, since we can claim only to be <strong>groping</strong> toward the truth.&quot;</li>
+</ul>
+<h2 id="treatment-potential-outcomes-and-counterfactuals">Treatment, potential outcomes and counterfactuals</h2>
+<p>Here we will introduce some notations that is important for the following post.</p>
+<p>Suppose we are interested in the causal effect of some <strong>treatment</strong> A on some outcome Y.<br>
+treatment example: A = 1 if receive influenza vaccine; A = 0 otherwise. Here is a treatment that takes two values 1 or 0.<br>
+Outcome example: Y = 1 if develop cardiovascular disease within 2 years; Y = 0 otherwise.</p>
+<p>What is <strong>potential outcomes</strong>? You can think of it as the possible outcomes before the study takes place.</p>
+<p>Notation: $$Y^{a}$$ is the outcome that would be observed if treatment was set to A = a.</p>
+<p>What about <strong>counterfactuals</strong>? Counterfactual outcomes are ones that would have been ovserved had the treatment been different. For example: if my treatment wes A = 1, then my counterfactual outcome is $$Y^{0}$$.</p>
+<h2 id="hypothetical-intervention">Hypothetical intervention</h2>
+<p>One important assumption of causal effects of intervention is that the variables can be manipulated. Halland (1986) famously wrote &quot;no causation without manipulation&quot;&quot;. We can imagine that we can manupulate some people get drug A while others get drugs B.</p>
+<p>However, it is less clear about what a causal effect of an immutable variable would mean e.g. gender, age, race. One way to approch this is to relate these varibales to the variables that we can manupulate.</p>
+<table>
+<thead>
+<tr>
+<th>No direct intervention</th>
+<th>Manipulable intervention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Race</td>
+<td>Name on resume</td>
+</tr>
+<tr>
+<td>Obesity</td>
+<td>Bariatric surgery</td>
+</tr>
+<tr>
+<td>Socioeconomic status</td>
+<td>Gift of money</td>
+</tr>
+</tbody>
+</table>
+<p>For the remainder of the post, we will primarily focus on treaments that could be thought of as <strong>interventions</strong>. Treatments that we can imagine being randomized (manupulated) in a hypothetical trial. The reason that we focus on causal effect of hypothetical interventions is that</p>
+<ol>
+<li>Their meaning is well defined.</li>
+<li>They are potentially actionable.</li>
+</ol>
+<h2 id="what-are-causal-effects">What are causal effects?</h2>
+<p>In general: A had a <strong>causal effect</strong> on Y if $$Y^{1}$$ differs from $$Y^{0}$$.<br>
+The <em>foundamental problem of causal inference</em> is that we can only observe one potential outcome for each person. However, with certain assumptions, we can estimate pupulation level (average) causal effects. That is, rather than think if the causal effect work for individual, we think of the population as a whole. Therefore we never know the unit level causal effect.</p>
+<ul>
+<li>Hopeless: What would have happened to me had I not taken ibuprofen? (unit elvel causal effect)</li>
+<li>Possible: What would the rate of headache remission be if everyone took ibuprofen when they had a headache versus no one did?</li>
+</ul>
+<h3 id="average-ausal-effect">Average ausal Effect</h3>
+<p>Definition: <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo>(</mo><msup><mi>Y</mi><mn>1</mn></msup><mo>−</mo><msup><mi>Y</mi><mn>0</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">E(Y^{1} - Y^{0})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>.<br>
+It means the average value of Y if everyone was treated with A = 1 minus the average value of Y if everyone was treated with A = 0, if Y is binary. Please note that this is just an ideal definition because we could never actually observe that in the real world.</p>
+<h3 id="conditioning-on-vs-setting-treatment">Conditioning on, VS setting, treatment</h3>
+<p>In general,</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>E</mi><mo>(</mo><msup><mi>Y</mi><mn>1</mn></msup><mo>−</mo><msup><mi>Y</mi><mn>0</mn></msup><mo>)</mo><mi mathvariant="normal">≠</mi><mi>E</mi><mo>(</mo><mi>Y</mi><mi mathvariant="normal">∣</mi><mi>A</mi><mo>=</mo><mn>1</mn><mo>)</mo><mo>−</mo><mi>E</mi><mo>(</mo><mi>Y</mi><mi mathvariant="normal">∣</mi><mi>A</mi><mo>=</mo><mn>0</mn><mo>)</mo></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+    E(Y^{1} - Y^{0}) \neq E(Y|A = 1) - E(Y|A = 0)
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.524108em;vertical-align:-0.512054em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.012054em;"><span style="top:-3.147946em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mrel"><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel"></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span><span class="mrel">=</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mord">∣</span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mord">∣</span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">0</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.512054em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>The reason is that $$E(Y^{1}$$ is the mean of Y if the whole population was treated with A = 1; while $$E(Y|A = 1)$$ is mean of Y among people with A = 1. Technically, $$E(Y|A = 1) - E(Y|A = 0)$$ is not a causal effect because it is comparing two different populations of people.</p>
+<h3 id="other-causal-effects">Other causal effects</h3>
+<p>Other causal effects that we may be interested in are:</p>
+<ul>
+<li>
+<p class='katex-block katex-error' title='ParseError: KaTeX parse error: Can&#039;t use function &#039;$&#039; in math mode at position 17: …(Y^{1} / Y^{0})$̲$ : causal rela…'>E(Y^{1} / Y^{0})$$ : causal relative risk
+</p>
+</li>
+</ul>
+<h3 id="challenge">Challenge</h3>
+<ol>
+<li>How do we use observed data to link observed outcomes to potential outcomes?</li>
+<li>What assumptions are necessay to estimate causal effects from observed data?</li>
+</ol>
+<h2 id="causal-assumptions">Causal assumptions</h2>
+<p>Identifiability of causal effects requires making some untestable assumptions. These are generally called causal assumptions.<br>
+The most common are :</p>
+<ul>
+<li>Stable Unit Treatment Value Assumption (SUTVA)</li>
+<li>Consistency</li>
+<li>Ignorability</li>
+<li>Positivity<br>
+They are all about the observed data: Y, A and a set of pre-treatment covariates X.</li>
+</ul>
+<h3 id="sutva">SUTVA</h3>
+<p>It involves two assumptions:</p>
+<ol>
+<li>No interference:
+<ul>
+<li>Unites do not interfere with each other</li>
+<li>Treatment assigment of one unit does not affect that outcome of another unit.</li>
+<li>&quot;Spoillover&quot; or &quot;contagion&quot; are also terms for interference.</li>
+</ul>
+</li>
+<li>One version of treatment
+<ul>
+<li>The potential outcomes can effectively linked to the observed data.<br>
+SUTVA allows us to write potential outcome for the ith person in terms of only that person's treatments.</li>
+</ul>
+</li>
+</ol>
+<h3 id="consistency-assumption">Consistency assumption</h3>
+<p>The potential outcome under treatment A = a is equal to the observed outcome if the actual treatment received is A = a.</p>
+<h3 id="ignorability-assumption">Ignorability assumption</h3>
+<p>Given pre-treatment covariates X, treatment assignment is independent from the potential outcomes.</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>Y</mi><mn>0</mn></msup><mo separator="true">,</mo><msup><mi>Y</mi><mn>1</mn></msup><mo>∐</mo><mi>A</mi><mi mathvariant="normal">∣</mi><mi>X</mi></mrow><annotation encoding="application/x-tex">Y^{0}, Y^{1} \coprod A|X
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.6000100000000002em;vertical-align:-0.55001em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-symbol large-op" style="position:relative;top:-0.000004999999999977245em;">∐</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">A</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span></span></span></span></span></p>
+<p>Essentially it means that the treatment A is randomly assigned regardless of X.</p>
+<h3 id="positivity-assumtion">Positivity assumtion</h3>
+<p>It refers to that everybody has a positive opportunity to receive either treatment.</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><mi>A</mi><mo>=</mo><mi>a</mi><mi mathvariant="normal">∣</mi><mi>X</mi><mo>=</mo><mi>x</mi><mo>)</mo><mo>&gt;</mo><mn>0</mn><mo separator="true">,</mo><mtext>for all a and x</mtext></mrow><annotation encoding="application/x-tex">P(A = a| X = x) &gt;0 , \text{for all a and x}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">a</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord text"><span class="mord">for all a and x</span></span></span></span></span></span></p>
+<p>If treatment was deterministic for some values of X, then we would have no ovserved values of Y for one of the treatment groups for thoses values of X.</p>
+<h1 id="confounding-and-directed-acyclic-graphs-dags">Confounding and Directed Acyclic Graphs (DAGs)</h1>
+<h2 id="confounding-control">Confounding control</h2>
+<p>Confounders are often defined as variables that affect treatment and affect the outcome.</p>
+<p>We are interested in identifying a set of variables X that will make the ignorability assumption hold. Then we want to use statistical methods, which will be covered later in the course, to control these variables and estimated causal effects.</p>
+<h2 id="causal-graph">Causal graph</h2>
+<p>Graphs (causal graphs or directed acyclic graphs) are considered useful for causal inference. The functions of causal graphs are:</p>
+<ul>
+<li>Helpful for identifying which variables to control for</li>
+<li>Make assumptions eplicit.</li>
+</ul>
+<p>Here I would not explain all the details about DAGs, more information about compatibility between DAGs and distributions can be found <a href="https://www.stat.cmu.edu/~cshalizi/uADA/12/lectures/ch22.pdf">here</a>.</p>
+<p>Instead, I would like to note down some interesting facts when learning DAGs path and associations.</p>
+<ol>
+<li>For a fork path $$A &lt;-E-&gt; B$$, A and B are dependent because the information from E flows to both A and B.</li>
+<li>For colliders $$A-&gt;G&lt;-B$$, A and B are independent. However, if we control forff G, then A and B are dependent.</li>
+</ol>
+<h1 id="ending">Ending</h1>
+<p>Now we have an overview of the causal effects and we know that DAGs is an important method to identify the variables need to be controlled in order to achieve ignorability assumption. Next we will proceed to see how to <strong>control</strong> the counfounders. The two of the general approaches are <em>matching</em> and <em>inverse probability of treatment weighting</em>.</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://BolinWu-Gridea.github.io/post/test/" class="post-title gt-a-link">
+                    test
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Data Science Blog
+</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Footer information
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://BolinWu-Gridea.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
