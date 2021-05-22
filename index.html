@@ -1,419 +1,352 @@
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8"/>
-<meta name="description" content=""/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>Bolin Wu</title>
-
-<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico?v=1621684676834">
-
-<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/tailwind.css">
 <link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+<link rel="alternate" type="application/atom+xml" title="Bolin Wu - Atom Feed" href="https://BolinWu-Gridea.github.io/atom.xml">
 
-<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
-<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
-<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+    
 
-<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
-<!-- DEMO JS -->
-<!--<script src="media/scripts/index.js"></script>-->
-
-
-
+  <meta name="description" content="Data Science Blog
+" />
 </head>
 <body>
-<div class="main gt-bg-theme-color-first">
-    <div class="main-content">
-        <nav class="navbar navbar-expand-lg">
-    <div class="navbar-brand">
-        <img class="user-avatar" src="/images/avatar.png" alt="头像">
-        <div class="site-name gt-c-content-color-first">
-            Bolin Wu
-        </div>
-    </div>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="navbar-nav mr-auto" style="text-align: center">
-            
-                <div class="nav-item">
-                    
-                        <a href="/" class="menu gt-a-link">
-                            Homepage
-                        </a>
-                    
-                </div>
-            
-                <div class="nav-item">
-                    
-                        <a href="/archives" class="menu gt-a-link">
-                            Archives
-                        </a>
-                    
-                </div>
-            
-                <div class="nav-item">
-                    
-                        <a href="/tags" class="menu gt-a-link">
-                            Tags
-                        </a>
-                    
-                </div>
-            
-                <div class="nav-item">
-                    
-                        <a href="/post/about" class="menu gt-a-link">
-                            About
-                        </a>
-                    
-                </div>
-            
-        </div>
-        <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1621684676834" action="/search/index.html">
-                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
-                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
-            </form>
-        </div>
-    </div>
-</nav>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
 
-
-        <div class="post-list-container">
-    <div class="post-inner">
-        
-            <div class="post gt-bg-theme-color-second">
-                <div class="post-left">
-                    <div>
-                        
-                            <span class="sticky-top-flag gt-bg-accent-color-first">置顶</span>
-                        
-                        <a href="https://BolinWu-Gridea.github.io/post/2020-01-14-ML-Wine/">
-                            <span class="post-title gt-c-content-color-first">Evaluate Wine by LSTM and Simple NN </span>
-                        </a>
-                    </div>
-                    <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        
-                    </div>
-                    <div class="post-info">
-                        <time class="post-time gt-c-content-color-first">
-                            发布于 · 2021-01-12 ·
-                        </time>
-                        
-                            <a href="https://BolinWu-Gridea.github.io/tag/g7o3VtjDf5/" class="post-tag">
-                                # supervised learning
-                            </a>
-                        
-                    </div>
-                </div>
-                
-                    <a href="https://BolinWu-Gridea.github.io/post/2020-01-14-ML-Wine/" class="post-feature-image"
-                       style="background-image: url('https://BolinWu-Gridea.github.io/post-images/2020-01-14-ML-Wine.jpg')">
-                    </a>
-                
-            </div>
-        
-            <div class="post gt-bg-theme-color-second">
-                <div class="post-left">
-                    <div>
-                        
-                        <a href="https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/">
-                            <span class="post-title gt-c-content-color-first">An Overview of Causal Inference (Part 2: Propensity Score and Matching)</span>
-                        </a>
-                    </div>
-                    <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        
-                    </div>
-                    <div class="post-info">
-                        <time class="post-time gt-c-content-color-first">
-                            发布于 · 2021-05-07 ·
-                        </time>
-                        
-                            <a href="https://BolinWu-Gridea.github.io/tag/ZBshjYFjk/" class="post-tag">
-                                # causal inference
-                            </a>
-                        
-                    </div>
-                </div>
-                
-            </div>
-        
-            <div class="post gt-bg-theme-color-second">
-                <div class="post-left">
-                    <div>
-                        
-                        <a href="https://BolinWu-Gridea.github.io/post/2021-04-20-CausalityIntroductionP1/">
-                            <span class="post-title gt-c-content-color-first">An Overview of Causal Inference (Part 1: Causal Effects and Confounding)</span>
-                        </a>
-                    </div>
-                    <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        
-                    </div>
-                    <div class="post-info">
-                        <time class="post-time gt-c-content-color-first">
-                            发布于 · 2021-04-17 ·
-                        </time>
-                        
-                            <a href="https://BolinWu-Gridea.github.io/tag/ZBshjYFjk/" class="post-tag">
-                                # causal inference
-                            </a>
-                        
-                    </div>
-                </div>
-                
-            </div>
-        
-            <div class="post gt-bg-theme-color-second">
-                <div class="post-left">
-                    <div>
-                        
-                        <a href="https://BolinWu-Gridea.github.io/post/2021-03-09-LASSO/">
-                            <span class="post-title gt-c-content-color-first">Prediction of Children Anaemia Rate by LASSO</span>
-                        </a>
-                    </div>
-                    <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        
-                    </div>
-                    <div class="post-info">
-                        <time class="post-time gt-c-content-color-first">
-                            发布于 · 2021-03-08 ·
-                        </time>
-                        
-                            <a href="https://BolinWu-Gridea.github.io/tag/LLI7dlml0c/" class="post-tag">
-                                # penalized model
-                            </a>
-                        
-                    </div>
-                </div>
-                
-            </div>
-        
-            <div class="post gt-bg-theme-color-second">
-                <div class="post-left">
-                    <div>
-                        
-                        <a href="https://BolinWu-Gridea.github.io/post/2021-02-09-SimpleNN/">
-                            <span class="post-title gt-c-content-color-first">Classification of Image Data by Simple NN </span>
-                        </a>
-                    </div>
-                    <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        
-                    </div>
-                    <div class="post-info">
-                        <time class="post-time gt-c-content-color-first">
-                            发布于 · 2021-02-09 ·
-                        </time>
-                        
-                            <a href="https://BolinWu-Gridea.github.io/tag/uoV00CWoy/" class="post-tag">
-                                # feedforward neural network
-                            </a>
-                        
-                    </div>
-                </div>
-                
-                    <a href="https://BolinWu-Gridea.github.io/post/2021-02-09-SimpleNN/" class="post-feature-image"
-                       style="background-image: url('https://BolinWu-Gridea.github.io/post-images/2021-02-09-SimpleNN.jpg')">
-                    </a>
-                
-            </div>
-        
-            <div class="post gt-bg-theme-color-second">
-                <div class="post-left">
-                    <div>
-                        
-                        <a href="https://BolinWu-Gridea.github.io/post/2021-02-18-DecisionTree/">
-                            <span class="post-title gt-c-content-color-first">Prediction of Baseball Player Salary by Regression Tree, Random Forest and XGBoost</span>
-                        </a>
-                    </div>
-                    <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        
-                    </div>
-                    <div class="post-info">
-                        <time class="post-time gt-c-content-color-first">
-                            发布于 · 2021-02-07 ·
-                        </time>
-                        
-                            <a href="https://BolinWu-Gridea.github.io/tag/XoJvuNc1Wu/" class="post-tag">
-                                # tree-based methods
-                            </a>
-                        
-                    </div>
-                </div>
-                
-                    <a href="https://BolinWu-Gridea.github.io/post/2021-02-18-DecisionTree/" class="post-feature-image"
-                       style="background-image: url('https://BolinWu-Gridea.github.io/post-images/2021-02-18-DecisionTree.jpg')">
-                    </a>
-                
-            </div>
-        
-            <div class="post gt-bg-theme-color-second">
-                <div class="post-left">
-                    <div>
-                        
-                        <a href="https://BolinWu-Gridea.github.io/post/2021-02-03-EM_Post/">
-                            <span class="post-title gt-c-content-color-first">The Application of EM Algorithm</span>
-                        </a>
-                    </div>
-                    <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        
-                    </div>
-                    <div class="post-info">
-                        <time class="post-time gt-c-content-color-first">
-                            发布于 · 2021-02-01 ·
-                        </time>
-                        
-                            <a href="https://BolinWu-Gridea.github.io/tag/J1GvUL627h/" class="post-tag">
-                                # unsupervised machine learning
-                            </a>
-                        
-                    </div>
-                </div>
-                
-                    <a href="https://BolinWu-Gridea.github.io/post/2021-02-03-EM_Post/" class="post-feature-image"
-                       style="background-image: url('https://BolinWu-Gridea.github.io/post-images/2021-02-03-EM_Post.jpeg')">
-                    </a>
-                
-            </div>
-        
-            <div class="post gt-bg-theme-color-second">
-                <div class="post-left">
-                    <div>
-                        
-                        <a href="https://BolinWu-Gridea.github.io/post/2021-01-31-Useful-Commands-of-ggplot2-/">
-                            <span class="post-title gt-c-content-color-first">Data Visualization with ggplot2</span>
-                        </a>
-                    </div>
-                    <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        
-                    </div>
-                    <div class="post-info">
-                        <time class="post-time gt-c-content-color-first">
-                            发布于 · 2021-01-29 ·
-                        </time>
-                        
-                            <a href="https://BolinWu-Gridea.github.io/tag/3NvdI79lVT/" class="post-tag">
-                                # data visualization
-                            </a>
-                        
-                    </div>
-                </div>
-                
-                    <a href="https://BolinWu-Gridea.github.io/post/2021-01-31-Useful-Commands-of-ggplot2-/" class="post-feature-image"
-                       style="background-image: url('https://BolinWu-Gridea.github.io/post-images/2021-01-31-Useful-Commands-of-ggplot2-.jpeg')">
-                    </a>
-                
-            </div>
-        
-            <div class="post gt-bg-theme-color-second">
-                <div class="post-left">
-                    <div>
-                        
-                        <a href="https://BolinWu-Gridea.github.io/post/2021-01-26-Kmeans/">
-                            <span class="post-title gt-c-content-color-first">K-means Clustering for Numeric Data </span>
-                        </a>
-                    </div>
-                    <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        
-                    </div>
-                    <div class="post-info">
-                        <time class="post-time gt-c-content-color-first">
-                            发布于 · 2021-01-24 ·
-                        </time>
-                        
-                            <a href="https://BolinWu-Gridea.github.io/tag/J1GvUL627h/" class="post-tag">
-                                # unsupervised machine learning
-                            </a>
-                        
-                    </div>
-                </div>
-                
-            </div>
-        
-            <div class="post gt-bg-theme-color-second">
-                <div class="post-left">
-                    <div>
-                        
-                        <a href="https://BolinWu-Gridea.github.io/post/2021-01-16-GARCH/">
-                            <span class="post-title gt-c-content-color-first">Modelling Daily Dow Jones Industrial Average by GARCH </span>
-                        </a>
-                    </div>
-                    <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        
-                    </div>
-                    <div class="post-info">
-                        <time class="post-time gt-c-content-color-first">
-                            发布于 · 2021-01-15 ·
-                        </time>
-                        
-                            <a href="https://BolinWu-Gridea.github.io/tag/2Exz0B0fk5/" class="post-tag">
-                                # financial data
-                            </a>
-                        
-                            <a href="https://BolinWu-Gridea.github.io/tag/7v2JXQ6YCp/" class="post-tag">
-                                # GARCH
-                            </a>
-                        
-                    </div>
-                </div>
-                
-                    <a href="https://BolinWu-Gridea.github.io/post/2021-01-16-GARCH/" class="post-feature-image"
-                       style="background-image: url('https://BolinWu-Gridea.github.io/post-images/2021-01-16-GARCH.jpg')">
-                    </a>
-                
-            </div>
-        
+    <div class="nav py-3 md:py-8 fixed w-full z-10 bg-gray-50 dark:bg-gray-700 transition-all duration-300" :class="{ 'scroll': scrolled }">
+  <div class="flex justify-end px-4">
+    <div class="w-8 h-8 flex justify-center items-center rounded-full md:hidden" @click="showMenu = !showMenu">
+      <i class="ri-close-line" v-show="showMenu"></i>
+      <i class="ri-menu-3-line" v-show="!showMenu"></i>
     </div>
+  </div>
+  <nav class="max-w-4xl w-full mx-auto text-center flex flex-col md:flex-row justify-center md:block" :class="`${ showMenu ? 'block' : 'hidden' }`">
+    
+      <a href="/" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+        Homepage
+      </a>
+    
+      <a href="/archives" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+        Archives
+      </a>
+    
+      <a href="/tags" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+        Tags
+      </a>
+    
+      <a href="/post/about" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+        About
+      </a>
+    
+    <a href="https://BolinWu-Gridea.github.io/atom.xml" target="_blank" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+      RSS
+    </a>
+  </nav>
 </div>
 
-        <div class="pagination-container">
+    <div class="max-w-4xl w-full mx-auto ">
+      
+        <header class="flex py-16 md:py-32 mt-12 flex-col md:flex-row px-4 md:px-0 animated fadeIn">
+  <div class="flex-1 order-2 md:order-1 md:pr-16">
+    <div class="text-4xl font-bold text-center md:text-left">
+      Bolin Wu
+    </div>
+    <div class="text-xl text-gray-500 mt-4 text-center md:text-left">
+      Data Science Blog
+
+    </div>
     
     
-</div>
+      <div class="mt-8 flex items-center">
+        
+          <div class="text-gray-500 mr-2">
+            Contact me 👉
+          </div>
+        
+        
+          
+        
+          
+            
+              <a href="mailto:bolin.wu1026@gmail.com" target="_blank" class="mr-2 w-8 h-8 inline-flex items-center justify-center text-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast">
+                <i class="ri-mail-line"></i>
+              </a>
+            
+          
+        
+          
+            
+              <a href="https://github.com/Bolin-Wu" target="_blank" class="mr-2 w-8 h-8 inline-flex items-center justify-center text-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast">
+                <i class="ri-github-line"></i>
+              </a>
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    
+  </div>
+  <div class="md:mx-8 flex-shrink-0 self-start rounded-full border-4 border-dotted border-transparent hover:border-yellow-50 p-2 w-32 h-32 order-1 md:order-2 mx-auto s3-dotted">
+    <img class="rounded-full object-cover" src="https://BolinWu-Gridea.github.io/images/avatar.png?v=1621688982648" alt="Bolin Wu" width="100%" height="100%">
+  </div>
+</header>
+      
+
+      <div class="shadow-box bg-white dark:bg-gray-600 border-gray-300 rounded-none md:rounded-lg -mx-1 md:mx-0 md:px-0">
+        
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+      <i class="ri-star-line text-orange-200 absolute text-2xl left-0 ml-1 rotate-90"></i>
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://BolinWu-Gridea.github.io/post/2020-01-14-ML-Wine/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          Evaluate Wine by LSTM and Simple NN 
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-01-11</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        
+This project is done by my teammate Zhenyu Zhao and me. It costs us a lot of time to finish but we really enjoy the pro...
+      </div>
+      <a href="https://BolinWu-Gridea.github.io/post/2020-01-14-ML-Wine/" class="btn">
+        Read more
+      </a>
+    </div>
+    
+      <img class="flex-shrink-0 self-start md:ml-4 mb-4 md:mb-0 rounded-sm object-cover featured-img order-1 md:order-2 w-full h-40 md:w-56 md:h-32" loading="lazy" src="https://BolinWu-Gridea.github.io/post-images/2020-01-14-ML-Wine.jpg" alt="Evaluate Wine by LSTM and Simple NN ">
+    
+  </div>
+
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          An Overview of Causal Inference (Part 2: Propensity Score and Matching)
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-05-07</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        
+In the Part 1 we talked about the basic concepts of causal effect and confounding. In this post we will proceeed with d...
+      </div>
+      <a href="https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/" class="btn">
+        Read more
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://BolinWu-Gridea.github.io/post/2021-04-20-CausalityIntroductionP1/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          An Overview of Causal Inference (Part 1: Causal Effects and Confounding)
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-04-17</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        
+Causal inference has been a heated field in statistics. It has great application for observational data. In this post I...
+      </div>
+      <a href="https://BolinWu-Gridea.github.io/post/2021-04-20-CausalityIntroductionP1/" class="btn">
+        Read more
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://BolinWu-Gridea.github.io/post/2021-03-09-LASSO/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          Prediction of Children Anaemia Rate by LASSO
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-03-08</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        
+This post investigates the five factors that are related to anaemia in children by using the data collected from the Wo...
+      </div>
+      <a href="https://BolinWu-Gridea.github.io/post/2021-03-09-LASSO/" class="btn">
+        Read more
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://BolinWu-Gridea.github.io/post/2021-02-09-SimpleNN/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          Classification of Image Data by Simple NN 
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-02-07</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        
+Intuitively, simple neural network is a combination of many (linear) transformations, which is similar to mixture model...
+      </div>
+      <a href="https://BolinWu-Gridea.github.io/post/2021-02-09-SimpleNN/" class="btn">
+        Read more
+      </a>
+    </div>
+    
+      <img class="flex-shrink-0 self-start md:ml-4 mb-4 md:mb-0 rounded-sm object-cover featured-img order-1 md:order-2 w-full h-40 md:w-56 md:h-32" loading="lazy" src="https://BolinWu-Gridea.github.io/post-images/2021-02-09-SimpleNN.jpg" alt="Classification of Image Data by Simple NN ">
+    
+  </div>
+
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://BolinWu-Gridea.github.io/post/2021-02-18-DecisionTree/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          Prediction of Baseball Player Salary by Regression Tree, Random Forest and XGBoost
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-02-07</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        
+Tree-based methods are conceptually easy to comprehend and they render advantages like easy visualization and data-prep...
+      </div>
+      <a href="https://BolinWu-Gridea.github.io/post/2021-02-18-DecisionTree/" class="btn">
+        Read more
+      </a>
+    </div>
+    
+      <img class="flex-shrink-0 self-start md:ml-4 mb-4 md:mb-0 rounded-sm object-cover featured-img order-1 md:order-2 w-full h-40 md:w-56 md:h-32" loading="lazy" src="https://BolinWu-Gridea.github.io/post-images/2021-02-18-DecisionTree.jpg" alt="Prediction of Baseball Player Salary by Regression Tree, Random Forest and XGBoost">
+    
+  </div>
+
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://BolinWu-Gridea.github.io/post/2021-02-03-EM_Post/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          The Application of EM Algorithm
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-02-01</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        
+Expectation-maximization (EM) algorithm is a powerful unsupervised
+machine learning tool. Conceptually, It is quite sim...
+      </div>
+      <a href="https://BolinWu-Gridea.github.io/post/2021-02-03-EM_Post/" class="btn">
+        Read more
+      </a>
+    </div>
+    
+      <img class="flex-shrink-0 self-start md:ml-4 mb-4 md:mb-0 rounded-sm object-cover featured-img order-1 md:order-2 w-full h-40 md:w-56 md:h-32" loading="lazy" src="https://BolinWu-Gridea.github.io/post-images/2021-02-03-EM_Post.jpeg" alt="The Application of EM Algorithm">
+    
+  </div>
+
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://BolinWu-Gridea.github.io/post/2021-01-31-Useful-Commands-of-ggplot2-/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          Data Visualization with ggplot2
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-01-29</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        
 
 
-        <div class="site-footer gt-c-content-color-first">
-    <div class="slogan gt-c-content-color-first">Data Science Blog
-</div>
-    <div class="social-container">
-        
-            
-                <a href="https://github.com/Bolin-Wu" target="_blank">
-                    <i class="fab fa-github gt-c-content-color-first"></i>
-                </a>
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
+In this post I will share some frequently used ggplot2 commands when
+making data visualization.
+To make it easy to re...
+      </div>
+      <a href="https://BolinWu-Gridea.github.io/post/2021-01-31-Useful-Commands-of-ggplot2-/" class="btn">
+        Read more
+      </a>
     </div>
-    <div class="footer-info">
-        Be better every day
-    </div>
-    <div>
-        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
-                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://BolinWu-Gridea.github.io/atom.xml" target="_blank">RSS</a></a>
-    </div>
-</div>
+    
+      <img class="flex-shrink-0 self-start md:ml-4 mb-4 md:mb-0 rounded-sm object-cover featured-img order-1 md:order-2 w-full h-40 md:w-56 md:h-32" loading="lazy" src="https://BolinWu-Gridea.github.io/post-images/2021-01-31-Useful-Commands-of-ggplot2-.jpeg" alt="Data Visualization with ggplot2">
+    
+  </div>
 
-<script>
-  hljs.initHighlightingOnLoad()
-</script>
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://BolinWu-Gridea.github.io/post/2021-01-26-Kmeans/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          K-means Clustering for Numeric Data 
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-01-24</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        
+The k-means algorithm is a well-known unsupervised machine learning algorithm. From The elements of Statistical Learnin...
+      </div>
+      <a href="https://BolinWu-Gridea.github.io/post/2021-01-26-Kmeans/" class="btn">
+        Read more
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://BolinWu-Gridea.github.io/post/2021-01-16-GARCH/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          Modelling Daily Dow Jones Industrial Average by GARCH 
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-01-15</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        Introduction
+GARCH is a well known model to capture the volatility in the data. It can be useful to deal with the financ...
+      </div>
+      <a href="https://BolinWu-Gridea.github.io/post/2021-01-16-GARCH/" class="btn">
+        Read more
+      </a>
+    </div>
+    
+      <img class="flex-shrink-0 self-start md:ml-4 mb-4 md:mb-0 rounded-sm object-cover featured-img order-1 md:order-2 w-full h-40 md:w-56 md:h-32" loading="lazy" src="https://BolinWu-Gridea.github.io/post-images/2021-01-16-GARCH.jpg" alt="Modelling Daily Dow Jones Industrial Average by GARCH ">
+    
+  </div>
+  
+      </div>
+
+      
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Prudence is a fountain of life to the prudent
+</footer>
 
     </div>
-</div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://BolinWu-Gridea.github.io/media/scripts/main.js"></script>
 </body>
+
 </html>
