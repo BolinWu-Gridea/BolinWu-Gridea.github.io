@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2021-05-22T10:32:16.439Z</updated>
+    <updated>2021-05-22T11:12:13.968Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -16,8 +16,8 @@
         <id>https://BolinWu-Gridea.github.io/post/2021-04-20-CausalityIntroductionP1/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2021-04-20-CausalityIntroductionP1/">
         </link>
-        <updated>2021-04-18T16:00:00.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
+        <updated>2021-04-18T10:00:00.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
 <p>Causal inference has been a heated field in statistics. It has great application for observational data. In this post I will shares some key concepts of causal inference:</p>
 <ul>
 <li>The confusion over causal inference</li>
@@ -209,8 +209,8 @@ SUTVA allows us to write potential outcome for the ith person in terms of only t
         <id>https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/">
         </link>
-        <updated>2021-04-17T22:00:00.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
+        <updated>2021-04-17T10:00:00.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
 <p>In the <a href="https://bolinwu.org/CausalityIntroductionP1/">Part 1</a> we talked about the basic concepts of causal effect and confounding. In this post we will proceeed with discussing about how to control the confounders with matching. The main content consists of:</p>
 <ul>
 <li>The concept of matching.</li>
@@ -526,8 +526,8 @@ mean of x
         <id>https://BolinWu-Gridea.github.io/post/2021-03-09-LASSO/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2021-03-09-LASSO/">
         </link>
-        <updated>2021-03-09T02:00:00.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
+        <updated>2021-03-08T19:00:00.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
 <p>This post investigates the five factors that are related to anaemia in children by using the data collected from the <a href="https://www.who.int/data/gho/">World Health Organization</a>. The method we will use is LASSO, which is a classic penalized regression. In this post we will see how LASSO filter out the variable for us and its prediction performance compared with our baseline model, linear regression.<br>
 To implement LASSO in R, the package I used is &quot;glmnet&quot;.</p>
 <h1 id="data-description">Data Description</h1>
@@ -703,36 +703,521 @@ It is not uncommon that a simple regression may give better result than &quot;fa
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[test]]></title>
-        <id>https://BolinWu-Gridea.github.io/post/test/</id>
-        <link href="https://BolinWu-Gridea.github.io/post/test/">
+        <title type="html"><![CDATA[Classification of Image Data by Simple NN ]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/2021-02-09-SimpleNN/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/2021-02-09-SimpleNN/">
         </link>
-        <updated>2021-02-26T08:27:36.000Z</updated>
-        <content type="html"><![CDATA[<p>test</p>
+        <updated>2021-02-08T12:00:00.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<p>Intuitively, simple neural network is a combination of many (linear) transformations, which is similar to mixture model in some way. It allows to transform the input data in a more sophisticated way that a single linear model could not achieve. Simple neural network is the foundation for many other more advanced neural network models e.g., Recurrent Neural Network and Long Short Term Memory (LSTM). By the way, I posted a project of LSTM <a href="https://bolinwu.org/ML-Wine/">here</a> please feel free to check it out if you are interested.</p>
+<p>If you have not heard of neural network before, this video may help you to easily grasp the idea:<br>
+<a href="http://www.youtube.com/watch?v=CqOfi41LfDw" title="StatQuest"><img src="http://img.youtube.com/vi/CqOfi41LfDw/0.jpg" alt="" loading="lazy"></a></p>
+<p>The content of this post includes:</p>
+<ol>
+<li>The basics of <strong>feedforward neural network</strong>.</li>
+<li>The application of it with the help of TensorFlow and Keras.</li>
+<li>Several useful parameter tunings.</li>
+</ol>
+<p>The main reference is <a href="https://www.deeplearningbook.org">Deep Learning, Goodfellow et al</a>, Chapter 6.</p>
+<h1 id="neural-network-basics">Neural Network Basics</h1>
+<p>At first, let us implement a straight forward neural network mathematically. We assume our single hidden layer network to be:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo separator="true">,</mo><mi>W</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>w</mi><mo separator="true">,</mo><mi>b</mi><mo>)</mo><mo>=</mo><msup><mi>w</mi><mi>T</mi></msup><mi>m</mi><mi>a</mi><mi>x</mi><mo>(</mo><mn>0</mn><mo separator="true">,</mo><msup><mi>W</mi><mi>T</mi></msup><mi>x</mi><mo>+</mo><mi>c</mi><mo>)</mo><mo>+</mo><mi>b</mi></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+f(x,W,c,w,b) = w^{T} max(0,W^{T}x+c)+b
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.551331em;vertical-align:-0.5256654999999999em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0256655000000001em;"><span style="top:-3.1343345000000005em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">b</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span><span class="mord mathdefault">m</span><span class="mord mathdefault">a</span><span class="mord mathdefault">x</span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault">c</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5256654999999999em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>Where X is the input data, W,w,are the weight matrix, c,b are the interceps, for hidden layer and output layer respectively. These parameters are usually estimated by the backpropagation algorithm. Here for illustration we just assume:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>W</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">W = \begin{bmatrix}1 &amp; 1\\
+1 &amp; 1
+\end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9500000000000004em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9500000000000004em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span></span></p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">c = \begin{bmatrix}0 \\
+-1
+\end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">c</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">0</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">−</span><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9500000000000004em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span></span></p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>w</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>2</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">w = \begin{bmatrix}1 \\
+-2
+\end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">−</span><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9500000000000004em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span></span></p>
+<p>and b =0.</p>
+<p>The input data:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>X</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">X = \begin{bmatrix}0 &amp; 0\\
+0 &amp; 1\\
+1 &amp; 0\\
+1 &amp; 1
+\end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:4.80204em;vertical-align:-2.15003em;"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.6520099999999998em;"><span style="top:-1.6499900000000003em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎣</span></span></span><span style="top:-2.80499em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎢</span></span></span><span style="top:-3.40599em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎢</span></span></span><span style="top:-4.65201em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎡</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.15003em;"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.6500000000000004em;"><span style="top:-4.8100000000000005em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">0</span></span></span><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">0</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-1.2099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.1500000000000004em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.6500000000000004em;"><span style="top:-4.8100000000000005em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">0</span></span></span><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-2.4099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">0</span></span></span><span style="top:-1.2099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.1500000000000004em;"><span></span></span></span></span></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.6520099999999998em;"><span style="top:-1.6499900000000003em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎦</span></span></span><span style="top:-2.80499em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎥</span></span></span><span style="top:-3.40599em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎥</span></span></span><span style="top:-4.65201em;"><span class="pstrut" style="height:3.1550000000000002em;"></span><span class="delimsizinginner delim-size4"><span>⎤</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.15003em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>The basic steps of implementing the network above:</p>
+<ol>
+<li>Transform the original data X by using weight W and intercept c.</li>
+<li>Send the transformed data into activation function, get output X'.</li>
+<li>Transform the X' by using the weight w and intercept b. Then get the final output.</li>
+</ol>
+<p>The max() function part is actually a ReLU activation function and this example is a realization of XOR logic gate.</p>
+<p>R Code:</p>
+<pre><code class="language-r"># load the package
+library(sigmoid)
+library(keras)
+library(kerasR)
+library(tensorflow)
+
+W = matrix(rep(1,4),nrow = 2); c = matrix(c(0,-1), nrow = 2);
+w = matrix(c(1,-2), nrow = 2)
+X = matrix(c(0,0,0,1,1,0,1,1), byrow = T, nrow = 4, ncol = 2)
+
+network = function(x_input,W_input, c_input, w_input, b_input){
+  # transfor c_input so that it can be used for addition in the next step
+  c_trans = matrix(NA, nrow =  nrow(x_input %*% W_input), ncol = nrow(c_input))
+  for (i in 1: nrow(c_input) ) {
+    c_trans[,i] = rep(c_input[i],nrow(x_input %*% W_input) )
+
+  }
+
+  # (6.8) and (6.9)
+  layer_trans1  = x_input %*% W_input + c_trans
+  # put into activation function, (6.10)
+  activation_1 = relu(layer_trans1)
+  # output, (6.11)
+  out_1 = activation_1 %*% w + b_input
+  return(out_1)
+
+}
+
+
+network(X,W_input = W,c_input = c,w_input = w,b_input =0)
+
+     [,1]
+[1,]    0
+[2,]    1
+[3,]    1
+[4,]    0
+</code></pre>
+<h1 id="feed-forward-neural-network-using-keras-and-tensorflow">Feed-Forward Neural Network using Keras and TensorFlow</h1>
+<p>Now let us step into the application part. You can find find how to install keras and tensorflow in R <a href="https://tensorflow.rstudio.com/installation/">here</a>.<br>
+The data that we will use is the classic MNIST dataset from keras which contains a huge amount of hand-written digits. The data could be easiliy loaded as follows:</p>
+<pre><code class="language-r">library(keras)
+mnist &lt;- dataset_mnist()
+# scale the dataset
+mnist$train$x &lt;- mnist$train$x/255
+mnist$test$x &lt;- mnist$test$x/255
+</code></pre>
+<h2 id="1-have-a-grasp-of-mnist">1. Have a grasp of MNIST</h2>
+<p>Let us first have a grasp about the dataset by visualizing a digit. You could play around the code and explore the dataset in your own way.</p>
+<pre><code class="language-r">idx &lt;- 3
+im &lt;- mnist$train$x[idx,,]
+# Transpose the image
+im &lt;- t(apply(im, 2, rev))
+image(1:28, 1:28, im, col=gray((0:255)/255), xlab = &quot;&quot;, ylab = &quot;&quot;,
+        xaxt='n', yaxt='n', main=paste(mnist$train$y[idx]))
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621680342589.png" alt="" loading="lazy"><br>
+<em>Fig.1 Digit Visualization</em></p>
+<p>And we can also use object.size()function to see the size of MNIST dataset:</p>
+<pre><code class="language-r">cat(&quot;The training data set is&quot;,object.size(mnist$train),&quot;bytes;&quot;,&quot;\n&quot;,
+    &quot;The test data set is&quot;,object.size(mnist$test),&quot;bytes.&quot;)
+
+The training data set is 376560792 bytes;
+ The test data set is 62760792 bytes.
+</code></pre>
+<h2 id="2-implementation">2. Implementation</h2>
+<p>Next, we will start with on hidden layer with 16 units and the sigmoid as the avtivation function, without any regularization.</p>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 16, activation = &quot;sigmoid&quot;)
+  %&gt;%
+# ouput layer
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;adam&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 5,
+    validation_split = 0.3,
+    verbose = 2
+  )
+
+Epoch 1/5
+1313/1313 - 1s - loss: 0.5673 - accuracy: 0.8667
+1313/1313 - 2s - loss: 0.5673 - accuracy: 0.8667 - val_loss: 0.3418 - val_accuracy: 0.9087
+Epoch 2/5
+1313/1313 - 1s - loss: 0.3237 - accuracy: 0.9125
+1313/1313 - 2s - loss: 0.3237 - accuracy: 0.9125 - val_loss: 0.3124 - val_accuracy: 0.9139
+Epoch 3/5
+1313/1313 - 1s - loss: 0.2981 - accuracy: 0.9174
+1313/1313 - 2s - loss: 0.2981 - accuracy: 0.9174 - val_loss: 0.2998 - val_accuracy: 0.9169
+Epoch 4/5
+1313/1313 - 1s - loss: 0.2841 - accuracy: 0.9212
+1313/1313 - 2s - loss: 0.2841 - accuracy: 0.9212 - val_loss: 0.2951 - val_accuracy: 0.9199
+Epoch 5/5
+1313/1313 - 1s - loss: 0.2753 - accuracy: 0.9235
+1313/1313 - 2s - loss: 0.2753 - accuracy: 0.9235 - val_loss: 0.2874 - val_accuracy: 0.9236
+
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621680418771.jpeg" alt="" loading="lazy"><br>
+<em>Training Process</em></p>
+<p>The accuracy after 5 epochs is 0.9235.</p>
+<p>Please note that in the setup part, the last dense layer is an ouput layer. Its units number has to be 10 because there are ten digits and we are interested to classyfy these 10 circumstances. If in the future we would like to do yes/no classification, then the unit should be 1.</p>
+<h2 id="3-parameter-tuning">3. Parameter Tuning</h2>
+<p>The default epoch number is 5, hidden layer is 16 units and the activation function is sigmoid.</p>
+<h3 id="a-increase-the-number-of-hidden-units-to-128">(a) Increase the number of hidden units to 128</h3>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 128, activation = &quot;sigmoid&quot;) %&gt;% # increase unit to 128
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;adam&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 5,
+    validation_split = 0.3,
+    verbose = 2
+  )
+
+
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621680446248.jpeg" alt="" loading="lazy"><br>
+<em>Training Process</em></p>
+<p>The validation accuracy after 5 epochs is around 0.9607.</p>
+<h3 id="b-change-the-activation-function-to-relu">(b) Change the activation function to reLU</h3>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;% # change to ReLU
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;adam&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 5,
+    validation_split = 0.3,
+    verbose = 2
+  )
+
+
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621680485454.jpeg" alt="" loading="lazy"><br>
+<em>Training Process</em></p>
+<p>The validation accuracy after 5 epochs is around 0.9708.</p>
+<h3 id="c-change-the-optimizer-to-rmsprop">(c) Change the optimizer to RMSprop</h3>
+<p>Sebastian Ruder has an excellent papper <a href="https://arxiv.org/abs/1609.04747">An overview of gradient descent optimization algorithms</a> which illustrates the different optimizers. If you would like to know what are optimizers and the differences between them, please take a look.</p>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;%
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;RMSprop&quot;, # change to RMSprop
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 5,
+    validation_split = 0.3,
+    verbose = 2
+  )
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621680508104.jpeg" alt="" loading="lazy"><br>
+<em>Training Process</em></p>
+<p>The validation accuracy after 5 epochs is around 0.9678, not changed much.</p>
+<h3 id="d-try-to-run-the-net-for-ten-epochs-and-use-early-stopping-for-regularization">(d) Try to run the net for ten epochs and use early stopping for regularization</h3>
+<p>The early stopping means that the process stops training when a monitored metric has stopped improving. We can do so by adding <em>&quot;callbacks = callback_early_stopping(monitor = &quot;val_loss&quot;,patience = 3)&quot;</em> in the model fitting sequence as is shown above. The <em>&quot;patience&quot;</em> parameter is the number of epochs with no improvement after which training will be stopped.</p>
+<p>The early stopping is one of the remedies for overfitting.</p>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;%
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;RMSprop&quot;, # change to RMSprop
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 10,
+    validation_split = 0.3,
+    verbose = 2,
+      # early stopping
+    callbacks = callback_early_stopping(monitor = &quot;val_loss&quot;,patience = 3)
+  )
+
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621680558886.jpeg" alt="" loading="lazy"><br>
+<em>Training Process</em></p>
+<p>The validation accuracy after 5 epochs is around 0.9716 which is slightly improved.</p>
+<h3 id="e-add-a-second-layer-with-128-hidden-units">(e) Add a second layer with 128 hidden units.</h3>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;%
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;% # add a second layer
+  layer_dense(10, activation = &quot;softmax&quot;)
+ # add a second layer
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;RMSprop&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 10,
+    validation_split = 0.3,
+    verbose = 2
+  )
+
+summary(model)
+
+Model: &quot;sequential_15&quot;
+_________________________________________________________________________________
+Layer (type)                        Output Shape                    Param #      
+=================================================================================
+flatten_15 (Flatten)                (None, 784)                     0            
+_________________________________________________________________________________
+dense_37 (Dense)                    (None, 128)                     100480       
+_________________________________________________________________________________
+dense_38 (Dense)                    (None, 128)                     16512        
+_________________________________________________________________________________
+dense_39 (Dense)                    (None, 10)                      1290         
+=================================================================================
+Total params: 118,282
+Trainable params: 118,282
+Non-trainable params: 0
+_________________________________________________________________________________
+
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621680577971.jpeg" alt="" loading="lazy"><br>
+<em>Training Process</em></p>
+<p>The validation accuracy after 10 epochs is around 0.9750. If we use the summary function we can see that the number of total parameters with two hidden layers is 118,282, which is pretty huge compared with normal statistical models. One benefit is that it gives a pretty high classification accuracy, but the disadvantages could be the long time consumption of model training as well as potential overfitting problem. Next I will introduce <strong>dropout</strong> which could be a remedy for the mentioned disadvantages.</p>
+<h3 id="f-add-dropout">(f) Add dropout.</h3>
+<p>In practice you could choose what layers you want to implement dropout. Here I introduce dropout (p=0.2) to the first layer and dropout (p=0.5) to the second layer.</p>
+<p>Without dropout, <strong>every</strong> node in a hidden layer is connected with <strong>every</strong> node in the next hidden layer. With dropout,the nodes in a hidden layer will be <strong>excluded</strong> with a given probability therefore it will fasten the training process as well as preventing overfitting to some extent.</p>
+<pre><code class="language-r"># set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;%
+  layer_dropout(0.2) %&gt;%  # introduce dropout
+  layer_dense(units = 128, activation = &quot;relu&quot;) %&gt;%
+  layer_dropout(0.5) %&gt;%
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;RMSprop&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 10,
+    validation_split = 0.3,
+    verbose = 2
+  )
+
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621680598685.jpeg" alt="" loading="lazy"><br>
+<em>Training Process</em></p>
+<p>The validation accuracy after 10 epochs is around 0.9701.</p>
+<h2 id="3-try-to-improve-the-network-architecture">3. Try to improve the network architecture</h2>
+<p>Now, with all the tuning methods given above, you could play round and build a network that gives best accuracy.</p>
+<p>After many trials of different parameters, I found the network with the best validation accuracy = 0.9725.<br>
+The architecture is:</p>
+<ol>
+<li>Two hidden layers with the first activation function to be sigmoid and the second to be softmax. Both units are 128. The output layer has softmax activation function with 10 units.</li>
+<li>Add drop out with 0.3 probability for each hidden layer. This can help accelerate the training process and prevent overfitting to some extent.</li>
+<li>The optimizer is Adam method.</li>
+<li>Set epochs = 50 and use early stopping (patiece = 3). I increase the number of epoch in case that the net work fails to get to its optimal model for lack of iteration. And the early stopping is used so that it can stop when its accuracy stop growing for three consecutive epochs.</li>
+</ol>
+<p>The code is listed below:</p>
+<pre><code class="language-r"># change apoch, drop layout, add early stopping
+# add another layer
+# library(kerasR)
+# set up the model
+model &lt;- keras_model_sequential() %&gt;%
+  layer_flatten(input_shape = c(28, 28)) %&gt;%
+
+  layer_dense(units = 128, activation = &quot;sigmoid&quot;) %&gt;%
+  layer_dropout(0.3)%&gt;%
+  layer_dense(units = 128, activation = &quot;softmax&quot;) %&gt;%
+  layer_dropout(0.3)%&gt;%
+  layer_dense(10, activation = &quot;softmax&quot;)
+
+
+# compile the model
+model %&gt;%
+  compile(
+    loss = &quot;sparse_categorical_crossentropy&quot;,
+    optimizer = &quot;adam&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+# fit the model
+model %&gt;%
+  fit(
+    x = mnist$train$x, y = mnist$train$y,
+    epochs = 50,
+    validation_split = 0.3,
+    verbose = 2,
+    callbacks = callback_early_stopping(monitor = &quot;val_loss&quot;,patience = 3)
+  )
+
+</code></pre>
+<h2 id="compute-the-accuracy-precision-and-recall-of-the-designed-model">Compute the accuracy, precision, and recall of the designed model</h2>
+<p>Here we can use evaluate() funciton to get the accuracy directly. <br>
+And to get precision and recall, I need to first use predict_classes() funciton to get the prediction in integer, and then use confutionMatrix in caret package.</p>
+<p>The accuracy = 0.9741;</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:right">Precision</th>
+<th style="text-align:right">Recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Class:0</td>
+<td style="text-align:right">0.9807</td>
+<td style="text-align:right">0.9867</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 1</td>
+<td style="text-align:right">0.9852</td>
+<td style="text-align:right">0.9938</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 2</td>
+<td style="text-align:right">0.9748</td>
+<td style="text-align:right">0.9748</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 3</td>
+<td style="text-align:right">0.9546</td>
+<td style="text-align:right">0.9792</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 4</td>
+<td style="text-align:right">0.9845</td>
+<td style="text-align:right">0.9715</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 5</td>
+<td style="text-align:right">0.9664</td>
+<td style="text-align:right">0.9686</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 6</td>
+<td style="text-align:right">0.9792</td>
+<td style="text-align:right">0.9812</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 7</td>
+<td style="text-align:right">0.9718</td>
+<td style="text-align:right">0.9718</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 8</td>
+<td style="text-align:right">0.9733</td>
+<td style="text-align:right">0.9713</td>
+</tr>
+<tr>
+<td style="text-align:left">Class: 9</td>
+<td style="text-align:right">0.9806</td>
+<td style="text-align:right">0.9504</td>
+</tr>
+</tbody>
+</table>
+<h1 id="ending">Ending</h1>
+<h2 id="challenges">Challenges</h2>
+<p>In the end I would like to share some challenges that I met when I was implementing neural network (NN). <br>
+First, understanding the feedforward NN structure in tensorflow. Before I ommited the fact that the last dense layer should be output layer and thought it was set up by the API by default. It is important to read documentation carefully. <br>
+Second, we only need to use pipeline when compiling and fitting model. I did not understand why in the compliling part and fitting part, only pipeline is needed but we do not need to store it. I guess the reason could be that the tensorflow API is developped by Python or some other language as foundation therefore it does not follow our intuition of using R.</p>
+<pre><code class="language-r">model  %&gt;% compile()
+model %&gt;% fit()
+# but we do not need to use
+model = model  %&gt;% compile()
+# or
+model = model %&gt;% fit()
+</code></pre>
+<h2 id="tips">Tips</h2>
+<ul>
+<li>This post does not discuss some important concepts e.g., backpropagation and gradient descent, but they are worth checking out.</li>
+<li>It is beneficial to read the summary of compiled model and calculate the number of parameters again by hand. This could help you comprehend the setup better.</li>
+</ul>
+<p>Hopefully this post can be helpful to you. Thank you for reading.</p>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Classification of Baseball Player Technical Statistics by Decision Tree and Random Forest]]></title>
-        <id>https://BolinWu-Gridea.github.io/post/2020-02-18-DecisionTree/</id>
-        <link href="https://BolinWu-Gridea.github.io/post/2020-02-18-DecisionTree/">
+        <title type="html"><![CDATA[Prediction of Baseball Player Salary by Regression Tree, Random Forest and XGBoost]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/2021-02-18-DecisionTree/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/2021-02-18-DecisionTree/">
         </link>
-        <updated>2021-02-08T19:00:00.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="introduction">Introduction</h1>
-<p>Tree-based methods are conceptually easy to comprehend and they render advantages like easy visualization and data-preprocessing. It is a powerful tool for classification. In this post I will introduce how to classify baseball player technical statistics by  Decision Tree and Random Forest from algorithm coding to  package usage.</p>
-<h2 id="content">Content:</h2>
+        <updated>2021-02-07T15:00:00.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<p>Tree-based methods are conceptually easy to comprehend and they render advantages like easy visualization and data-preprocessing. It is a powerful tool for both numeric and categorical prediction. In this post I will introduce how to predict baseball player salary by  Decision Tree and Random Forest from algorithm coding to  package usage.</p>
+<p>Content:</p>
 <ol>
 <li>Showing the algorithm of Decision Tree by R, which including tree splitting, tree grwoing, bagging, prediction, etc.</li>
 <li>Runing Random Forest and XGBoost with the help of <strong>randomForest</strong> package</li>
 </ol>
-<h2 id="reference">Reference:</h2>
+<p>Reference:</p>
 <ul>
 <li><a href="https://web.stanford.edu/~hastie/ElemStatLearn/">The Elements of Statistical Learning: Data Mining, Inference, and Prediction</a>  by Trevor Hastie et al.</li>
 <li>Mans Magnusson (2020). uuml: R Content for the Introduction to Machine Learning. Course at Uppsala University. R package version 0.2.0.</li>
 </ul>
-<h1 id="decision-tree">Decision Tree</h1>
+<h1 id="regression-tree">Regression Tree</h1>
 <h2 id="data-pre-processing">Data Pre-processing</h2>
-<p>First, we need to lead the dataset Hitters provided in the refereced <a href="https://github.com/MansMeg/IntroML/tree/master/rpackage">uuml</a> package. This dataset consists of the salary of many baseball players and their relevant technical statistics. <br>
-Here we assume that we only care about three columns:&quot;Years&quot;, &quot;Hits&quot; and &quot;Salary&quot;. The missing values are imputed by listwise deletion. And we set the first 30 ovservations as test set and the rest as training set.</p>
+<p>First, we need to lead the dataset Hitters provided in the reference <a href="https://github.com/MansMeg/IntroML/tree/master/rpackage">uuml</a> package. This dataset consists of the salary of many baseball players and their relevant technical statistics. <br>
+Here we assume that we only care about three columns:&quot;Years&quot;, &quot;Hits&quot; and &quot;Salary&quot;. The missing values are imputed by listwise deletion. And we set the first 30 observations as test set and the rest as training set.</p>
 <pre><code class="language-r"># install relevant packages
 # remotes::install_github(&quot;MansMeg/IntroML&quot;,subdir = &quot;rpackage&quot;)
 # install.packages(&quot;randomForest&quot;)
@@ -792,7 +1277,7 @@ head(X_check)
 <p>Essentially, what they do can be explained by the following three steps:</p>
 <ol>
 <li>Let j grind over all the variables of the dataset, which in our case is 2 variables <strong>Years</strong> and <strong>Hits</strong>. Let s grind over all the values of jth variable. For example, given the sample data above when j = 1 (Years), s will grind from year = 2 (Bob Melvin) to the year of last player.</li>
-<li>Allocate each observation according to the given j and s into two groups. And then calculate the mean value of each group, $$\hat{c_{1}}$$ and $$\hat{c_{2}}$$. Get the within group scatters by using the function in the min() of the first equation above.</li>
+<li>Allocate each observation according to the given j and s into two groups. And then calculate the mean value of each group, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><msub><mi>c</mi><mn>1</mn></msub><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{c_{1}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><msub><mi>c</mi><mn>2</mn></msub><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{c_{2}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span>. Get the within group scatters by using the function in the min() of the first equation above.</li>
 <li>Return the j and s that give the smallest within group scatter.</li>
 </ol>
 <p>This process can be also called <strong>greedy method</strong>, because we are grinding all the possible values and return the most ideal result.</p>
@@ -953,10 +1438,8 @@ grow_tree = function(X,y,l){
 <h3 id="explanation">Explanation</h3>
 <p>Here my code may seem a bit too much. I believe that different people will have different approaches to build the algorithm and if you who are reading this post have a neater way please let me know, thank you 😃 <br>
 Instead of explaining the my code line by line, I would like to explain the general concept with the help of my scrach. Sorry if it is a bit ugly.</p>
-<figure>
-  <img src="{{ site.url }}{{ site.baseurl }}/images/DecisionTreeFig/ugly_illustration.jpeg" alt="none" style="width:100%">
-  <figcaption> An ugly scratch </figcaption>
-</figure>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621680009865.jpeg" alt="" loading="lazy"><br>
+<em>An ugly scratch</em></p>
 <p>The key is to use m (green) and M (yellow). The m denotes the index of splitted leaves, the M denotes the total number of leaves given an iteration. Therefore, as long as when the size of leaf m is bigger than 2l, m increases by 1 step while M goes by 2 steps per iteration (since there are two new leaves after each split). <br>
 It is kind of like m is chasing M, and M stops when leaves stop growing and m stops when it catches M. Every time when m goes one step, it activates tree splitting function and gathers useful infomation.</p>
 <p>Let us try out with the sample data:</p>
@@ -975,7 +1458,7 @@ tr
 </code></pre>
 <p>This data frame can be regarded as a &quot;map&quot;. For example, for observation <strong>Bob Melvin; year = 2 hits = 60</strong>, firstly since year&lt;6, it follows R2_i = 3, going to 3rd row of the data frame. Secondly, since hits&lt;102, it follows R2_i = 7, going to the 7th row. Thirdly, since there are only NA for indicating next step, the 7th row is its destination.</p>
 <h2 id="prediction">Prediction</h2>
-<p>Finally, we are at an exciting part, predicing a new observation given our pre-trained decision tree!</p>
+<p>Finally, we are at an exciting part, predicting a new observation given our pre-trained decision tree!</p>
 <p>The basic idea of prediction is following the output dataframe of the tr. As is mentioned above, R1_i and R2_i indicates the row of the dataframe to go next like a map. It is stopped until the row shows up NA for the first 4 columns.</p>
 <p>This function is to predict the classification gamma of new observations.</p>
 <pre><code class="language-r">predict_with_tree = function(newdata, tree){
@@ -1024,10 +1507,8 @@ cat(&quot;MSE =&quot;,MSE)
 <h1 id="bagging">Bagging</h1>
 <h2 id="concept-2">Concept</h2>
 <p>The basic idea of bagged tree regression is that we draw with replacement a random sample of N units from the original sample and fit a prediction, then we repeat it B times. In the end we weigh together the B predictions and derive the final prediction. The picture on P285, ESL tells us that as the number of Bootstrap samples goes greater, the test error goes smaller then it tends to be a constant which is smaller than the original tree.</p>
-<figure>
-  <img src="{{ site.url }}{{ site.baseurl }}/images/DecisionTreeFig/P285_BagComparison.jpg" alt="none" style="width:100%">
-  <figcaption> Figure from P285, ESL </figcaption>
-</figure>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621680035648.jpg" alt="" loading="lazy"><br>
+<em>Figure from P285, ESL</em></p>
 <h2 id="code-3">Code</h2>
 <pre><code class="language-r">bagged_tree = function(Xtrain, Ytrain, l, B,Xtest){
   sizeN = nrow(Xtrain)
@@ -1066,7 +1547,7 @@ cat(&quot;B = 10, bagged tree RMSE = &quot;,sqrt (mean(( bagged_tree(X_train,y_t
 <h2 id="concept-3">Concept</h2>
 <p>The idea of random forest is very similar to bagged tree model. There is only one difference that in bagged tree model, all the features in the bootstrap samples are used. But in the random forest only random subset (without replacement) of features are chosen. The random forest is supposed to give a better performance if the trees are highly correlated. <br>
 The intuition of boosting is that the training of latter tree is learning from the misclassification of the previous tree. So that the next trained tree is better than the previous tree.</p>
-<p>For this part, we just need to fit the data into randomForest() function. ntree controls the number of bootstrap samples. To make it comparable, I also set ntree to be 10 which is the same as the previous bagged tree regression.</p>
+<p>For this part, we just need to fit the data into <em>randomForest()</em> function. <em>ntree</em> controls the number of bootstrap samples. To make it comparable, I also set <em>ntree</em> to be 10 which is the same as the previous bagged tree regression.</p>
 <h2 id="code-4">Code</h2>
 <pre><code class="language-r">train_df = Hitters[31:nrow(Hitters),]
 
@@ -1106,7 +1587,7 @@ cat(&quot;random forest RMSE of test set =&quot;, sqrt(67380.79))
 
 ## random forest RMSE of test set = 259.5781
 </code></pre>
-<p>After reading the XG boosting documentation, I assume the parameter nrounds control the number of the tree therefore I set it to be 10 to make it comparable with the previous results.</p>
+<p>After reading the XG boosting documentation, I assume the parameter <em>nrounds</em> control the number of the tree therefore I set it to be 10 to make it comparable with the previous results.</p>
 <pre><code class="language-r">xgb = xgboost(data = data.matrix(X_train), label = y_train,
               max.depth =5, eta = 1,
               nthread = 2, nrounds =10
@@ -1120,7 +1601,7 @@ y_pred &lt;- predict(xgb, data.matrix(X_test))
 cat(&quot;RMSE of xgboost = &quot;, sqrt(mean((y_pred - y_test)^2)) )
 ## RMSE of xgboost =  285.6745
 </code></pre>
-<p>The RMSE is bigger than the random forest model. It could be the reason that the sample size is not big enough or I did the tune the prameters in the function well. <br>
+<p>The RMSE is bigger than the random forest model. It could be the reason that the sample size is not big enough or I did the tune the parameters in the function well. <br>
 However, it is better than the bagged tree model.</p>
 <h1 id="ending">Ending</h1>
 <h2 id="challenges">Challenges</h2>
@@ -1128,8 +1609,368 @@ However, it is better than the bagged tree model.</p>
 Nevertheless, the struggling process does help me to understand the algorithm better. I would encourage the reader to get your hand dirty by starting from scratch despite the fact that there are packages which can make it work easily.</p>
 <h2 id="tips">Tips</h2>
 <ul>
-<li>The graphic illustration of how tree-based methods partitioning feature into a set of rectangles is pretty good. Please check out on <a href="https://web.stanford.edu/~hastie/ElemStatLearn/">ESL</a> P306.</li>
+<li>The graphic illustration of how tree-based methods partitioning feature into a set of rectangles is pretty good. Please check out on <a href="(https://web.stanford.edu/~hastie/ElemStatLearn/)">ESL</a> P306.</li>
 </ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[The Application of EM Algorithm]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/2021-02-03-EM_Post/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/2021-02-03-EM_Post/">
+        </link>
+        <updated>2021-02-01T19:00:00.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<p>Expectation-maximization (EM) algorithm is a powerful unsupervised<br>
+machine learning tool. Conceptually, It is quite similar to k-means<br>
+algorithm, which I shared in this <a href="https://bolinwu.org/Kmeans/">post</a>.<br>
+However, instead of clustering through estimated means, it cluster<br>
+through estimating the distributions parameters and then evaluate how<br>
+likely is each observation belong to distributions. Another difference<br>
+is that EM uses soft assignment while k-means uses hard assignment.</p>
+<p>The content includes:</p>
+<ol>
+<li>The procedure of EM algorithm in the<br>
+two-component mixture model context.</li>
+<li>How to apply different parts of<br>
+the algorithm step-by-step by simulation data.</li>
+<li>Test the algorithm by using data of <a href="https://web.stanford.edu/~hastie/ElemStatLearn/">Hastie et<br>
+al. (2009)</a>, as well as<br>
+the built-in <strong>faithful</strong> and <strong>iris</strong> dataset.</li>
+<li>Algorithm evaluation.</li>
+</ol>
+<p>Prerequisite to read the following blog:</p>
+<ul>
+<li>Basic knowledge of mixture<br>
+model, multivariate normal distribution, maximum likelihood.</li>
+<li>R<br>
+programming.</li>
+</ul>
+<p>Main reference:</p>
+<ul>
+<li><a href="https://web.stanford.edu/~hastie/ElemStatLearn/">The Elements of Statistical Learning by Hastie et<br>
+al. (2009)</a> Chapter 8.</li>
+<li>Mans Magnusson (2020). uuml: R Content for the Introduction to<br>
+Machine Learning. Course at Uppsala University. R package version 0.2.0.</li>
+</ul>
+<h1 id="loading-r-packages-and-data">Loading R packages and data</h1>
+<p>Loading the packages and the data that are used in this post.</p>
+<pre><code class="language-r"># add this line for installing the uuml package
+# remotes::install_github(&quot;MansMeg/IntroML&quot;,
+#                        subdir = &quot;rpackage&quot;)
+
+# load the package and data
+library(ggplot2)
+library(uuml)
+data(&quot;mixture_data&quot;)
+y =  mixture_data
+data(&quot;iris&quot;)
+data(&quot;faithful&quot;)
+</code></pre>
+<h1 id="algorithm-procedure">Algorithm Procedure</h1>
+<p>In the context of simple two-component mixture model, we would like to model the density of given data by two normal distributions:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><msub><mi>Y</mi><mn>1</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>∼</mo><mi mathvariant="normal">N</mi><mo>(</mo><msub><mi>μ</mi><mn>1</mn></msub><mo separator="true">,</mo><msubsup><mi>σ</mi><mn>1</mn><mn>2</mn></msubsup><mo>)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><msub><mi>Y</mi><mn>2</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>∼</mo><mi mathvariant="normal">N</mi><mo>(</mo><msub><mi>μ</mi><mn>2</mn></msub><mo separator="true">,</mo><msubsup><mi>σ</mi><mn>2</mn><mn>2</mn></msubsup><mo>)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mi>Y</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi mathvariant="normal">Δ</mi><mo>)</mo><msub><mi>Y</mi><mn>1</mn></msub><mo>+</mo><mi mathvariant="normal">Δ</mi><msub><mi>Y</mi><mn>2</mn></msub></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+Y_{1} &amp; \sim \mathrm{N}(\mu_{1},\sigma_{1}^{2}) \\
+Y_{2} &amp; \sim \mathrm{N}(\mu_{2},\sigma_{2}^{2}) \\
+Y &amp;= (1 - \Delta)Y_{1} + \Delta Y_{2}\\
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:4.548216em;vertical-align:-2.024108em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.524108em;"><span style="top:-4.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.135892em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-1.6358920000000001em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.024108em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.524108em;"><span style="top:-4.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathrm">N</span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-3.135892em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathrm">N</span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-1.6358920000000001em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">Δ</span><span class="mclose">)</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">Δ</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.024108em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>Where <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Δ</mi><mo>∈</mo><mo>(</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">\Delta \in (0,1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72243em;vertical-align:-0.0391em;"></span><span class="mord">Δ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span> with  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>r</mi><mo>(</mo><mi mathvariant="normal">Δ</mi><mo>=</mo><mn>1</mn><mo>)</mo><mo>=</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">Pr (\Delta =1) = \pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord">Δ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span></span>.</p>
+<p>Then the density of Y is</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><msub><mi>g</mi><mi>Y</mi></msub><mo>(</mo><mi>y</mi><mo>)</mo><mo>=</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>π</mi><mo>)</mo><msub><mi>ϕ</mi><msub><mi>θ</mi><mn>1</mn></msub></msub><mo>(</mo><mi>y</mi><mo>)</mo><mo>+</mo><mi>π</mi><msub><mi>ϕ</mi><msub><mi>θ</mi><mn>2</mn></msub></msub><mo>(</mo><mi>y</mi><mo>)</mo></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+g_{Y}(y) = (1 - \pi) \phi_{\theta_{1}}(y) + \pi \phi_{\theta_{2}}(y)
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.5000000000000002em;vertical-align:-0.5000000000000002em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1em;"><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.22222em;">Y</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mclose">)</span><span class="mord"><span class="mord mathdefault">ϕ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mord"><span class="mord mathdefault">ϕ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5000000000000002em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>Where <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>ϕ</mi><mi>θ</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\phi_{\theta}(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault">ϕ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span> denotes the normal density with parameters <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi><mo>=</mo><mo>(</mo><mi>μ</mi><mo separator="true">,</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">\theta = (\mu,\sigma^{2})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>.</p>
+<p>And the log-likelihood  on the N training cases of data Z is given by</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>l</mi><mo>(</mo><mi>θ</mi><mo separator="true">;</mo><mi>Z</mi><mo>)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mi>l</mi><mi>o</mi><mi>g</mi><mo>[</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>π</mi><mo>)</mo><msub><mi>ϕ</mi><msub><mi>θ</mi><mn>1</mn></msub></msub><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>)</mo><mo>+</mo><mi>π</mi><msub><mi>ϕ</mi><msub><mi>θ</mi><mn>2</mn></msub></msub><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>)</mo><mo>]</mo></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+l(\theta; Z) = \sum_{i=1}^{N} log [ (1 - \pi) \phi_{\theta_{1}}(y_{i}) + \pi \phi_{\theta_{2}}(y_{i}) ]
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.4060050000000004em;vertical-align:-1.4530025em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.9530025000000004em;"><span style="top:-3.9530025em;"><span class="pstrut" style="height:3.828336em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mopen">[</span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mclose">)</span><span class="mord"><span class="mord mathdefault">ϕ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mord"><span class="mord mathdefault">ϕ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4530025em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>Direct maximization of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mo>(</mo><mi>θ</mi><mo separator="true">;</mo><mi>Z</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">l(\theta; Z)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="mclose">)</span></span></span></span> is not feasible numerically therefore we proceed it in an iterative way. A more dedicated deduction is available in the reference book.<br>
+In short, what we do here is to estimate <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span></span> by</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><msub><mi>γ</mi><mi>i</mi></msub><mo>(</mo><mi>θ</mi><mo>)</mo><mo>=</mo><mi>P</mi><mi>r</mi><mo>(</mo><msub><mi mathvariant="normal">Δ</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mi mathvariant="normal">∣</mi><mi>θ</mi><mi>Z</mi><mo>)</mo></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+\gamma_{i}(\theta) =Pr(\Delta_{i} = 1 | \theta Z)
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.5000000000000002em;vertical-align:-0.5000000000000002em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1em;"><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord"><span class="mord">Δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5000000000000002em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>$\gamma_{i}(\theta) $ is also called the <strong>responsibility</strong> of model 2 for observation i.</p>
+<p>The EM algorithm consists of three  steps:</p>
+<ol>
+<li>Initial guesses for the parameters <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><msub><mi>μ</mi><mn>1</mn></msub><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{\mu_{1}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mover accent="true"><msub><mi>σ</mi><mn>1</mn></msub><mo>^</mo></mover><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\hat{\sigma_{1}}^{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0484479999999998em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8984479999999999em;"><span style="top:-3.1473400000000002em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span>,  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><msub><mi>μ</mi><mn>2</mn></msub><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{\mu_{2}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mover accent="true"><msub><mi>σ</mi><mn>2</mn></msub><mo>^</mo></mover><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\hat{\sigma_{2}}^{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0484479999999998em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8984479999999999em;"><span style="top:-3.1473400000000002em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>π</mi><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{\pi}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span></span></span></span></span></span></span>.</li>
+<li><strong>Expectation Step:</strong> compute the responsibilities</li>
+</ol>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mover accent="true"><msub><mi>γ</mi><mi>i</mi></msub><mo>^</mo></mover><mo>=</mo><mfrac><mrow><mover accent="true"><mi>π</mi><mo>^</mo></mover><msub><mi>ϕ</mi><mover accent="true"><msub><mi>θ</mi><mn>2</mn></msub><mo>^</mo></mover></msub><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>)</mo></mrow><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mover accent="true"><mi>π</mi><mo>^</mo></mover><mo>)</mo><msub><mi>ϕ</mi><mover accent="true"><msub><mi>θ</mi><mn>1</mn></msub><mo>^</mo></mover></msub><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>)</mo><mo>+</mo><mover accent="true"><mi>π</mi><mo>^</mo></mover><msub><mi>ϕ</mi><mover accent="true"><msub><mi>θ</mi><mn>2</mn></msub><mo>^</mo></mover></msub><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>)</mo></mrow></mfrac><mo separator="true">,</mo><mi>i</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><mi>N</mi></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+\hat{\gamma_{i}} = \frac{\hat{\pi} \phi_{\hat{\theta_{2}}}(y_{i})}{ (1 - \hat{\pi}) \phi_{\hat{\theta_{1}}}(y_{i}) + \hat{\pi}\phi_{\hat{\theta_{2}}}(y_{i})}, i = 1,2,...,N
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.977632em;vertical-align:-1.238816em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.738816em;"><span style="top:-3.738816em;"><span class="pstrut" style="height:3.565816em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.5658159999999999em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span></span></span></span><span class="mclose">)</span><span class="mord"><span class="mord mathdefault">ϕ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3742840000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord accent mtight"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9578799999999998em;"><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span><span style="top:-2.9634400000000003em;"><span class="pstrut" style="height:2.7em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mtight">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.42581599999999986em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span></span></span></span><span class="mord"><span class="mord mathdefault">ϕ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3742840000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord accent mtight"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9578799999999998em;"><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span><span style="top:-2.9634400000000003em;"><span class="pstrut" style="height:2.7em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mtight">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.42581599999999986em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.815816em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span></span></span></span><span class="mord"><span class="mord mathdefault">ϕ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3742840000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord accent mtight"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9578799999999998em;"><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span><span style="top:-2.9634400000000003em;"><span class="pstrut" style="height:2.7em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mtight">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.42581599999999986em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.111816em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.238816em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<ol start="3">
+<li><strong>Maximization Step:</strong> : Update the means and variances:</li>
+</ol>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mover accent="true"><msub><mi>μ</mi><mn>1</mn></msub><mo>^</mo></mover></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mo>(</mo><mn>1</mn><mo>−</mo><mover accent="true"><msub><mi>γ</mi><mi>i</mi></msub><mo>^</mo></mover><mo>)</mo><msub><mi>y</mi><mi>i</mi></msub></mrow><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mover accent="true"><msub><mi>γ</mi><mi>i</mi></msub><mo>^</mo></mover></mrow></mfrac></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mover accent="true"><msub><mi>μ</mi><mn>2</mn></msub><mo>^</mo></mover></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mover accent="true"><msub><mi>γ</mi><mi>i</mi></msub><mo>^</mo></mover><msub><mi>y</mi><mi>i</mi></msub></mrow><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mover accent="true"><msub><mi>γ</mi><mi>i</mi></msub><mo>^</mo></mover></mrow></mfrac></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mover accent="true"><msub><mi>σ</mi><mn>1</mn></msub><mo>^</mo></mover></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mo>(</mo><mn>1</mn><mo>−</mo><mover accent="true"><msub><mi>γ</mi><mi>i</mi></msub><mo>^</mo></mover><mo>)</mo><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mover accent="true"><msub><mi>μ</mi><mn>1</mn></msub><mo>^</mo></mover><msup><mo>)</mo><mn>2</mn></msup></mrow><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mo>(</mo><mn>1</mn><mo>−</mo><mover accent="true"><msub><mi>γ</mi><mi>i</mi></msub><mo>^</mo></mover><mo>)</mo></mrow></mfrac></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mover accent="true"><msub><mi>σ</mi><mn>2</mn></msub><mo>^</mo></mover></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mover accent="true"><msub><mi>γ</mi><mi>i</mi></msub><mo>^</mo></mover><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mover accent="true"><msub><mi>μ</mi><mn>2</mn></msub><mo>^</mo></mover><msup><mo>)</mo><mn>2</mn></msup></mrow><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mover accent="true"><msub><mi>γ</mi><mi>i</mi></msub><mo>^</mo></mover></mrow></mfrac></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mover accent="true"><mi>π</mi><mo>^</mo></mover></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mfrac><mover accent="true"><msub><mi>γ</mi><mi>i</mi></msub><mo>^</mo></mover><mi>N</mi></mfrac></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+\hat{\mu_{1}} &amp;= \frac{\sum_{i=1}^{N} (1 - \hat{\gamma_{i}})y_{i}}{\sum_{i = 1}^{N}\hat{\gamma_{i}}} \\
+\hat{\mu_{2}} &amp;= \frac{\sum_{i=1}^{N} \hat{\gamma_{i}}y_{i}} {\sum_{i = 1}^{N}\hat{\gamma_{i}}} \\
+\hat{\sigma_{1}} &amp;= \frac{\sum_{i=1}^{N} (1 - \hat{\gamma_{i}})(y_{i}-\hat{\mu_{1}})^{2}}{\sum_{i = 1}^{N}(1 -\hat{ \gamma_{i}})} \\
+\hat{\sigma_{2}} &amp;= \frac{\sum_{i=1}^{N}  \hat{\gamma_{i}}(y_{i}-\hat{\mu_{2}})^{2}}{\sum_{i = 1}^{N}\hat{ \gamma_{i}}} \\
+\hat{\pi} &amp;= \sum_{i = 1}^{N}\frac{\hat{\gamma_{i}}}{N}
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:15.973533em;vertical-align:-7.7367665em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:8.2367665em;"><span style="top:-10.3941615em;"><span class="pstrut" style="height:3.828336em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span><span style="top:-7.2522795em;"><span class="pstrut" style="height:3.828336em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span><span style="top:-4.1103975em;"><span class="pstrut" style="height:3.828336em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span><span style="top:-0.9685155000000008em;"><span class="pstrut" style="height:3.828336em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span><span style="top:2.3307614999999995em;"><span class="pstrut" style="height:3.828336em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:7.7367665em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:8.2367665em;"><span style="top:-10.3941615em;"><span class="pstrut" style="height:3.828336em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.670941em;"><span style="top:-2.128769em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.981231em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.6897100000000003em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.981231em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mclose">)</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.170941em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span style="top:-7.2522795em;"><span class="pstrut" style="height:3.828336em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.670941em;"><span style="top:-2.128769em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.981231em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.6897100000000003em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.981231em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.170941em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span style="top:-4.1103975em;"><span class="pstrut" style="height:3.828336em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.670941em;"><span style="top:-2.128769em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.981231em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.6897100000000003em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.981231em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.170941em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span style="top:-0.9685155000000008em;"><span class="pstrut" style="height:3.828336em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.670941em;"><span style="top:-2.128769em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.981231em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.6897100000000003em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.981231em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.170941em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span style="top:2.3307614999999995em;"><span class="pstrut" style="height:3.828336em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714399999999998em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10903em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:7.7367665em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<ol start="4">
+<li>Iterate step 2 and 3 until convergence.</li>
+</ol>
+<h1 id="a-scratch-of-mixture-model">A Scratch of Mixture model</h1>
+<p>Now, let us proceed and grasp the concepts mentioned above more clearly<br>
+with code and data.</p>
+<p>(1) Implement a function to simulate data from a univariate mixture model by mixture model as mentioned above.</p>
+<pre><code class="language-r">r_uni_two_com = function(n, theta){
+  # simulate y1 and y2 according to the equations mentioned above
+  y1 = rnorm(n,theta$mu_1,theta$sigma_1)
+  y2 = rnorm(n,theta$mu_2,theta$sigma_2)
+  # mixed
+  y = (1 - theta$pi) * y1 + theta$pi * y2
+  return(y)
+}
+</code></pre>
+<p>(2) Simulate 200 observations using <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>μ</mi><mn>1</mn></msub><mo>=</mo><mo>−</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\mu_1=-2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord">2</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>μ</mi><mn>2</mn></msub><mo>=</mo><mn>1.5</mn></mrow><annotation encoding="application/x-tex">\mu_2=1.5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">.</span><span class="mord">5</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>σ</mi><mn>1</mn></msub><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\sigma_1=2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>σ</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sigma_2=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">\pi=0.3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">3</span></span></span></span>. Visualize observations in a histogram.</p>
+<pre><code class="language-r">n = 200
+theta_0 = list(mu_1 = -2, mu_2 = 1.5, sigma_1 = 2, sigma_2 = 1, pi = 0.3)
+set.seed(2020)
+simulation_data = r_uni_two_com(n,theta_0)
+hist(x = simulation_data, main = &quot;Histgram of Simulated Data of Mixture Model&quot;, xlab = &quot;Mixed Y&quot;)
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://BolinWu-Gridea.github.io/post-images/1621681273050.png" alt="" loading="lazy"></figure>
+<p>(3) Compute the density value for a given set of parameters and data with a function <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi mathvariant="normal">_</mi><mi>u</mi><mi>n</mi><mi>i</mi><mi mathvariant="normal">_</mi><mi>t</mi><mi>w</mi><mi>o</mi><mi mathvariant="normal">_</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mo>(</mo><mi>x</mi><mo separator="true">,</mo><mi>θ</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">d\_uni\_two\_comp(x, \theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mord mathdefault">d</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">u</span><span class="mord mathdefault">n</span><span class="mord mathdefault">i</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">o</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">m</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span></span></span>.</p>
+<pre><code class="language-r"># get the density by using dnorm() function
+d_uni_comp = function(x,theta){
+  density_m1 = dnorm(x,theta$mu_1,theta$sigma_1)
+  density_m2 = dnorm(x, theta$mu_2,theta$sigma_2)
+  return(list(density_m1 = density_m1,density_m2 = density_m2 ))
+}
+
+library(reshape2) # for merging the density plots
+# melt the density into one column so that we can plot them in one figure
+data&lt;- melt(d_uni_comp(simulation_data,theta_0) )
+# combine the it with simulation data
+data = cbind(simulation_data,data)
+ggplot(data,aes(x=simulation_data,y = value, color=L1)) + geom_line(alpha=0.7)+ theme_minimal() + ggtitle(&quot;Simutated Data versus Corresponding Density&quot;) +
+  theme(plot.title = element_text(hjust = 0.5),legend.title = element_blank()) +
+  coord_cartesian(xlim =c(-4,4))
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://BolinWu-Gridea.github.io/post-images/1621681588804.png" alt="" loading="lazy"></figure>
+<p>Model 1 (red line) seems to be centered around -2 and model 2 (blue line) seems to be centered around 2. It looks reasonable according to the data generation process.</p>
+<p>(4) Calculate <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>γ</mi></mrow><annotation encoding="application/x-tex">\gamma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span></span></span></span> at the <strong>expectation</strong> step.</p>
+<p>Here the function <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>e</mi><mi mathvariant="normal">_</mi><mi>u</mi><mi>n</mi><mi>i</mi><mi mathvariant="normal">_</mi><mi>t</mi><mi>w</mi><mi>o</mi><mi mathvariant="normal">_</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mo>(</mo><mi>X</mi><mo separator="true">,</mo><mi>t</mi><mi>h</mi><mi>e</mi><mi>t</mi><mi>a</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">e\_uni\_two\_comp(X, theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mord mathdefault">e</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">u</span><span class="mord mathdefault">n</span><span class="mord mathdefault">i</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">o</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">m</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">t</span><span class="mord mathdefault">h</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mclose">)</span></span></span></span> returns a vector of gamma for each row in <strong>X</strong>.</p>
+<pre><code class="language-r"># use equation above to calculate the resposibility
+e_uni_two_camp = function(x,theta){
+  gamma_i =( theta$pi * d_uni_comp(x,theta)$density_m2 ) /
+    ( (1-theta$pi) * d_uni_comp(x,theta)$density_m1 +
+        theta$pi * d_uni_comp(x,theta)$density_m2  )
+  return(gamma_i)
+}
+
+# initial guess of parameters
+theta_0 = list(mu_1 = 4.12, mu_2 = 0.94, sigma_1 = 2, sigma_2 = 2, pi = 0.5)
+gamma = e_uni_two_camp(y,theta_0)
+head(gamma)
+</code></pre>
+<pre><code>##           [,1]
+## [1,] 0.9106339
+## [2,] 0.8716861
+## [3,] 0.7797225
+## [4,] 0.6645640
+## [5,] 0.6484311
+## [6,] 0.5178799
+</code></pre>
+<p>Initially, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>μ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\mu_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> = 4.12, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>μ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\mu_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">μ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> = 0.94, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>σ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\sigma_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> = 2, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>σ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\sigma_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> = 2. According to the definition of responsibility, the larger responsibility ( <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>γ</mi></mrow><annotation encoding="application/x-tex">\gamma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span></span></span></span> ) of a given x, the more likely it is belong to model 2, otherwise it may more likely to belong to model 1.<br>
+For example, we can see that the first 6 observations, the responsibilities are bigger than 0.5, so they are likely belong to model 2. However, we need to continue on iterating the process until it converges.</p>
+<p>(5) Implement a function called <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>a</mi><mi>x</mi><mi mathvariant="normal">_</mi><mi>u</mi><mi>n</mi><mi>i</mi><mi mathvariant="normal">_</mi><mi>t</mi><mi>w</mi><mi>o</mi><mi mathvariant="normal">_</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mo>(</mo><mi>X</mi><mo separator="true">,</mo><mi>g</mi><mi>a</mi><mi>m</mi><mi>m</mi><mi>a</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">max\_uni\_two\_comp(X, gamma)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">a</span><span class="mord mathdefault">x</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">u</span><span class="mord mathdefault">n</span><span class="mord mathdefault">i</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">o</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">m</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">a</span><span class="mord mathdefault">m</span><span class="mord mathdefault">m</span><span class="mord mathdefault">a</span><span class="mclose">)</span></span></span></span> that returns a list with parameters mu1, mu2, sigma1, sigma2 and pi at the <strong>maximization</strong> step.</p>
+<pre><code class="language-r">max_uni_two_comp = function(y,gamma){
+  mu_1 = sum( (1 - gamma) * y ) / sum( 1 - gamma)
+  mu_2 = sum( ( gamma) * y ) / sum(  gamma)
+  sigma_1 =  sum( (1 - gamma) * ((y-mu_1)^2) ) / sum( 1 - gamma)
+  sigma_2 = sum( ( gamma) * (y-mu_2)^2 ) / sum( gamma)
+  pi = sum(gamma)/ length(y)
+  return(list(mu_1 = mu_1, mu_2 = mu_2, sigma_1 = sqrt(sigma_1),
+              sigma_2 = sqrt(sigma_2), pi = pi))
+}
+
+theta = max_uni_two_comp(y,gamma)
+
+theta
+    ## $mu_1
+    ## [1] 3.842941
+    ##
+    ## $mu_2
+    ## [1] 1.450413
+    ##
+    ## $sigma_1
+    ## [1] 1.700666
+    ##
+    ## $sigma_2
+    ## [1] 1.47168
+    ##
+    ## $pi
+    ## [1] 0.4883709
+</code></pre>
+<p>These are the estimated parameters after the first iteration.</p>
+<p>(6) Now we need to implement the log-likelihood of the model as <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>l</mi><mi mathvariant="normal">_</mi><mi>u</mi><mi>n</mi><mi>i</mi><mi mathvariant="normal">_</mi><mi>t</mi><mi>w</mi><mi>o</mi><mi mathvariant="normal">_</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mo>(</mo><mi>x</mi><mo separator="true">,</mo><mi>t</mi><mi>h</mi><mi>e</mi><mi>t</mi><mi>a</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">ll\_uni\_two\_comp(x, theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">u</span><span class="mord mathdefault">n</span><span class="mord mathdefault">i</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">o</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">m</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">t</span><span class="mord mathdefault">h</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mclose">)</span></span></span></span>.<br>
+Log-likelihood is important when evaluating the algorithm.</p>
+<pre><code class="language-r">ll_uni_two_camp = function(x,theta){
+  ll_i =sum( log( ( (1 - theta$pi) * d_uni_comp(x,theta)$density_m1 ) +
+                    (theta$pi * d_uni_comp(x,theta)$density_m2) )  )
+  return(ll_i)
+}
+
+ll_uni_two_camp(y,theta_0)
+    ## [1] -43.1055
+</code></pre>
+<p>(7) Combine the implemented functions to an EM algorithm <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>e</mi><mi>m</mi><mi mathvariant="normal">_</mi><mi>u</mi><mi>n</mi><mi>i</mi><mi mathvariant="normal">_</mi><mi>t</mi><mi>w</mi><mi>o</mi><mi mathvariant="normal">_</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mo>(</mo><mi>X</mi><mo separator="true">,</mo><mi>t</mi><mi>h</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi mathvariant="normal">_</mi><mn>0</mn><mo separator="true">,</mo><mi>i</mi><mi>t</mi><mi>e</mi><mi>r</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">em\_uni\_two\_comp(X, theta\_0, iter)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mord mathdefault">e</span><span class="mord mathdefault">m</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">u</span><span class="mord mathdefault">n</span><span class="mord mathdefault">i</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">o</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">m</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">t</span><span class="mord mathdefault">h</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">t</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">)</span></span></span></span> that takes in a <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">n \times p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span></span></span></span> data matrix <strong>X</strong> and an initialization value for as <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>t</mi><mi>h</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi mathvariant="normal">_</mi><mn>0</mn></mrow><annotation encoding="application/x-tex">theta\_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.00444em;vertical-align:-0.31em;"></span><span class="mord mathdefault">t</span><span class="mord mathdefault">h</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord">0</span></span></span></span>.</p>
+<pre><code class="language-r">em_uni_two_comp = function(y,theta){
+  iter = 3
+  for (i in 1:iter) {
+  gamma = e_uni_two_camp(y,theta)
+  theta = max_uni_two_comp(y,gamma)
+  ll = ll_uni_two_camp(y,theta)
+
+  # print the log-likehood
+  cat(&quot;Log Lik:&quot;,ll,&quot;\n&quot;)
+}
+}
+
+em_uni_two_comp(y,theta_0)
+    ## Log Lik: -41.53247
+    ## Log Lik: -41.11211
+    ## Log Lik: -40.48348
+</code></pre>
+<p>Here the iteration is set to be 3 and we can see that the log likelihood is getting smaller which is as expected.</p>
+<p>Test the algorithm on the y for 20 iterations and get the <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>π</mi><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{\pi}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span></span></span></span></span></span></span>.</p>
+<pre><code class="language-r">for (iter in c(1,5,10,15,20)) {
+  # iter = 20
+  # intial gamma
+  gamma = e_uni_two_camp(y,theta_0)
+  # start the iteration of EM
+  for (i in 1:iter) {
+  theta = max_uni_two_comp(y,gamma)
+  ll = ll_uni_two_camp(y,theta)
+  gamma = e_uni_two_camp(y,theta)
+}
+cat(&quot;iteration=&quot;,iter,&quot;;&quot;,&quot;estimated pi = &quot;,theta$pi, &quot;\n&quot;)
+}
+    ## iteration= 1 ; estimated pi =  0.4883709
+    ## iteration= 5 ; estimated pi =  0.4981389
+    ## iteration= 10 ; estimated pi =  0.5436594
+    ## iteration= 15 ; estimated pi =  0.5532677
+    ## iteration= 20 ; estimated pi =  0.5544302
+</code></pre>
+<h1 id="evaluation">Evaluation</h1>
+<p>Next we can evaluate EM algorithm by plotting the change of log likeliood to see if it converges.</p>
+<pre><code class="language-r">estimated_final_ll =c()
+  iter = 20
+  # intial gamma
+  gamma = e_uni_two_camp(y,theta_0)
+  # start the iteration of EM
+  for (i in 1:iter) {
+  theta = max_uni_two_comp(y,gamma)
+  ll = ll_uni_two_camp(y,theta)
+  gamma = e_uni_two_camp(y,theta)
+  estimated_final_ll = cbind(estimated_final_ll,ll)
+}
+
+
+plot(estimated_final_ll[1,],
+     ylab = &quot;observed Data Log-Likelihood&quot;,
+     xlab = &quot;iteration&quot;,
+     main = &quot;Estimated Log-likelihood over Iterations&quot;)
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://BolinWu-Gridea.github.io/post-images/1621681733270.png" alt="" loading="lazy"></figure>
+<p>The trend looks converged after iteration = 10. Therefore the algorithm is working well for the given dataset.</p>
+<h1 id="run-the-em-algorithm-with-the-other-dataset">Run the EM algorithm with the other dataset.</h1>
+<p>Here I set the iteration to be 20. The estimated parameters will be<br>
+printed under the code.</p>
+<h2 id="eruptions-variable-of-faithful-dataset">Eruptions variable of Faithful dataset:</h2>
+<pre><code class="language-r">erruptions = faithful$eruptions
+# initial guess of parameters
+theta_erup = list(mu_1 = 1.75, mu_2 = 4.5, sigma_1 = 1, sigma_2 = 1, pi = 0.55)
+
+estimated_final_ll =c()
+  iter = 20
+  # intial gamma
+    gamma = e_uni_two_camp(erruptions,theta_erup )
+  # start the iteration of EM
+  for (i in 1:iter) {
+  theta_faithful = max_uni_two_comp(erruptions,gamma)
+  ll = ll_uni_two_camp(erruptions,theta)
+  gamma = e_uni_two_camp(erruptions,theta)
+  }
+theta_faithful
+    ## $mu_1
+    ## [1] 4.256629
+    ##
+    ## $mu_2
+    ## [1] 2.05479
+    ##
+    ## $sigma_1
+    ## [1] 0.4899172
+    ##
+    ## $sigma_2
+    ## [1] 0.3383707
+    ##
+    ## $pi
+    ## [1] 0.3491834
+</code></pre>
+<h2 id="petallength-variable-of-iris-dataset">Petal.Length variable of Iris dataset:</h2>
+<pre><code class="language-r">pd_length = iris$Petal.Length
+estimated_final_ll =c()
+# set the initial parameters
+theta_iris = list(mu_1 =1, mu_2 = 4, sigma_1 = 1, sigma_2 = 1, pi = 0.5)
+  iter = 20
+  # intial gamma
+    gamma = e_uni_two_camp(pd_length,theta_iris )
+  # start the iteration of EM
+  for (i in 1:iter) {
+  theta_iris = max_uni_two_comp(pd_length,gamma)
+  ll = ll_uni_two_camp(pd_length,theta)
+  gamma = e_uni_two_camp(pd_length,theta)
+  }
+theta_iris
+</code></pre>
+<pre><code>## $mu_1
+## [1] 4.919392
+##
+## $mu_2
+## [1] 1.502265
+##
+## $sigma_1
+## [1] 0.8159113
+##
+## $sigma_2
+## [1] 0.3266122
+##
+## $pi
+## [1] 0.3398739
+</code></pre>
+<h2 id="visualize-the-density-for-the-two-datasets-using-the-parameters-estimated-with-em-algorithm">Visualize the density for the two datasets using the parameters estimated with EM algorithm.</h2>
+<h3 id="first-visualize-for-the-faithful-dataset">First visualize for the faithful dataset</h3>
+<pre><code class="language-r">data&lt;- melt(d_uni_comp(erruptions,theta_faithful))
+# combine the it with simulation data
+data = cbind(erruptions,data)
+
+ggplot(data,aes(x=erruptions,y = value, color=L1)) + geom_line(alpha=0.7)+ theme_minimal() + ggtitle(&quot;Density for Erruptions after Estimated by EM Algorithm&quot;) +theme(plot.title = element_text(hjust = 0.5),legend.title = element_blank())
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621681804380.png" alt="" loading="lazy"><br>
+<em>EM estimated density of faithful data</em></p>
+<h3 id="then-visualize-for-the-iris-dataset">Then visualize for the iris dataset</h3>
+<pre><code class="language-r">data&lt;- melt(d_uni_comp(pd_length,theta_iris))
+# combine the it with simulation data
+data = cbind(pd_length,data)
+
+ggplot(data,aes(x=pd_length,y = value, color=L1)) + geom_line(alpha=0.7)+ theme_minimal() + ggtitle(&quot;Density for Pedal Length after Estimated by EM Algorithm&quot;) +theme(plot.title = element_text(hjust = 0.5),legend.title = element_blank())
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621681823247.jpeg" alt="" loading="lazy"><br>
+*EM estimated density of iris data *</p>
+<p>These clustering results looks reasonable. Great!</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>This post shared how to derive the basic pieces of EM algorithm in the two-component mixture model case. We can see in the end the algorithm gives us the a mixture distribution based on the given dataset instead of telling directly which observations belong to which cluster.<br>
+In the future I will share how to use EM algorithm in general.</p>
+<p>Thank you for reading!</p>
 ]]></content>
     </entry>
 </feed>

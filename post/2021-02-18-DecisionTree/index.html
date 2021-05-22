@@ -1,0 +1,572 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Prediction of Baseball Player Salary by Regression Tree, Random Forest and XGBoost | Bolin Wu</title>
+
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico?v=1621681927702">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Bolin Wu
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            Homepage
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            Archives
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            Tags
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            About
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1621681927702" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Prediction of Baseball Player Salary by Regression Tree, Random Forest and XGBoost
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-02-07 ·
+                    </time>
+                    
+                        <a href="https://BolinWu-Gridea.github.io/tag/XoJvuNc1Wu/" class="post-tags">
+                            # tree-based methods
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <!-- more -->
+<p>Tree-based methods are conceptually easy to comprehend and they render advantages like easy visualization and data-preprocessing. It is a powerful tool for both numeric and categorical prediction. In this post I will introduce how to predict baseball player salary by  Decision Tree and Random Forest from algorithm coding to  package usage.</p>
+<p>Content:</p>
+<ol>
+<li>Showing the algorithm of Decision Tree by R, which including tree splitting, tree grwoing, bagging, prediction, etc.</li>
+<li>Runing Random Forest and XGBoost with the help of <strong>randomForest</strong> package</li>
+</ol>
+<p>Reference:</p>
+<ul>
+<li><a href="https://web.stanford.edu/~hastie/ElemStatLearn/">The Elements of Statistical Learning: Data Mining, Inference, and Prediction</a>  by Trevor Hastie et al.</li>
+<li>Mans Magnusson (2020). uuml: R Content for the Introduction to Machine Learning. Course at Uppsala University. R package version 0.2.0.</li>
+</ul>
+<h1 id="regression-tree">Regression Tree</h1>
+<h2 id="data-pre-processing">Data Pre-processing</h2>
+<p>First, we need to lead the dataset Hitters provided in the reference <a href="https://github.com/MansMeg/IntroML/tree/master/rpackage">uuml</a> package. This dataset consists of the salary of many baseball players and their relevant technical statistics. <br>
+Here we assume that we only care about three columns:&quot;Years&quot;, &quot;Hits&quot; and &quot;Salary&quot;. The missing values are imputed by listwise deletion. And we set the first 30 observations as test set and the rest as training set.</p>
+<pre><code class="language-r"># install relevant packages
+# remotes::install_github(&quot;MansMeg/IntroML&quot;,subdir = &quot;rpackage&quot;)
+# install.packages(&quot;randomForest&quot;)
+# install.packages(&quot;xgboost&quot;)
+
+# loead the packages                     
+library(xgboost)
+library(randomForest)
+# load the data
+library(uuml)
+data(&quot;Hitters&quot;)
+# In the task we only care about three columns:&quot;Years&quot;, &quot;Hits&quot; and &quot;Salary&quot;
+# and we need to excluede the NA values
+# So we need to pre-process the data
+Hitters = Hitters[,c(&quot;Years&quot;, &quot;Hits&quot;,&quot;Salary&quot;)]
+
+# get rid of NA
+Hitters &lt;- Hitters[complete.cases(Hitters),]
+
+# set aside test set and training set
+X_test &lt;- Hitters[1:30, c(&quot;Years&quot;, &quot;Hits&quot;)]
+y_test &lt;- Hitters[1:30, c(&quot;Salary&quot;)]
+X_train &lt;- Hitters[31:nrow(Hitters), c(&quot;Years&quot;, &quot;Hits&quot;)]
+y_train &lt;- Hitters[31:nrow(Hitters), c(&quot;Salary&quot;)]
+
+</code></pre>
+<h2 id="tree-splitting">Tree Splitting</h2>
+<p>Now let us see how to do the first split. Please note that here does not involve tree growing.</p>
+<h3 id="concept">Concept</h3>
+<p>The alforithm we will use is from the referenced book <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction</em> (ESL), P307. We are seeking to splitting variable j and split point s that meet:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>m</mi><mi>i</mi><msub><mi>n</mi><mrow><mi>j</mi><mo separator="true">,</mo><mi>s</mi></mrow></msub><mo>[</mo><mi>m</mi><mi>i</mi><msub><mi>n</mi><mrow><mi>c</mi><mn>1</mn></mrow></msub><munder><mo>∑</mo><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>∈</mo><msub><mi>R</mi><mn>1</mn></msub><mo>(</mo><mi>j</mi><mo separator="true">,</mo><mi>s</mi><mo>)</mo></mrow></munder><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>c</mi><mn>1</mn></msub><msup><mo>)</mo><mn>2</mn></msup><mo>+</mo><mi>m</mi><mi>i</mi><msub><mi>n</mi><msub><mi>c</mi><mn>2</mn></msub></msub><munder><mo>∑</mo><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>∈</mo><msub><mi>R</mi><mn>2</mn></msub><mo>(</mo><mi>j</mi><mo separator="true">,</mo><mi>s</mi><mo>)</mo></mrow></munder><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>c</mi><mn>2</mn></msub><msup><mo>)</mo><mn>2</mn></msup><mo>]</mo></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+min_{j,s} [min_{c1} \sum_{x_{i}\in R_{1}(j,s)}(y_{i} - c_{1})^{2} + min_{c_{2}} \sum_{x_{i} \in R_{2}(j,s)}(y_{i} - c_{2})^{2} ]
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.86601em;vertical-align:-1.183005em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.683005em;"><span style="top:-3.683005em;"><span class="pstrut" style="height:3.050005em;"></span><span class="mord"><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">c</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.808995em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mrel mtight">∈</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:-0.00773em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mopen mtight">(</span><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight">s</span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.516005em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139199999999997em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.808995em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mrel mtight">∈</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:-0.00773em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mopen mtight">(</span><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight">s</span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.516005em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mclose">]</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.183005em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>Where the inner minimization with regard to j and s is solved by :</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mover accent="true"><msub><mi>c</mi><mn>1</mn></msub><mo>^</mo></mover></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>a</mi><mi>v</mi><mi>e</mi><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>x</mi><mi>i</mi></msub><mo>∈</mo><msub><mi>R</mi><mn>1</mn></msub><mo>(</mo><mi>j</mi><mo separator="true">,</mo><mi>s</mi><mo>)</mo><mo>)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mover accent="true"><msub><mi>c</mi><mn>2</mn></msub><mo>^</mo></mover></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>a</mi><mi>v</mi><mi>e</mi><mo>(</mo><msub><mi>y</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>x</mi><mi>i</mi></msub><mo>∈</mo><msub><mi>R</mi><mn>2</mn></msub><mo>(</mo><mi>j</mi><mo separator="true">,</mo><mi>s</mi><mo>)</mo><mo>)</mo></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+\hat{c_{1}} &amp;= ave (y_{i}| x_{i} \in R_{1} (j,s)) \\
+\hat{c_{2}} &amp;= ave (y_{i}| x_{i} \in R_{2} (j,s))
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.0000000000000004em;vertical-align:-1.2500000000000002em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.7500000000000002em;"><span style="top:-3.91em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2500000000000002em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.7500000000000002em;"><span style="top:-3.91em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord mathdefault">e</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mclose">)</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord mathdefault">e</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2500000000000002em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>By first glance, you may get confused by what do those equations mean. Let us use a part of the data to make an illustration:</p>
+<pre><code class="language-r"># use a size of 20
+X_check &lt;- Hitters[31:50, c(&quot;Years&quot;, &quot;Hits&quot;)]
+y_check &lt;- Hitters[31:50, c(&quot;Salary&quot;)]
+
+head(X_check)
+
+##           Years   Hits
+## -Bob Melvin	2	60
+## -BillyJo Robidoux	2	41
+## -Bill Schroeder	4	46
+## -Chris Bando	6	68
+## -Chris Brown	3	132
+## -Carmen Castillo	5	57
+
+</code></pre>
+<p>Essentially, what they do can be explained by the following three steps:</p>
+<ol>
+<li>Let j grind over all the variables of the dataset, which in our case is 2 variables <strong>Years</strong> and <strong>Hits</strong>. Let s grind over all the values of jth variable. For example, given the sample data above when j = 1 (Years), s will grind from year = 2 (Bob Melvin) to the year of last player.</li>
+<li>Allocate each observation according to the given j and s into two groups. And then calculate the mean value of each group, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><msub><mi>c</mi><mn>1</mn></msub><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{c_{1}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><msub><mi>c</mi><mn>2</mn></msub><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{c_{2}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span>. Get the within group scatters by using the function in the min() of the first equation above.</li>
+<li>Return the j and s that give the smallest within group scatter.</li>
+</ol>
+<p>This process can be also called <strong>greedy method</strong>, because we are grinding all the possible values and return the most ideal result.</p>
+<h3 id="code">Code</h3>
+<p>To illustrate with R code, we will implement a function that takes data set X, the label y, and a minimal leaf size l. This function will give four outputs: The region that each observation belongs to (R1 and R2), splitting variable j and splitting point s.</p>
+<pre><code class="language-r">tree_split = function(X,y,l){
+  # store the split point
+  S = matrix(NA,nrow = nrow(X), ncol = ncol(X))
+  # store the sum of square
+  SS = matrix(NA,nrow = nrow(X), ncol = ncol(X))
+  for (j in 1:ncol(X)) {
+    for (k in 1:nrow(X)) {
+      # use the data point as split point
+      s = X[k,j]
+      # get the size in each leaf
+      R1_size = length(  which(X[,j] &lt; s) )
+      R2_size = length(  which(X[,j] &gt;= s) )
+      # proceed if the size of leaf is bigger than the minimum l
+      if (R1_size &gt;= l &amp; R2_size &gt;=l) {
+        # 2.1.3
+         c1 = mean( y[which(X[,j] &lt; s)] )
+         # 2.1.4
+         c2 = mean( y[which(X[,j] &gt;= s)] )
+         # 2.1.5
+         SS[k,j] =  sum( (y[which(X[,j] &lt; s)] - c1)^2 ) +
+           sum((y[which(X[,j] &gt;= s)] - c2)^2)
+      } else{
+        # if the leaf is smaller than the minimum, then set to inf
+        SS[k,j] = Inf
+      }
+      S[k,j] = s
+    }
+  }
+  # find the index of Matix with smallest value
+  j = which(SS == min(SS), arr.ind = TRUE)[1,2];
+  s = X[which(SS == min(SS), arr.ind = TRUE)[1,1],j];
+  R1 = which(X[,j] &lt; s);
+  R2 = which(X[,j] &gt;= s)
+  return(list(j = j,
+               s = s,
+               R1 = R1,
+               R2 = R2
+              , SS = min(SS)
+              )
+              )
+  }
+
+</code></pre>
+<p>Then check with the sample data, assuming the minimal leaf size to be 5:</p>
+<pre><code class="language-r">
+tree_split(X_check, y_check, l = 5)
+
+$j
+col
+  1
+
+$s
+[1] 6
+
+$R1
+ [1]  1  2  3  5  6  9 13 16 18 19
+
+$R2
+ [1]  4  7  8 10 11 12 14 15 17 20
+
+$SS
+[1] 1346633
+
+</code></pre>
+<p>The results seem to be reasonable. What about the first split for the whole training data?</p>
+<pre><code class="language-r">tree_split(X_train , y_train , l = 5 )
+
+$j
+col
+  1
+
+$s
+[1] 5
+
+$R1
+ [1]   1   2   3   5   9  13  16  18  19  21  22
+[12]  28  30  36  38  40  41  42  45  51  55  57
+[23]  73  75  78  79  80  88  89  94  96  99 100
+[34] 102 104 107 113 114 118 119 121 128 130 133
+[45] 134 138 139 141 142 143 145 146 147 149 151
+[56] 152 155 157 167 178 180 183 184 185 187 191
+[67] 192 193 194 197 198 199 204 206 210 211 216
+[78] 220 222 227 228
+
+$R2
+  [1]   4   6   7   8  10  11  12  14  15  17  20
+ [12]  23  24  25  26  27  29  31  32  33  34  35
+ [23]  37  39  43  44  46  47  48  49  50  52  53
+ [34]  54  56  58  59  60  61  62  63  64  65  66
+ [45]  67  68  69  70  71  72  74  76  77  81  82
+ [56]  83  84  85  86  87  90  91  92  93  95  97
+ [67]  98 101 103 105 106 108 109 110 111 112 115
+ [78] 116 117 120 122 123 124 125 126 127 129 131
+ [89] 132 135 136 137 140 144 148 150 153 154 156
+[100] 158 159 160 161 162 163 164 165 166 168 169
+[111] 170 171 172 173 174 175 176 177 179 181 182
+[122] 186 188 189 190 195 196 200 201 202 203 205
+[133] 207 208 209 212 213 214 215 217 218 219 221
+[144] 223 224 225 226 229 230 231 232 233
+
+$SS
+[1] 38464163
+
+
+</code></pre>
+<p>The fist split variate is j =1, which is year. The value is 5. If year is smaller than 5, then the observations go to R1, otherwise go to R2.</p>
+<h2 id="tree-growing">Tree Growing</h2>
+<p>In this part, I will first show the code and then illustrate it.</p>
+<h3 id="code-2">Code</h3>
+<p>Conceptually, tree growing is easy to understand: we looping pre-defined tree splitting until the generated leaves are so small that can not be further splitted (leaf size &lt; 2l). <br>
+However, it is a bit difficult to implement tree growing by coding. Here I will make a function that takes same X,y, and l. It returns a data frame including j, s, gamma, R1_i and R2_i. Gamma is a metric of within group scatter. The R1_i and R2_i indicates which row of data frame to go next.</p>
+<pre><code class="language-r">max_num_leaf = 7
+#this does not affact the output, just set the max depth of the tree, the redundant part will show NA
+grow_tree = function(X,y,l){
+  # make the matrix to store the data
+  S = matrix(NA,nrow = max_num_leaf, ncol = nrow(X))
+  j = matrix(NA,nrow = max_num_leaf, ncol = 1)
+  s = matrix(NA,nrow = max_num_leaf, ncol = 1)
+  gamma_m = matrix(NA,nrow = max_num_leaf, ncol = 1)
+  R1_i = rep(NA, length = max_num_leaf);
+  R2_i = rep(NA, length = max_num_leaf)
+  # the initial value
+  S[1,] = c(1 : nrow(X))
+  M = 1
+  m = 1
+
+  while (m &lt;= M ) {
+      # loop until the size is too small to be splitted
+     if ( length(S[m,][!is.na(S[m,])])&gt;= (2*l) ){
+         # given a specific m:
+         # get leaf size after split
+       len_col = length((tree_split(X[S[m,],], y[S[m,]], l = l)$R1))
+       S[M+1,1:len_col ] = tree_split(X[S[m,],], y[S[m,]], l = l)$R1
+       len_col = length((tree_split(X[S[m,],], y[S[m,]], l = l)$R2))
+       S[M+2,1:len_col] = tree_split(X[S[m,],], y[S[m,]], l = l)$R2
+          # get the split variable and point
+       j[m] = tree_split(X[S[m,],], y[S[m,]], l = l)$j
+       s[m] = tree_split(X[S[m,],], y[S[m,]], l = l)$s
+          # move on
+       R1_i[m] = M+1 ; R2_i[m] = M + 2
+       M = M +2
+     } else {
+         # when the size is too small, just return gamma, stop increasing M
+       gamma_m [m]= mean( y[S[m,]], na.rm = T )
+     }
+    m = m + 1
+
+  }
+  return(data.frame( j = j, s = s , R1_i=R1_i, R2_i = R2_i, gamma = gamma_m ))
+}
+
+</code></pre>
+<h3 id="explanation">Explanation</h3>
+<p>Here my code may seem a bit too much. I believe that different people will have different approaches to build the algorithm and if you who are reading this post have a neater way please let me know, thank you 😃 <br>
+Instead of explaining the my code line by line, I would like to explain the general concept with the help of my scrach. Sorry if it is a bit ugly.</p>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621680009865.jpeg" alt="" loading="lazy"><br>
+<em>An ugly scratch</em></p>
+<p>The key is to use m (green) and M (yellow). The m denotes the index of splitted leaves, the M denotes the total number of leaves given an iteration. Therefore, as long as when the size of leaf m is bigger than 2l, m increases by 1 step while M goes by 2 steps per iteration (since there are two new leaves after each split). <br>
+It is kind of like m is chasing M, and M stops when leaves stop growing and m stops when it catches M. Every time when m goes one step, it activates tree splitting function and gathers useful infomation.</p>
+<p>Let us try out with the sample data:</p>
+<pre><code class="language-r">tr = grow_tree(X_check,y_check,l = 5)
+tr
+
+## j   s  R1_i R2_i gamma
+## 1	6	2	3	 NA
+## 1	4	4	5	 NA
+## 2	102	6	7	 NA
+## NA	NA	NA	NA	 317
+## NA	NA	NA	NA	 496
+## NA	NA	NA	NA	 274
+## NA	NA	NA	NA	 539
+
+</code></pre>
+<p>This data frame can be regarded as a &quot;map&quot;. For example, for observation <strong>Bob Melvin; year = 2 hits = 60</strong>, firstly since year&lt;6, it follows R2_i = 3, going to 3rd row of the data frame. Secondly, since hits&lt;102, it follows R2_i = 7, going to the 7th row. Thirdly, since there are only NA for indicating next step, the 7th row is its destination.</p>
+<h2 id="prediction">Prediction</h2>
+<p>Finally, we are at an exciting part, predicting a new observation given our pre-trained decision tree!</p>
+<p>The basic idea of prediction is following the output dataframe of the tr. As is mentioned above, R1_i and R2_i indicates the row of the dataframe to go next like a map. It is stopped until the row shows up NA for the first 4 columns.</p>
+<p>This function is to predict the classification gamma of new observations.</p>
+<pre><code class="language-r">predict_with_tree = function(newdata, tree){
+
+ pred = matrix(NA,nrow =1 , ncol = ncol(newdata))
+ for (i in 1: nrow(newdata)) {
+   # start with m =1, the first row
+   m =1 ; s = tree[m,2] ; j = tree[m,1]
+   while (!is.na(tree[m,1])) {
+     if (newdata[i,j] &lt;s) { # follow R1_i
+       m = tree[m,3];s = tree[m,2] ; j = tree[m,1]
+
+     }else{# follow R2_i
+       m = tree[m,4];s = tree[m,2] ; j = tree[m,1]
+     }
+     pred[i] = tree[m,5]
+   }
+ }
+ return(pred)
+}
+
+</code></pre>
+<p>Let us pre:</p>
+<pre><code class="language-r">X_new &lt;- Hitters[51:52, c(&quot;Years&quot;, &quot;Hits&quot;)]
+y_new &lt;- Hitters[51:52, c(&quot;Salary&quot;)]
+predict_with_tree(newdata = X_new, tree = tr)
+
+##     [,1] [,2]
+## [1,]  317  496
+</code></pre>
+<p>The gamma of first observation is 317 and the second is 396.</p>
+<p>What is the mean square error on the test set for a tree trained on the whole training data?</p>
+<pre><code class="language-r"># set a large maximum tree depth
+max_num_leaf = 50
+
+# since we have more observations than the check data
+# set the minimum leaf size = 10
+tr = grow_tree(X_train,y_train,l = 10)
+pred_tr = predict_with_tree(newdata = X_test, tree = tr)
+
+MSE = mean((pred_tr - y_test) ^2 )
+cat(&quot;MSE =&quot;,MSE)
+
+## MSE = 78395.21
+</code></pre>
+<h1 id="bagging">Bagging</h1>
+<h2 id="concept-2">Concept</h2>
+<p>The basic idea of bagged tree regression is that we draw with replacement a random sample of N units from the original sample and fit a prediction, then we repeat it B times. In the end we weigh together the B predictions and derive the final prediction. The picture on P285, ESL tells us that as the number of Bootstrap samples goes greater, the test error goes smaller then it tends to be a constant which is smaller than the original tree.</p>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621680035648.jpg" alt="" loading="lazy"><br>
+<em>Figure from P285, ESL</em></p>
+<h2 id="code-3">Code</h2>
+<pre><code class="language-r">bagged_tree = function(Xtrain, Ytrain, l, B,Xtest){
+  sizeN = nrow(Xtrain)
+  # store the predictions
+  bagged_pred = matrix(NA, nrow = B, ncol = nrow(Xtest))
+  for (i in (1:B)) {
+    # bootstrap sample
+    random_draw = sample( c(1:sizeN ), size = sizeN ,replace = T )
+    bagged_tr = grow_tree(Xtrain[random_draw,],Ytrain[random_draw],l)
+    bagged_pred_tr = predict_with_tree(newdata = Xtest, tree = bagged_tr)
+    bagged_pred[i,] = bagged_pred_tr
+    i = i + 1
+  }
+  # the final prediction is the mean of the B trees prediction
+  return(colMeans(bagged_pred) )
+}
+
+</code></pre>
+<p>Let us see if the B goes bigger, will RMSE goes smaller:</p>
+<pre><code class="language-r">
+set.seed(100)
+cat(&quot;B = 10, bagged tree RMSE = &quot;,sqrt (mean(( bagged_tree(X_train,y_train,l = 10,
+                                               B=10,Xtest = X_test) - y_test) ^2 ) ), &quot;\n&quot;,
+    &quot;B = 20, bagged tree  RMSE = &quot;,sqrt (mean(( bagged_tree(X_train,y_train,l = 10,
+                                               B=20,Xtest = X_test) - y_test) ^2 ) ), &quot;\n&quot;,
+    &quot;B = 30, bagged tree  RMSE = &quot;,sqrt (mean(( bagged_tree(X_train,y_train,l = 10,
+                                               B=30,Xtest = X_test) - y_test) ^2 ) ), &quot;\n&quot;
+    )
+
+## B = 10, bagged tree RMSE =  312.8866
+##  B = 20, bagged tree  RMSE =  309.4088
+##  B = 30, bagged tree  RMSE =  295.2994
+</code></pre>
+<p>The RMSE goes smaller indeed.</p>
+<h1 id="random-forest-and-boosting">Random Forest and Boosting</h1>
+<h2 id="concept-3">Concept</h2>
+<p>The idea of random forest is very similar to bagged tree model. There is only one difference that in bagged tree model, all the features in the bootstrap samples are used. But in the random forest only random subset (without replacement) of features are chosen. The random forest is supposed to give a better performance if the trees are highly correlated. <br>
+The intuition of boosting is that the training of latter tree is learning from the misclassification of the previous tree. So that the next trained tree is better than the previous tree.</p>
+<p>For this part, we just need to fit the data into <em>randomForest()</em> function. <em>ntree</em> controls the number of bootstrap samples. To make it comparable, I also set <em>ntree</em> to be 10 which is the same as the previous bagged tree regression.</p>
+<h2 id="code-4">Code</h2>
+<pre><code class="language-r">train_df = Hitters[31:nrow(Hitters),]
+
+rf_mod = randomForest(Salary~ . , data = train_df, ntree = 10)
+rf_mod
+
+##
+## Call:
+##  randomForest(formula = Salary ~ ., data = train_df, ntree = 10)
+##                Type of random forest: regression
+##                      Number of trees: 10
+## No. of variables tried at each split: 1
+##
+##           Mean of squared residuals: 182725.5
+##                     % Var explained: 15.89
+</code></pre>
+<p>The variable that are used is only 1. I suppose the reason is that there are only 2 variables in the X train data. According to the rule of thumb, the number of splitted variable is K/3 for regression model. In our case it is 2/3, which is rounded to be 1.</p>
+<p>Now we can feed the randomForest function with xtest and ytest so that we can get the MSE of the test set.</p>
+<pre><code class="language-r">set.seed(100)
+rf_mod = randomForest(Salary~ . , data = train_df,xtest = X_test ,ytest = y_test, ntree = 10)
+rf_mod
+
+## Call:
+## randomForest(formula = Salary ~ ., data = train_df, xtest = X_test,      ytest = y_test, ntree = 10)
+##               Type of random forest: regression
+##                     Number of trees: 10
+## No. of variables tried at each split: 1
+##
+##          Mean of squared residuals: 193201.2
+##                    % Var explained: 11.06
+##                       Test set MSE: 67380.79
+##                    % Var explained: 24.66
+
+
+
+cat(&quot;random forest RMSE of test set =&quot;, sqrt(67380.79))
+
+## random forest RMSE of test set = 259.5781
+</code></pre>
+<p>After reading the XG boosting documentation, I assume the parameter <em>nrounds</em> control the number of the tree therefore I set it to be 10 to make it comparable with the previous results.</p>
+<pre><code class="language-r">xgb = xgboost(data = data.matrix(X_train), label = y_train,
+              max.depth =5, eta = 1,
+              nthread = 2, nrounds =10
+       )
+
+</code></pre>
+<p>And the RMSE of the predictions can be calculated as follows:</p>
+<pre><code class="language-r">
+y_pred &lt;- predict(xgb, data.matrix(X_test))
+
+cat(&quot;RMSE of xgboost = &quot;, sqrt(mean((y_pred - y_test)^2)) )
+## RMSE of xgboost =  285.6745
+</code></pre>
+<p>The RMSE is bigger than the random forest model. It could be the reason that the sample size is not big enough or I did the tune the parameters in the function well. <br>
+However, it is better than the bagged tree model.</p>
+<h1 id="ending">Ending</h1>
+<h2 id="challenges">Challenges</h2>
+<p>Conceptually, tree based methods are not difficult to understand. However, depending on your background, it might be difficult to implement them by plain coding. For example when I was coding the tree growing algorithm, I was struggled with grasping m and M. And also it is easy to code the tree growing process when depth = 2 or 3 but it could be hard to generalize it. It requires a good understanding of looping. <br>
+Nevertheless, the struggling process does help me to understand the algorithm better. I would encourage the reader to get your hand dirty by starting from scratch despite the fact that there are packages which can make it work easily.</p>
+<h2 id="tips">Tips</h2>
+<ul>
+<li>The graphic illustration of how tree-based methods partitioning feature into a set of rectangles is pretty good. Please check out on <a href="(https://web.stanford.edu/~hastie/ElemStatLearn/)">ESL</a> P306.</li>
+</ul>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://BolinWu-Gridea.github.io/post/2021-02-03-EM_Post/" class="post-title gt-a-link">
+                    The Application of EM Algorithm
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Data Science Blog
+</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/Bolin-Wu" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Be better every day
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://BolinWu-Gridea.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
