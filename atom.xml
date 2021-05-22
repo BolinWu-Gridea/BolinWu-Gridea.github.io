@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2021-05-22T09:24:10.152Z</updated>
+    <updated>2021-05-22T09:37:27.990Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -967,18 +967,6 @@ important to learn how to impute the dataset as well.<br>
 And the best way to master data visualization is to learn what we need<br>
 when encountering problems.</p>
 <p>Thank you for reading!</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[About]]></title>
-        <id>https://BolinWu-Gridea.github.io/post/about/</id>
-        <link href="https://BolinWu-Gridea.github.io/post/about/">
-        </link>
-        <updated>2019-01-24T07:09:48.000Z</updated>
-        <content type="html"><![CDATA[<blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<p>Welcome!</p>
 ]]></content>
     </entry>
 </feed>
