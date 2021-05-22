@@ -1,0 +1,484 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Evaluate Wine by LSTM and Simple NN  | Bolin Wu</title>
+
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico?v=1621684676834">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Bolin Wu
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            Homepage
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            Archives
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            Tags
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            About
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1621684676834" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Evaluate Wine by LSTM and Simple NN 
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-01-12 ·
+                    </time>
+                    
+                        <a href="https://BolinWu-Gridea.github.io/tag/g7o3VtjDf5/" class="post-tags">
+                            # supervised learning
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <!-- more -->
+<p>This project is done by my teammate Zhenyu Zhao and me. It costs us a lot of time to finish but we really enjoy the process. Therefore I am writing this blog to share what we have learnt. The publishment is under Zhenyu's permission. If you have any question please let me know. My contact is available at the front page.</p>
+<p>This project is focused on solving the question: Is it possible to let the machine evaluate a wine like a sommelier?<br>
+The answer is yes! With the help of <strong>simple Neural Network</strong> and Long short-term memory(<strong>LSTM</strong>), we can make it possible.</p>
+<p>Prerequisite to read the following blog:</p>
+<ul>
+<li>Basic knowledge of Neural Network and LSTM.</li>
+<li>Basic knowledge of R programming, tensorflow and functional API.</li>
+</ul>
+<h1 id="data">Data</h1>
+<h2 id="description">Description</h2>
+<p>The data are derived from <a href="https://www.kaggle.com/zynicide/wine-reviews?select=winemag-data_first150k.csv">Kaggle</a>. The data set has <em>150,000 observations</em> (original) and <em>6 variables</em> (after selection) as is listed below.</p>
+<ul>
+<li>Points: the points rated the wine on a scale of 80-100 (only when score of the wine <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>≥</mo></mrow><annotation encoding="application/x-tex">\geq</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719400000000001em;vertical-align:-0.13597em;"></span><span class="mrel">≥</span></span></span></span> 80 its review would be posted)</li>
+<li>Description: a few sentences from a sommelier describing the wine's taste, smell, look, feel, etc.</li>
+<li>Variety: the type of grapes used to make the wine</li>
+<li>Country: the country that the wine is from</li>
+<li>Province: the province or state that the wine is from</li>
+<li>Price: the cost for a bottle of the wine</li>
+</ul>
+<h2 id="pre-processing">Pre-processing</h2>
+<p>After we have downloaded the data, we have to do some data cleaning:</p>
+<ol>
+<li>Select the 6 variables of interested, as is shown above.</li>
+<li>Remove the observations that has NA value.</li>
+<li>Remove the observations that has less than 50 observations in each variety, country and province group.</li>
+<li>We filter out the description that has longer than 100 words.</li>
+</ol>
+<p>In the end, the dataset has roughly 120,000 observations.</p>
+<p>The reason why we do number 3 is that if there are too less observations in each group, then we can not train the model well. The reason for number 4 because the max length of words we will train is 100 since 99% of the descriptions are lower than 100 words. Another reason that we filter out the too long descriptions is that in long description, sometimes the real intention is shown in latter part of a description, but the model just look at the first 100 words, therefore the long descriptions may “mislead” the model.</p>
+<pre><code class="language-R"># load the package
+library(keras)
+library(tensorflow)
+library(tidyverse)
+
+setwd(&quot;...&quot;)
+df = read_csv(&quot;wine_150k_data.csv&quot;,col_names = T)
+
+#---------------- Description column cleaning ---------------#
+# select the variables that we need              
+df = df %&gt;% select(country,description, points, province, variety, price)
+df = na.omit(df)
+dim(df)
+
+# check length of description to determine the length for LSTM input   
+unique_obs &lt;- df %&gt;%
+  group_by(variety, country, province) %&gt;%
+  summarize(n = n()) %&gt;%
+  filter(n &lt; 50)
+
+sum(unique_obs$n) # check obs number to be deleted
+
+df &lt;- df %&gt;%
+  anti_join(unique_obs)
+
+# find the length
+desc_len &lt;- df$description %&gt;%
+  strsplit(&quot; &quot;) %&gt;%
+  sapply(length)
+
+# filter out the description that are too long
+too_long &lt;- which(desc_len &gt; 100)
+df &lt;- df[-too_long, ]
+
+set.seed(2021)
+# split training and testing sets.
+training_id &lt;- sample.int(nrow(df), size = nrow(df)*0.8)
+training &lt;- df[training_id,]
+testing &lt;- df[-training_id,]
+</code></pre>
+<h1 id="chosen-models">Chosen models</h1>
+<p>Before we introduce the models, let’s review the variables that we have again. The data consists of 3 types of variables: numerical, categorical and textual variables. We know that <strong>RNN</strong> or <strong>LSTM</strong> can be used to deal with a textual data consist of sentences. LSTM is similar to Recurrent Neural Network, one difference is that it saves information for later, thus preventing vanishing gradient to some extent therefore we use <strong>LSTM</strong> instead of <strong>RNN</strong>. And simple neural network is good at dealing with numeric data. Therefore we would like to combine them together to predict the points of a wine. Hopefully the figure below can help you understand the structure.</p>
+<figure data-type="image" tabindex="1"><img src="https://BolinWu-Gridea.github.io/post-images/1621683891150.jpeg" alt="" loading="lazy"></figure>
+<p>The numeric data is price. The categorical data is country, province and variety. The textual data is description. We treat the textual data as main input, numeric and categorical data as auxiliary input.  These two branches are separately set up and then concatenated together. The concatenated layer is fed to a final simple Neural Network to make prediction of points.</p>
+<p>One thing worth noticing that the way that tensorflow handels categorical and numeric data is that it creates a <strong>feature space</strong> based on the available dataset which we can specify which column is numeric and which column is categorical. The way that it deals with categorical data is that it maps every single word by one-hot encoding.</p>
+<p>It is an interesting to see that how would it perform. Would it outperform/underperform any single neural network? We will also discuss it in the following sections.</p>
+<h1 id="model-setup-code">Model setup code</h1>
+<p>As is mentioned above, there are two branches. The functions that are used in bove are mainly from the API. Let us see how they are setup separately.</p>
+<h2 id="the-textual-part">The textual part</h2>
+<pre><code class="language-R">#---------------------------------------------#
+#------------------ texual part --------------#
+#---------------------------------------------#
+
+# Define the number of tokens and max length of each
+# description
+num_words &lt;- 10000
+max_length &lt;- 100
+text_vectorization &lt;- layer_text_vectorization(
+  max_tokens = num_words,
+  output_sequence_length = max_length,
+)
+
+# these are built-in function in tensorflow
+text_vectorization %&gt;%
+  adapt(df$description)
+
+get_vocabulary(text_vectorization)
+
+text_vectorization(matrix(df$description[1],ncol=1))
+
+input &lt;- layer_input(shape = c(1), dtype = &quot;string&quot;)
+
+output &lt;- input %&gt;%
+  text_vectorization() %&gt;%
+  layer_embedding(input_dim = num_words + 1, output_dim = 16
+                  ,input_length = max_length) %&gt;%
+  # layer_global_average_pooling_1d() %&gt;%
+  layer_lstm(units = 32) %&gt;%
+  layer_dense(units = 16, activation = &quot;relu&quot;) %&gt;%
+  # layer_dropout(0.5) %&gt;%
+  layer_dense(units = 1, activation = &quot;linear&quot;)
+
+model &lt;- keras_model(input, output)
+summary(model)
+
+model %&gt;% compile(
+  optimizer = optimizer_rmsprop(),
+  loss = 'mse',
+  metrics = list('mean_squared_error')
+)
+
+set.seed(2021)
+model_tex &lt;- model %&gt;% fit(
+  training$description, training $points,
+  epochs = 5,
+  batch_size = 128,
+  validation_split = 0.2,
+  verbose=2
+)
+
+# prediction
+pred_tex &lt;- predict(model,  testing$description )
+
+# MSE for model comparison
+mse_text&lt;- sum( (pred_tex - testing$points)^2 ) / nrow(testing)
+mse_text
+
+
+</code></pre>
+<p>The LSTM model consists of an input layer, a text vectorization layer, an embedding layer with dimension (100, 16), a LSTM layer with 16 units, a hidden layer of 16 units and an output layer in the end with 1 unit. The dimension of embedding layer is (100,16) because 99% of descriptions are within 100 words and we want to map every word to a space with 16 abstract features.</p>
+<h2 id="the-categorical-and-numeric-part">The categorical and numeric part</h2>
+<pre><code class="language-R">
+#-----------------------------------------------------#
+#### --------------- categorical part ---------------####
+#-----------------------------------------------------#
+
+
+# set up the feature space
+spec &lt;- feature_spec(training, points ~ variety + country + province + price) %&gt;%
+  step_numeric_column(
+    price,
+    normalizer_fn = scaler_standard()
+  ) %&gt;%
+  step_categorical_column_with_vocabulary_list(country, province, variety) %&gt;%
+  step_indicator_column(country, province, variety) %&gt;%
+  step_embedding_column(country, province, variety, dimension = 16)
+
+spec_prep &lt;- fit(spec)
+#str(spec_prep$dense_features())
+
+
+input &lt;- layer_input_from_dataset(training %&gt;% select(variety, country, province, price))
+output &lt;- input %&gt;%
+  layer_dense_features(dense_features(spec_prep)) %&gt;%
+  layer_dense(units = 32, activation = &quot;relu&quot;) %&gt;%
+  layer_dense(units = 1, activation = &quot;linear&quot;)
+
+model &lt;- keras_model(input, output)
+
+###
+
+summary(model)
+
+model %&gt;% compile(
+  optimizer = optimizer_rmsprop(),
+  loss = 'mse',
+  metrics = list('mean_squared_error')
+)
+
+set.seed(2021)
+history &lt;- model %&gt;%
+  fit(
+    x = training %&gt;% select(variety, country, province, price),
+    y = training$points,
+    epochs = 5,
+    validation_split = 0.2
+  )
+
+
+# prediction
+pred_num_cat &lt;- predict(model,  testing%&gt;% select(variety, country, province, price) )
+
+# MSE for model comparison
+mse_num_cat  &lt;- sum( (pred_num_cat - testing$points)^2 ) / nrow(testing)
+mse_num_cat
+
+</code></pre>
+<p>The simple Neural Network for categorical and numeric data consists of 4 input layers for 4 variables respectively, a feature layer, a hidden layer with 32 units and an output layer with 1 unit. The feature layer is to map the categorical data and numeric data to a feature space in a way that the computer can understand.</p>
+<h2 id="the-concatinate-part">The concatinate part</h2>
+<pre><code class="language-R">
+# similar to the previous
+main_input &lt;- layer_input(shape = c(1), dtype = &quot;string&quot;, name = 'main_input')
+
+lstm_out &lt;- main_input %&gt;%
+   text_vectorization() %&gt;%
+  layer_embedding(input_dim = num_words + 1, output_dim = 16
+                  ,input_length = max_length) %&gt;%
+  layer_lstm(units = 16 )
+## ---------------
+
+## ---------------
+
+# cate and num
+auxiliary_input &lt;- layer_input_from_dataset(training %&gt;%
+                                              select(variety, country, province, price))
+
+auxiliary_output &lt;- auxiliary_input %&gt;%
+  layer_dense_features(dense_features(spec_prep)) %&gt;%
+  layer_dense(units = 32, activation = &quot;relu&quot;)
+
+main_output &lt;- layer_concatenate(c(lstm_out, auxiliary_output)) %&gt;%
+  # the final simple NN
+  layer_dense(units = 32, activation = &quot;relu&quot;) %&gt;%
+  layer_dense(units = 1, activation = &quot;linear&quot;, name = 'main_output')
+
+model &lt;- keras_model(
+  inputs = c(main_input, auxiliary_input),
+  outputs = c(main_output)
+)
+summary(model)
+
+# another input end
+model_comv %&gt;% compile(
+  optimizer = &quot;rmsprop&quot;,
+  loss = list(main_output = 'mse'),
+  metrics = list(main_output = 'mean_squared_error'),
+  loss_weights = list(main_output = 1.0)
+)
+
+# And trained it via:
+set.seed(2021)
+history =  model_comv %&gt;% fit(
+  x = list(training$description,
+           training %&gt;% select(variety, country, province, price)),
+  y = list(main_output = training$points),
+  epochs = 5,
+  batch_size = 32,
+  validation_split = 0.2,
+  verbose=2
+)
+
+# prediction
+pred_comb &lt;- predict(model_comv, list(testing$description,
+                                      testing %&gt;% select(variety, country, province, price)) )
+
+# MSE for model comparison
+mse_comb &lt;- sum( (pred_comb - testing$points)^2 ) / nrow(testing)
+mse_comb
+
+
+</code></pre>
+<p>The combined model concatenates of the two models specified above with the help of layer_concatenate() function. The concatenate layer combines the input layers &amp; first hidden layer of simple NN and input layer &amp; embedding layer &amp; LSTM layer of LSTM model. After that, the concatenated input is sent to a hidden layer with 32 units and the final output layer with 1 unit.</p>
+<h1 id="evaluation-of-the-methods">Evaluation of the methods</h1>
+<p>Now it is the exciting moment! How do these models perform in prediction, let us see!</p>
+<p>There are two matrics that we are using to evaluate, MSE and accuracy.<br>
+MSE is defined as follows:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>M</mi><mi>S</mi><mi>E</mi><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo>⋅</mo><munderover><mo>∑</mo><mi>i</mi><mi>n</mi></munderover><mo>(</mo><msub><mi>Y</mi><mi>i</mi></msub><mo>−</mo><mover accent="true"><msub><mi>Y</mi><mi>i</mi></msub><mo>^</mo></mover><msup><mo>)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">     MSE =  \frac{1}{n} \cdot \sum_{i}^{n} (Y_{i} - \hat{Y_{i}})^2
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">M</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.00744em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">n</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:2.929066em;vertical-align:-1.277669em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6513970000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.19677em;vertical-align:-0.25em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9467699999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">Y_{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the real point of a wine, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><msub><mi>Y</mi><mi>i</mi></msub><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{Y_{i}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0967699999999998em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9467699999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span> is the predicted point and n is the total number of observations.</p>
+<p>Since the prediction is numeric, accuracy of prediction is calculated in following way: If the prediction is within true value <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>±</mo></mrow><annotation encoding="application/x-tex">\pm</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">±</span></span></span></span> threshold, it is regarded as an accurate prediction. Then we calculate the proportion of accurate predictions in the test data set.  The threshold is grinding from 1 to 10.5 with step size 0.5.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Validation MSE</th>
+<th>Prediction MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LM with price</td>
+<td>8.40</td>
+<td>8.09</td>
+</tr>
+<tr>
+<td>LM with price/variety/ province</td>
+<td>7.56</td>
+<td>7.36</td>
+</tr>
+<tr>
+<td>Simple NN</td>
+<td>6.49</td>
+<td>6.35</td>
+</tr>
+<tr>
+<td>LSTM</td>
+<td>10.54</td>
+<td>10.58</td>
+</tr>
+<tr>
+<td>Combined NN &amp; LSTM</td>
+<td><strong>6.28</strong></td>
+<td><strong>6.13</strong></td>
+</tr>
+</tbody>
+</table>
+<figure data-type="image" tabindex="2"><img src="https://BolinWu-Gridea.github.io/post-images/1621683955700.jpeg" alt="" loading="lazy"></figure>
+<h1 id="conclusion">Conclusion</h1>
+<p>Based on MSE, the combination model has the best prediction performance which is around 6.1. The simple NN based on categorical data and numeric data has the similar performance. The LSTM has the worst performance. This could be due to Bayes error. Similarly, for human it is comparatively easier to judge a wine by price and origin than reading a long description.</p>
+<p>However, from MSE and accuracy we can see that the concatenated model is still the best instead of being somewhere between Simple NN and LSTM. It is encouraging because it indicates the validity of concatenation.</p>
+<h2 id="potential-problems-improvements-and-ethical-issues">Potential problems, improvements and ethical issues</h2>
+<h2 id="problems">Problems</h2>
+<ul>
+<li>The variable &quot;points&quot; is ranged from 80-100 which could be too narrow for the training and evaluating.</li>
+<li>The original data set has 150,000 observations, but after the data cleaning there is only 110,000 observations left for modeling. The data set perhaps is not big enough.</li>
+<li>There is a variable called &quot;winery&quot; in the original data set, but it has non-English letters in it so that we exclude the variable although it could be an important factor.</li>
+<li>Because of calculation power limitation, the parameters such as hidden units in each layer, number of epoch are all limited to a small size.</li>
+</ul>
+<h2 id="improvements">Improvements</h2>
+<ul>
+<li>Increasing the number of epoch and using early stopping to make sure that the training reaches its best stage.</li>
+<li>Increasing the number of units in the hidden layers or using dropout to increase the complexity of the model or prevent over-fitting.</li>
+<li>It might be better to handle different type of variables separately, so set up different input branches for numerical/ categorical variables and tune them separately may be a good choice.</li>
+</ul>
+<h2 id="ethical-issues">Ethical issues</h2>
+<p>In the end I would like to talk about ethical issus.<br>
+Since R could only recognizes letters in English, we do not concern the observations which has languages other than English in the interested variables. Therefore it might be biased for not concerning wine originated from non-English speaking regions or the descriptions in other languages, for example French.</p>
+<p>Thank you for reading!</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Data Science Blog
+</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/Bolin-Wu" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Be better every day
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://BolinWu-Gridea.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

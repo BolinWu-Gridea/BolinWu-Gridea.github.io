@@ -1,0 +1,358 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>K-means Clustering for Numeric Data  | Bolin Wu</title>
+
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico?v=1621684676834">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Bolin Wu
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            Homepage
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            Archives
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            Tags
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            About
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1621684676834" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    K-means Clustering for Numeric Data 
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-01-24 ·
+                    </time>
+                    
+                        <a href="https://BolinWu-Gridea.github.io/tag/J1GvUL627h/" class="post-tags">
+                            # unsupervised machine learning
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <!-- more -->
+<p>The k-means algorithm is a well-known unsupervised machine learning algorithm. From <em>The elements of Statistical Learning</em> by Trevor Hastie, Robert Tibshirani and Jerome Friedman, the biggest <strong>difference</strong> between supervised learning and unsupervised learning is that the data for supervised learning are <strong>labeled</strong> while the data for unsupervised learning are <strong>unlabeled</strong>. Statistically speaking, for unsupervised learning, we would like to explore the property of joint density P(X) where X is a p-vector. <br>
+In genral, Unsupervised learning is a useful tool to explore the structure of the data and data clustering.</p>
+<p>In this blog, I will show the intuition, implementation and evaluation of k-means algorithm.</p>
+<p>Reference of this blog:</p>
+<ul>
+<li><a href="https://web.stanford.edu/~hastie/ElemStatLearn/">The Elements of Statistical Learning by Hastie et al. (2009)</a> Chapter 14.</li>
+</ul>
+<p>Prerequisite to read the following blog:</p>
+<ul>
+<li>Recommend reading the reference above if you have not touched upon k-means algorithm before.</li>
+<li>Basic knowledge of R programming (function and loop).</li>
+</ul>
+<h1 id="the-k-means-algorithm">The k-means Algorithm</h1>
+<p>Basically, K-means clustering starts with a guess for the K cluster centres and then it loops over the following steps until convergence:</p>
+<ol>
+<li>Assign each data point to the closest cluster centre. Usually the distance is identified as Euclidean distance.</li>
+<li>Update the cluster centre by the coordinate-wise average of all data points that are closest to it.</li>
+</ol>
+<h2 id="data">Data</h2>
+<p>To facilitate replication, we will use classic &quot;iris&quot; dataset. We will only use the two variables: <em>Petal.length</em> and <em>Petal.width</em> in order to have a two-dimension visualization.<br>
+Load the data and visualize the iris as a scatterplot based on the two variables:</p>
+<pre><code class="language-R">library(ggplot2)
+data(&quot;iris&quot;)
+ggplot(data=iris,aes(x=Petal.Width,y=Petal.Length,color = Species)) +
+    geom_point() +
+    theme_minimal()
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621682408696.png" alt="" loading="lazy"><br>
+<em>Fig.1 Data visualization</em></p>
+<h2 id="implementation">Implementation</h2>
+<p>Now we are going to implement different parts of the k-means algorithm by following Algorithm 14.1 in <em>Hastie et al. (2009)</em>.<br>
+First step: We will implement a function called <strong>compute_cluster_means(X,C)</strong>. X is a <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">n \times p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span></span></span></span> original data matrix, where n is the number of obsevations, p is the  number of variables. C is a <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mo>×</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">p \times 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7777700000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> vector of cluster assignments. The ouput matrix is a <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>K</mi><mo>×</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">K \times p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span></span></span></span> matrix where K is the total number of clusters and each row represents the cluster centres. <br>
+We could assume the number of cluster to be K and run a loop over the K clusters. However, to make understanding easier, let us suppose that the number of clusters is 3:</p>
+<pre><code class="language-R">
+compute_cluster_means = function(X,C){
+  X = cbind(X,C)
+  # transforma to data frame so we can use filter funciton
+  # in tidyverse
+  K1 = colMeans(as.data.frame(X) %&gt;% filter(C==1))
+  K2 = colMeans(as.data.frame(X) %&gt;% filter(C==2))
+  K3 = colMeans(as.data.frame(X) %&gt;% filter(C==3))
+  return(rbind(K1,K2,K3))
+}
+
+# set up the X and C
+X = as.matrix(iris[,3:4])
+# for the first step, assign random clusters, store in C
+C = sample(1:3, nrow(X), replace = TRUE)
+
+m = compute_cluster_means(X, C)
+m
+
+   Petal.Length Petal.Width C
+K1     3.744444    1.244444 1
+K2     3.573469    1.095918 2
+K3     3.965957    1.255319 3
+</code></pre>
+<p>Second step: Assign each observation in the original data to each cluster based on the Euclidean distance. <br>
+A function called <strong>compute_cluster_encoding(X,m)</strong> will be implemented. m is a <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>K</mi><mo>×</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">K \times p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span></span></span></span> which calculated above. A <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mo>×</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">p \times 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7777700000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> vector of cluster assignments will be returned.</p>
+<pre><code class="language-R">
+compute_coluster_encoding = function(X,m){
+ K = 3 # number of clusters
+  C = c(NA) # store the encoding
+  for (i in 1:nrow(X)) {
+    c_dist = c() # store the distances
+  for (c in 1:K) { # calculate the distance for each K
+    c = sum((X[i,] - m[c,1:2])^2) # defination of dissimilarity for K-means
+    c_dist = append(c_dist,c)
+
+  }
+    # return the position of the smallest value
+    C[i] = which.min(c_dist)
+  }
+    return(C)
+}
+
+C = compute_coluster_encoding(X,m)
+# check the first 10 observations' clusters
+C[1:10]
+
+[1] 2 2 2 2 2 2 2 2 2 2
+</code></pre>
+<p>Third step: Reiterate the process by using the two functions defined above until no cluster assignments change. <br>
+<em>Note: The initial cluster assigment is randomized</em></p>
+<pre><code class="language-R">
+update_cluster = function(C_update, X){
+  C = rep(0,length = length(C_update))
+  # run until the vector C does not change
+  while (any(C != C_update)) {
+  # let C = initial value for the first loop
+  C = C_update
+  # m for the first loop is a random initialization value
+  m &lt;- compute_cluster_means(X, C)
+  # update C
+  C_update = compute_coluster_encoding(X,m)
+  }
+  return(C)
+}
+
+
+set.seed(4711)
+C_update &lt;- sample(1:3, nrow(X), replace = TRUE)
+head(n = 60, update_cluster(C_update,X))
+
+[1] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+[39] 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3
+</code></pre>
+<h2 id="evaluation">Evaluation</h2>
+<p>Now we have finished the main parts of k-means algorithm. <br>
+However, as you may notice, since the initial cluster assignment is randomized therefore theoretically, we will get different final clustering results by using different initial clusters. To evaluate the performance of the algorithm, we will use <strong>k-means within point scatter</strong> as defined in Eq. 14.31 in <em>Hastie et al. (2009)</em>.</p>
+<p>The basic idea of calculating k-means within-point scatter is to first find the mean vector of each cluster, and sum up the sqaured euclidean distance of the observations within each cluster. <br>
+This is the critera to choose the best K-means clustering.</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>W</mi><mo>(</mo><mi>C</mi><mo>)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><msub><mi>N</mi><mi>k</mi></msub><munder><mo>∑</mo><mrow><mi>C</mi><mo>(</mo><mi>i</mi><mo>)</mo><mo>=</mo><mi>k</mi></mrow></munder><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mover accent="true"><msub><mi>x</mi><mi>k</mi></msub><mo>ˉ</mo></mover><msup><mo>)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">    W(C) = \sum_{k=1}^{K} N_{k} \sum_{C(i) = k} (x_{i} - \bar{x_{k}})^{2}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.344341em;vertical-align:-1.516005em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.8478869999999998em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.300005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.07153em;">K</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.302113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.808995em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.07153em;">C</span><span class="mopen mtight">(</span><span class="mord mathdefault mtight">i</span><span class="mclose mtight">)</span><span class="mrel mtight">=</span><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.516005em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.56778em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">ˉ</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>where <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><msub><mi>x</mi><mi>k</mi></msub><mo>ˉ</mo></mover></mrow><annotation encoding="application/x-tex">\bar{x_{k}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.71778em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.56778em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">ˉ</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span> is the mean vector associated with the kth cluster and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>N</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">N_{k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the number of observations in cluster K.</p>
+<pre><code class="language-R">k_means_W = function(X,C){
+  m = compute_cluster_means(X,C)
+  # split the original dataset into different clusters based on the initial random clusters
+  X = cbind(X,C)
+  G1 = as.data.frame(X) %&gt;% filter(C==1)
+  G2 = as.data.frame(X) %&gt;% filter(C==2)
+  G3 = as.data.frame(X) %&gt;% filter(C==3)
+
+  # calculate the sqaured euclidean distance within each cluster
+  # sweep is used here to substract each row of G1 from m[i,1:2], where i = 1,2,3
+  dist_g1 = (sweep(G1, 2, m[1,])[,-3])^2
+  dist_g2 = (sweep(G2, 2, m[2,])[,-3])^2
+  dist_g3 = (sweep(G3, 2, m[3,])[,-3])^2
+
+  # sum up the sqaured euclidean distance
+  return(sum(dist_g1,dist_g2,dist_g3))
+
+}
+# get the within pint scatter
+k_means_W(X,C)
+
+88.72578
+</code></pre>
+<p>Next, we can run the k-means a couple times and see which gives the smallest within pint scatter:</p>
+<pre><code class="language-R"># number of clusters
+K = 3
+# the third and fourth columns are Petal.Length and Petal.Width
+X = as.matrix(iris[,3:4])
+loop = 10
+# store the within-point scatter
+W_loop_iris = rep(0,length = loop)
+# store the final cluster result
+C_loop_iris = matrix(NA,nrow = nrow(X),ncol = loop)
+for (i in 1:loop) {
+  C_update &lt;- sample(1:K, nrow(X), replace = TRUE)
+  C_final = update_cluster(C_update,X)
+  # k_means_W(X,C_final)
+  W_loop_iris[i] = k_means_W(X,C_final)
+  # compute_cluster_means(X,C_final)
+  C_loop_iris[,i] =C_final
+}
+
+W_loop_iris
+head(C_loop_iris)
+
+[1] 31.37136 31.37136 31.37136 31.37136 31.37136 31.37136 31.37136 31.37136
+ [9] 31.37136 31.37136
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+[1,]    1    2    1    1    1    1    3    3    2     2
+[2,]    1    2    1    1    1    1    3    3    2     2
+[3,]    1    2    1    1    1    1    3    3    2     2
+[4,]    1    2    1    1    1    1    3    3    2     2
+[5,]    1    2    1    1    1    1    3    3    2     2
+[6,]    1    2    1    1    1    1    3    3    2     2
+</code></pre>
+<p>The assignments for different loops are different but the within point scatters are the same.<br>
+I think the main reason is the iris dataset has a clear structure by itself, as we can see in the Figure 1, so that the k-means algorithm just ends up with the same within point scatter every time for different initial clusters. If the structure is not that clear, then we may end up with different clusters and thus have different within point scatters. Another reason is that our number of clusters is only 3, if we increase the number of clusters the final within point scatters may change as well.</p>
+<p>Finally, let us visualize the final cluster result:</p>
+<pre><code class="language-R"># get the final clustering (first column)
+C_final_iris = C_loop_iris[, 1]
+iris_visual = cbind(iris[,3:4],C_final_iris)
+iris_visual[,&quot;C_final_iris&quot;] = factor(iris_visual[,&quot;C_final_iris&quot;])
+
+ggplot(data=iris_visual,aes(x=Petal.Width, y=Petal.Length,color = C_final_iris))
+  + geom_point()
+  + theme_minimal()
+  + ggtitle(&quot;First Final K-means Clustering Result of iris&quot;) +
+    theme(plot.title = element_text(hjust = 0.5))
+
+</code></pre>
+<p><img src="https://BolinWu-Gridea.github.io/post-images/1621682471390.png" alt="" loading="lazy"><br>
+<em>Fig.2 K-means Clustering Result</em></p>
+<p>It is pretty similar to the Fig.1 which indicates that the clustering is reasonable.</p>
+<h1 id="potential-improvements">Potential improvements</h1>
+<ul>
+<li>Use a dataset that does not have a clear structure so that we can have more variations of the clustering results.</li>
+<li>When writing the algorithm, we can set the K as a parameter and run the loop instead of repeating. Try different number of K and see how the results differ.</li>
+</ul>
+<p>Thank you for reading!</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://BolinWu-Gridea.github.io/post/2021-01-16-GARCH/" class="post-title gt-a-link">
+                    Modelling Daily Dow Jones Industrial Average by GARCH 
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Data Science Blog
+</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/Bolin-Wu" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Be better every day
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://BolinWu-Gridea.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
