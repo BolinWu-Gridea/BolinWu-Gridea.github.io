@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2021-05-22T13:12:12.451Z</updated>
+    <updated>2021-05-22T13:17:31.874Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -16,7 +16,7 @@
         <id>https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/">
         </link>
-        <updated>2021-05-07T10:00:00.000Z</updated>
+        <updated>2021-05-07T04:00:00.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[An Overview of Causal Inference (Part 1: Causal Effects and Confounding)]]></title>
