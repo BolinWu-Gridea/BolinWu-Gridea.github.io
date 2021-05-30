@@ -1,0 +1,466 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>An Overview of Causal Inference (Part 3: Inverse probability of treatment weighting, IPTW) - Bolin Wu</title>
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/tailwind.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="An Overview of Causal Inference (Part 3: Inverse probability of treatment weighting, IPTW) - Bolin Wu - Atom Feed" href="https://BolinWu-Gridea.github.io/atom.xml">
+
+    
+
+  <meta name="description" content="
+In this post we will continue on discussing the estimate of causal effects. We will talk about intuition of IPTW, some ..." />
+  <meta property="og:title" content="An Overview of Causal Inference (Part 3: Inverse probability of treatment weighting, IPTW) - Bolin Wu">
+  <meta property="og:description" content="
+In this post we will continue on discussing the estimate of causal effects. We will talk about intuition of IPTW, some ..." />
+  <meta property="og:type" content="articles">
+  <meta property="og:url" content="https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-3-inverse-probability-of-treatment-weighting-iptw/" />
+  <meta property="og:image" content="https://BolinWu-Gridea.github.io/images/avatar.png">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:width" content="1200">
+  <meta name="twitter:title" content="An Overview of Causal Inference (Part 3: Inverse probability of treatment weighting, IPTW) - Bolin Wu">
+  <meta name="twitter:description" content="
+In this post we will continue on discussing the estimate of causal effects. We will talk about intuition of IPTW, some ...">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-3-inverse-probability-of-treatment-weighting-iptw/">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+ 
+  
+    <link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/prism-atom-dark.css">
+  
+
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+  
+</head>
+
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
+    <a href="https://BolinWu-Gridea.github.io" class="fixed top-0 left-0 mt-4 bg-black text-white dark:text-gray-700 dark:bg-yellow-50 dark:hover:bg-black dark:hover:text-white inline-flex p-2 pl-8 hover:text-gray-700 hover:bg-yellow-50 font-bold z-10 transition-fast animated fadeInLeft">
+      Bolin Wu
+    </a>
+    <div class="max-w-4xl w-full mx-auto">
+      <div class="shadow-box bg-white dark:bg-gray-600 rounded-lg pt-32 md:pt-64 px-4 md:px-8 pb-8 animated fadeIn mb-8">
+        <h1 class="text-5xl font-semibold leading-normal pb-8 mb-8 border-b-8 border-gray-700">
+          An Overview of Causal Inference (Part 3: Inverse probability of treatment weighting, IPTW)
+        </h1>
+        
+        <div class="mb-8 flex flex-wrap">
+          <div class="text-gray-400 text-sm mr-4">2021-05-30 · 10 min read</div>
+          
+        </div>
+        <div class="markdown mb-8" v-pre>
+          <!-- more -->
+<p>In this post we will continue on discussing the estimate of causal effects. We will talk about intuition of IPTW, some key definitions like weighting, marginal structual models. And in the end we will show a data example in R.</p>
+<h1 id="intuition-for-inverse-probability-of-treatment-weighting-iptw">Intuition for inverse probability of treatment weighting (IPTW)</h1>
+<h2 id="motivating-example">Motivating example</h2>
+<p>Suppose there is a single binary confounder X.<br>
+Among people with X = 1, only 10% receive the treatment. P(A = 1| X = 1) = 0.1. Among people with x = 0, 80% receive the treatment. P(A = 1| X = 0) = 0.8.</p>
+<p>Let us suppose there are 10 observations for X = 1, with 1 in the treated group and 9 in the control group. If we use the propensity score matching, we would match one treated subject with one randomly selcted subject in the control group. The one from the treated group counts as the same as 9 subjects from the control group. Rather than matching, we could use all of the data, but down-wight some and up-weight others. The particular treated subject should end up having nine times more weigtht than any of these individuals from the control group.</p>
+<h2 id="weighting">Weighting</h2>
+<p>This is accomplished by weighting by the inverse of the probability of treatment received. This is known as inverse probability of treatment weighting (IPTW).</p>
+<p>For treated subjects, weight by the inverse of P(A=1|X).<br>
+For control subjects, weight by the inverse of P(A=0|X).</p>
+<p>The main difference between propensity score matching and IPTW is that propensity matching is one-on-one whereas IPTW end up accomplishing the same thing where for a given value of X, or propensity score, we count the collection of treated subjects in the same way as a collection of control subjects, as if it was a randomized trial.</p>
+<h1 id="marginal-structural-models">Marginal structural models</h1>
+<p>A marginal structural model (MSE) is a model for the mean of the potantial outcomes. &quot;<strong>Marginal</strong>&quot; indicates that it is not conditional on the confounders. &quot;<strong>Structural</strong>&quot; means that it is a model for potential outcomes, not observed outcomes.</p>
+<h2 id="linear-msm">Linear MSM</h2>
+<p>It is defined as follows</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo>(</mo><msup><mi>Y</mi><mi>a</mi></msup><mo>)</mo><mo>=</mo><msub><mi>ψ</mi><mn>0</mn></msub><mo>+</mo><msub><mi>ψ</mi><mn>1</mn></msub><mi>a</mi><mo separator="true">,</mo><mtext>  </mtext><mi>a</mi><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">E(Y^{a}) = \psi_{0} + \psi_{1} a, \; a = 0,1
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">ψ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">ψ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault">a</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span></span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo>(</mo><msup><mi>Y</mi><mn>0</mn></msup><mo>)</mo><mo>=</mo><msub><mi>ψ</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">E(Y^{0}) = \psi_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">ψ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo>(</mo><msup><mi>Y</mi><mn>1</mn></msup><mo>)</mo><mo>=</mo><msub><mi>ψ</mi><mn>0</mn></msub><mo>+</mo><msub><mi>ψ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">E(Y^{1}) = \psi_{0} + \psi_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">ψ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">ψ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>ψ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\psi_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">ψ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the <strong>average causal effect</strong> <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo>(</mo><msup><mi>Y</mi><mn>1</mn></msup><mo>)</mo><mo>−</mo><mi>E</mi><mo>(</mo><msup><mi>Y</mi><mn>0</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">E(Y^{1}) - E(Y^{0})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>.</p>
+<p>You would typically use a model like this if you had a continuous outcome.</p>
+<h2 id="logistic-msm">Logistic MSM</h2>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>g</mi><mi>i</mi><mi>t</mi><mo>(</mo><mi>E</mi><mo>(</mo><msup><mi>Y</mi><mi>a</mi></msup><mo>)</mo><mo>)</mo><mo>=</mo><msub><mi>ψ</mi><mn>0</mn></msub><mo>+</mo><msub><mi>ψ</mi><mn>1</mn></msub><mi>a</mi><mo separator="true">,</mo><mtext>  </mtext><mi>a</mi><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">logit(E(Y^{a}) )= \psi_{0} + \psi_{1} a, \; a = 0,1
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">i</span><span class="mord mathdefault">t</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">ψ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">ψ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault">a</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span></span></span></span></span></p>
+<p>The <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>e</mi><mi>x</mi><mi>p</mi><mo>(</mo><msub><mi>ψ</mi><mn>1</mn></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">exp(\psi_{1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">e</span><span class="mord mathdefault">x</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">ψ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> is the <strong>causal odds ratio</strong>: <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi>P</mi><mo>(</mo><msup><mi>Y</mi><mn>1</mn></msup><mo>=</mo><mn>1</mn><mo>)</mo><mi mathvariant="normal">/</mi><mo>(</mo><mn>1</mn><mo>−</mo><mi>P</mi><mo>(</mo><msup><mi>Y</mi><mn>1</mn></msup><mo>=</mo><mn>1</mn><mo>)</mo><mo>)</mo></mrow><mrow><mi>P</mi><mo>(</mo><msup><mi>Y</mi><mn>0</mn></msup><mo>=</mo><mn>1</mn><mo>)</mo><mi mathvariant="normal">/</mi><mo>(</mo><mn>1</mn><mo>−</mo><mi>P</mi><mo>(</mo><msup><mi>Y</mi><mn>0</mn></msup><mo>=</mo><mn>1</mn><mo>)</mo><mo>)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{P(Y^{1} = 1) / (1 - P(Y^{1} = 1))}{P(Y^{0} =1) / (1 - P(Y^{0} = 1))}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.62892em;vertical-align:-0.52em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.10892em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7463142857142857em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mrel mtight">=</span><span class="mord mtight">1</span><span class="mclose mtight">)</span><span class="mord mtight">/</span><span class="mopen mtight">(</span><span class="mord mtight">1</span><span class="mbin mtight">−</span><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7463142857142857em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mrel mtight">=</span><span class="mord mtight">1</span><span class="mclose mtight">)</span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913142857142857em;"><span style="top:-2.931em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mrel mtight">=</span><span class="mord mtight">1</span><span class="mclose mtight">)</span><span class="mord mtight">/</span><span class="mopen mtight">(</span><span class="mord mtight">1</span><span class="mbin mtight">−</span><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913142857142857em;"><span style="top:-2.931em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mrel mtight">=</span><span class="mord mtight">1</span><span class="mclose mtight">)</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>.</p>
+<h2 id="estimation-in-msms">Estimation in MSMs</h2>
+<p>Steps:</p>
+<ol>
+<li>Estimate propensity score</li>
+<li>Create weights
+<ul>
+<li>1 divided by propensity score for treated subjects.</li>
+<li>1 divided by 1 minus the propensity score for control subjects.</li>
+</ul>
+</li>
+<li>Specify the MSM of interest (e.g. continuous or binary outcome)</li>
+<li>Use software to fit a weighted generalized linear model</li>
+<li>Use asymptotic (sandwich) variance estimator or bootstrapping</li>
+</ol>
+<h1 id="assessing-balance">Assessing balance</h1>
+<h2 id="balance-after-weighting">Balance after weighting</h2>
+<p>Covariate balance can be checked on the weighted sample using standardized differences by comparing in a table or in a plot. One metric is standardized mean difference (SMD).</p>
+<h2 id="distribution-of-weights">Distribution of weights</h2>
+<p>Why are we interested in the distribution of weights? Larger weights lead to noisier estimates of causal effects. If one person's outcome data can greatly affect the parameter estimate, then the standard error will be large. One way to estimate standard errors is <strong>bootstrapping</strong>:</p>
+<ol>
+<li>Randomly sample with replacement from the original sample.</li>
+<li>Estimate parameters.</li>
+<li>Repeat steps 1 and 2 many times.</li>
+<li>The standard deviation of the bootstrap estimates is an estimate of the standard error.</li>
+</ol>
+<p>However, someone with a very large weight will be included in some bootstrap samples, but not others. whether or not they are included will have a relatively large impact on the parameter estimates. Thus, a lot of the variability of the estimator would be due to this one subject. Large weights on some individuals can lead to really noisy estimator of causal effect.</p>
+<p>You can also use summary statistics of weights for examination.</p>
+<h2 id="remedies-for-large-weights">Remedies for large weights</h2>
+<p>A good first step is to look into <strong>why</strong> the weights are large.<br>
+Identify the subjects who have large weights.</p>
+<ul>
+<li>What is <strong>unusual</strong> about them?</li>
+<li>Is there a problem with their data?</li>
+<li>Is there a problem with the propensity score model?</li>
+</ul>
+<h3 id="trimming-the-tails">Trimming the tails</h3>
+<p>Large weights occur at observations in the tails of the propensity score distribution. Trimming the tails can eliminate some of the extreme weights. A common trimming strategy:</p>
+<ul>
+<li>Remove treated subjects whose propensity scores are above the 98th percentile from the distribution from the distribution among controls.</li>
+<li>Remove control subjects whose propensity scores are below the 2nd perventile from the distribution of treated subjects.</li>
+</ul>
+<p>Another approach is weight truncation. Steps:</p>
+<ol>
+<li>Determine a maximum allowable weight. It could be a specific value or a percentile.</li>
+<li>If a weight is greater than the maximum allowable, set it to the maximum allowable value. Whether or not to truncate weights involves a <strong>bias-varianfce trade-off</strong>: Truncation: bias, but smaller variance. No truncation: unbiased, larger variance.</li>
+</ol>
+<h1 id="data-example-in-r">Data example in R</h1>
+<p>For this example we will use data from Lalonde (1986), that aimed to<br>
+evaluate the impact of National Supported Work (NSW) Demonstration,<br>
+which is a labor training program, on post-intervention income levels.<br>
+Interest is in estimating the causal effect of this training program on<br>
+income.</p>
+<h2 id="loard-the-data-and-package">Loard the data and package</h2>
+<p>The data are the same as described in the post of <a href="https://bolinwu.blog/post/2021-05-08-CausalityIntroductionP2/">part 2</a></p>
+<pre><code class="language-r"># install.packages(&quot;tableone&quot;)
+# install.packages(&quot;Matching&quot;)
+# install.packages(&quot;ipw&quot;)
+# install.packages(&quot;survey&quot;)
+# install.packages(&quot;MatchIt&quot;)
+
+library(tableone)
+library(Matching)
+library(ipw) 
+library(survey)
+library(tidyverse)
+library(MatchIt) # the data is in this package
+data(lalonde)
+str(lalonde) # check the type of data
+</code></pre>
+<pre><code>## 'data.frame':    614 obs. of  9 variables:
+##  $ treat   : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ age     : int  37 22 30 27 33 22 23 32 22 33 ...
+##  $ educ    : int  11 9 12 11 8 9 12 11 16 12 ...
+##  $ race    : Factor w/ 3 levels &quot;black&quot;,&quot;hispan&quot;,..: 1 2 1 1 1 1 1 1 1 3 ...
+##  $ married : int  1 0 0 0 0 0 0 0 0 1 ...
+##  $ nodegree: int  1 1 0 1 1 1 0 1 0 0 ...
+##  $ re74    : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ re75    : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ re78    : num  9930 3596 24909 7506 290 ...
+</code></pre>
+<pre><code class="language-r"># select the confounder
+xvars = colnames(lalonde %&gt;% select(-c(&quot;treat&quot;,&quot;re78&quot;)))
+</code></pre>
+<h2 id="1-find-the-minimum-and-mnaximum-weights">1. Find the minimum and mnaximum weights.</h2>
+<pre><code class="language-r"># propensity score model
+psmodel = glm(treat~.-re78, family = binomial(link = &quot;logit&quot;),data = lalonde)
+
+## Value of propensity score for each subject
+ps = predict(psmodel, type = &quot;response&quot;)
+
+# creat weights
+weight = ifelse(lalonde$treat ==1, 1/ps, 1/ (1-ps))
+
+cat(&quot;the maximum weight is&quot;, max(weight), &quot;\n&quot;,
+    &quot;the minimum weight is&quot;, min(weight))
+</code></pre>
+<pre><code>## the maximum weight is 40.07729 
+##  the minimum weight is 1.009163
+</code></pre>
+<h2 id="2-find-the-standardized-differences-for-each-confounder-on-the-weighted-pseudo-population-what-is-the-standardized-difference-for-nodegree">2. Find the standardized differences for each confounder on the weighted (pseudo) population. What is the standardized difference for nodegree?</h2>
+<pre><code class="language-r"># apply weights to data
+weighteddata = svydesign(ids = ~1 , data = lalonde, weights = ~ weight)
+
+# weighted table 1
+weightedtable = svyCreateTableOne(vars = xvars, strata = &quot;treat&quot;, data = weighteddata, test = FALSE)
+
+# show the table with SMD
+print(weightedtable, smd = TRUE)
+</code></pre>
+<pre><code>##                       Stratified by treat
+##                        0                 1                 SMD   
+##   n                     616.00            553.63                 
+##   age (mean (SD))        27.10 (10.80)     25.57 (6.53)     0.172
+##   educ (mean (SD))       10.29 (2.74)      10.61 (2.05)     0.132
+##   race (%)                                                  0.112
+##      black               245.1 (39.8)      247.9 (44.8)          
+##      hispan               72.1 (11.7)       67.4 (12.2)          
+##      white               298.8 (48.5)      238.3 (43.0)          
+##   married (mean (SD))     0.41 (0.49)       0.31 (0.47)     0.197
+##   nodegree (mean (SD))    0.62 (0.48)       0.57 (0.50)     0.112
+##   re74 (mean (SD))     4552.74 (6337.09) 2932.18 (5709.42)  0.269
+##   re75 (mean (SD))     2172.04 (3160.14) 1658.07 (3072.89)  0.165
+</code></pre>
+<p>From the table above, we can see that the standardized difference for<br>
+nodegree is 0.112. This is a bit large since we expect it to be smaller<br>
+than 0.01.</p>
+<h2 id="3-using-iptw-find-the-estimate-and-95-confidence-interval-for-the-average-causal-effect-this-can-be-obtained-from-svyglm">3. Using IPTW, find the estimate and 95% confidence interval for the average causal effect. This can be obtained from svyglm.</h2>
+<pre><code class="language-r"># fit a marginal structural model 
+msm = svyglm(re78~treat, design = svydesign(~1, weights = ~weight, data = lalonde))
+
+# find the confidence interval
+confint(msm)
+</code></pre>
+<pre><code>##                 2.5 %   97.5 %
+## (Intercept)  5706.948 7138.730
+## treat       -1559.321 2008.673
+</code></pre>
+<pre><code class="language-r"># find the estimated coefficients
+coef(msm)
+</code></pre>
+<pre><code>## (Intercept)       treat 
+##   6422.8390    224.6763
+</code></pre>
+
+        </div>
+        <!-- Share to Twitter, Weibo, Telegram -->
+        <div class="flex items-center">
+          <div class="mr-4 flex items-center">
+            <i class="ri-share-forward-line text-gray-500"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTwitter">
+            <i class="ri-twitter-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-red-500 hover:bg-red-100 dark:hover:bg-gray-600 inline-flex" @click="shareToWeibo">
+            <i class="ri-weibo-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-indigo-500 hover:bg-indigo-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTelegram">
+            <i class="ri-telegram-line"></i>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Prudence is a fountain of life to the prudent.
+</footer>
+    </div>
+
+    <!-- TOC Container -->
+    <div class="fixed right-0 bottom-0 mb-16 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white dark:bg-gray-500 dark:text-gray-200 hover:shadow-lg transition-all animated fadeInRight" @click="showToc = true">
+      <i class="ri-file-list-line"></i>
+    </div>
+
+    <div class="fixed right-0 top-0 bottom-0 overflow-y-auto w-64 bg-white dark:bg-gray-800 p-4 border-l border-gray-100 dark:border-gray-600 z-10 transition-fast" :class="{ '-mr-64': !showToc }">
+      <div class="flex mb-4 justify-end">
+        <div class="w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast" @click="showToc = false">
+          <i class="ri-close-line text-lg"></i>
+        </div>
+      </div>
+      <div class="post-toc-container">
+        <ul class="markdownIt-TOC">
+<li><a href="#intuition-for-inverse-probability-of-treatment-weighting-iptw">Intuition for inverse probability of treatment weighting (IPTW)</a>
+<ul>
+<li><a href="#motivating-example">Motivating example</a></li>
+<li><a href="#weighting">Weighting</a></li>
+</ul>
+</li>
+<li><a href="#marginal-structural-models">Marginal structural models</a>
+<ul>
+<li><a href="#linear-msm">Linear MSM</a></li>
+<li><a href="#logistic-msm">Logistic MSM</a></li>
+<li><a href="#estimation-in-msms">Estimation in MSMs</a></li>
+</ul>
+</li>
+<li><a href="#assessing-balance">Assessing balance</a>
+<ul>
+<li><a href="#balance-after-weighting">Balance after weighting</a></li>
+<li><a href="#distribution-of-weights">Distribution of weights</a></li>
+<li><a href="#remedies-for-large-weights">Remedies for large weights</a>
+<ul>
+<li><a href="#trimming-the-tails">Trimming the tails</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#data-example-in-r">Data example in R</a>
+<ul>
+<li><a href="#loard-the-data-and-package">Loard the data and package</a></li>
+<li><a href="#1-find-the-minimum-and-mnaximum-weights">1. Find the minimum and mnaximum weights.</a></li>
+<li><a href="#2-find-the-standardized-differences-for-each-confounder-on-the-weighted-pseudo-population-what-is-the-standardized-difference-for-nodegree">2. Find the standardized differences for each confounder on the weighted (pseudo) population. What is the standardized difference for nodegree?</a></li>
+<li><a href="#3-using-iptw-find-the-estimate-and-95-confidence-interval-for-the-average-causal-effect-this-can-be-obtained-from-svyglm">3. Using IPTW, find the estimate and 95% confidence interval for the average causal effect. This can be obtained from svyglm.</a></li>
+</ul>
+</li>
+</ul>
+
+      </div>
+    </div>
+
+    <!-- Back to top -->
+    <div class="fixed right-0 bottom-0 mb-4 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white hover:shadow-lg transition-all dark:bg-gray-500 dark:text-gray-200" @click="backToUp" v-show="scrolled">
+      <i class="ri-arrow-up-line"></i>
+    </div>
+  </div>
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Background of PhotoSwipe. 
+        It's a separate element as animating opacity is faster than rgba(). -->
+  <div class="pswp__bg">
+  </div>
+  <!-- Slides wrapper with overflow:hidden. -->
+  <div class="pswp__scroll-wrap">
+    <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+    <div class="pswp__container">
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+    </div>
+    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <!--  Controls are self-explanatory. Order can be changed. -->
+        <div class="pswp__counter">
+        </div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+        <!-- element will get class pswp__preloader--active when preloader is running -->
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip">
+        </div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://BolinWu-Gridea.github.io/media/scripts/main.js"></script>
+  
+  <!-- Code Highlight -->
+  
+    <script src="https://BolinWu-Gridea.github.io/media/prism.js"></script>
+    <script>
+      Prism.highlightAll()
+    </script>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+  <script>
+    //拿到预览框架，也就是上面的html代码
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    //定义图片数组变量
+    var imgitems;
+    /**
+    * 用于显示预览界面
+    * @param index 图片数组下标
+    */
+    function viewImg(index) {
+      //其它选项这里不做过多阐述，详情见官网
+      var pswpoptions = {
+        index: parseInt(index, 10), // 开始幻灯片索引。0是第一张幻灯片。必须是整数，而不是字符串。
+        bgOpacity: 0.7, // 背景透明度，0-1
+        maxSpreadZoom: 3, // 缩放级别，不要太大
+      };
+      //初始化并打开PhotoSwipe，pswpElement对应上面预览框架，PhotoSwipeUI_Default为皮肤，imgitems为图片数组，pswpoptions为选项
+      var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, imgitems, pswpoptions);
+      gallery.init()
+    }
+    /**
+    * 用于添加图片点击事件
+    * @param img 图片元素
+    * @param index 所属下标（在imgitems中的位置）
+    */
+    function addImgClick(img, index) {
+      img.onclick = function() {
+        viewImg(index)
+      }
+    }
+    /**
+    * 轮询所有图片，获取src、width、height等数据，加入imgitems，并给图片元素添加事件
+    * 最好在onload中执行该方法，本站因放在最底部，所以直接初始化
+    * 异步加载图片可在图片元素创建完成后调用此方法
+    */
+    function initImg() {
+      //重置图片数组
+      imgitems = [];
+      //查找class:markdown 下的所有img元素并遍历
+      var imgs = document.querySelectorAll('.markdown img');
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        //本站相册初始为loading图片，真实图片放在data-src
+        var ds = img.getAttribute("data-src");
+        //创建image对象，用于获取图片宽高
+        var imgtemp = new Image();
+        //判断是否存在data-src
+        if (ds != null && ds.length > 0) {
+          imgtemp.src = ds
+        } else {
+          imgtemp.src = img.src
+        }
+        //判断是否存在缓存
+        if (imgtemp.complete) {
+          var imgobj = {
+            "src": imgtemp.src,
+            "w": imgtemp.width,
+            "h": imgtemp.height,
+          };
+          imgitems[i] = imgobj;
+          addImgClick(img, i);
+        } else {
+          console.log('进来了2')
+          imgtemp.index = i;
+          imgtemp.img = img;
+          imgtemp.onload = function() {
+            var imgobj = {
+              "src": this.src,
+              "w": this.width,
+              "h": this.height,
+            };
+            //不要使用push，因为onload前后顺序会不同
+            imgitems[this.index] = imgobj
+            //添加点击事件
+            addImgClick(this.img, this.index);
+          }
+        }
+      }
+    }
+    //初始化
+    initImg();
+  </script>
+  
+  
+</body>
+
+</html>
