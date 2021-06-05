@@ -1,0 +1,551 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>An Overview of Causal Inference (Part 4: Instrumental variable) - Bolin Wu</title>
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/tailwind.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="An Overview of Causal Inference (Part 4: Instrumental variable) - Bolin Wu - Atom Feed" href="https://BolinWu-Gridea.github.io/atom.xml">
+
+    
+
+  <meta name="description" content="Introduction to instrumental variables
+Intromental variables (IV) is an alternative causal inference method that does no..." />
+  <meta property="og:title" content="An Overview of Causal Inference (Part 4: Instrumental variable) - Bolin Wu">
+  <meta property="og:description" content="Introduction to instrumental variables
+Intromental variables (IV) is an alternative causal inference method that does no..." />
+  <meta property="og:type" content="articles">
+  <meta property="og:url" content="https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-4-instrumental-variable/" />
+  <meta property="og:image" content="https://BolinWu-Gridea.github.io/images/avatar.png">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:width" content="1200">
+  <meta name="twitter:title" content="An Overview of Causal Inference (Part 4: Instrumental variable) - Bolin Wu">
+  <meta name="twitter:description" content="Introduction to instrumental variables
+Intromental variables (IV) is an alternative causal inference method that does no...">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-4-instrumental-variable/">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+ 
+  
+    <link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/prism-atom-dark.css">
+  
+
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+  
+</head>
+
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
+    <a href="https://BolinWu-Gridea.github.io" class="fixed top-0 left-0 mt-4 bg-black text-white dark:text-gray-700 dark:bg-yellow-50 dark:hover:bg-black dark:hover:text-white inline-flex p-2 pl-8 hover:text-gray-700 hover:bg-yellow-50 font-bold z-10 transition-fast animated fadeInLeft">
+      Bolin Wu
+    </a>
+    <div class="max-w-4xl w-full mx-auto">
+      <div class="shadow-box bg-white dark:bg-gray-600 rounded-lg pt-32 md:pt-64 px-4 md:px-8 pb-8 animated fadeIn mb-8">
+        <h1 class="text-5xl font-semibold leading-normal pb-8 mb-8 border-b-8 border-gray-700">
+          An Overview of Causal Inference (Part 4: Instrumental variable)
+        </h1>
+        
+        <div class="mb-8 flex flex-wrap">
+          <div class="text-gray-400 text-sm mr-4">2021-06-04 · 12 min read</div>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/ZBshjYFjk/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              causal inference
+            </a>
+          
+        </div>
+        <div class="markdown mb-8" v-pre>
+          <h1 id="introduction-to-instrumental-variables">Introduction to instrumental variables</h1>
+<p>Intromental variables (IV) is an alternative causal inference method that does not rely on the ignorability assumption. Let us think of an example. A: smoking during pregnancy (yes or no); Y: birthweight; X: party, mother's age, weight, etc.<br>
+<strong>Concern</strong>:  There could be unmeasured confounders.<br>
+<strong>Challenge</strong>: Not ethical to randomly assignsmoking to pregnant women.</p>
+<p>So there could be unmeasured confounders like mother's age, whether she's given birth before or her weight, etc. What we could do is using the <strong>encouragement</strong> design.</p>
+<h2 id="encouragement-design">Encouragement design</h2>
+<p>Adding Z: randomized to either receive <strong>encouragement</strong> to stop smoking (Z=1) or receive usual care (Z = 0). An intention-to-treat analysis would focus on the <strong>causal effect of encouragement</strong>:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo>(</mo><msup><mi>Y</mi><mrow><mi>z</mi><mo>=</mo><mn>1</mn></mrow></msup><mo>)</mo><mo>−</mo><mi>E</mi><mo>(</mo><msup><mi>Y</mi><mrow><mi>z</mi><mo>=</mo><mn>0</mn></mrow></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">E(Y^{z=1}) - E(Y^{z=0})
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.04398em;">z</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.04398em;">z</span><span class="mrel mtight">=</span><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></p>
+<p>This is a valid causal effect and would likely be of some interest.</p>
+<p>What can we say about the <strong>causal effect of smoking</strong> itself? This is the focus of IV mothods.</p>
+<h1 id="randomized-trials-with-noncompliance">Randomized trials with noncompliance</h1>
+<p>We can begin by imagining a randomized trials:</p>
+<ul>
+<li>Z: randomized to treatment (1 if randomized to treatment, otherwise 0)</li>
+<li>A: treatment received (1 if receive treatment, otherwise 0)</li>
+<li>Y: outcome</li>
+<li>Please note that not everyone assigned treatment will actually receive the treatment (non-compliance).</li>
+</ul>
+<p>Essentially the non-compliance makes a randomized trial like an observational study. There could be confounding based on <strong>treatment received</strong>.  It might be reasonable to assume that treatment assignment does not directly affect Y.  Here Z can be thought of as (strong) <strong>encouragement</strong> to receive the treatment.</p>
+<h1 id="compliance-classes">Compliance classes</h1>
+<p>We can classify people based on potential treatment.</p>
+<table>
+<thead>
+<tr>
+<th><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>A</mi><mn>0</mn></msup></mrow><annotation encoding="application/x-tex">A^0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span></span></span></th>
+<th style="text-align:center"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>A</mi><mn>1</mn></msup></mrow><annotation encoding="application/x-tex">A^1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></th>
+<th style="text-align:right">Label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:right">Never-takers</td>
+</tr>
+<tr>
+<td>0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:right">Compliers</td>
+</tr>
+<tr>
+<td>1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:right">Defiers</td>
+</tr>
+<tr>
+<td>1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:right">Always-takers</td>
+</tr>
+</tbody>
+</table>
+<p>The number in the table represents if a person actually take the treatment or not. Take the first row as anexample, when he is not assignted to receive to treatment, he does not receive the treatment (0). However, when he is assigned, he still does not take the treatment (0). Therefore we call him never-takers. The same way of interpretation for the other three rows.</p>
+<p>A motivation for using IV methods in general is concern about possible <strong>unmeasured confounding</strong>. If there is unmeasured confounding, then we can not marginalize over all confounders, by matching, IPTW, etc.</p>
+<p>IV methods do not focus on the average causal effect for the population. Instead, they focus on a <strong>local average treatment effect</strong>.</p>
+<h2 id="local-average-treatment-effect">Local average treatment effect</h2>
+<p>The target of inference is</p>
+<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: align at position 7: \begin{̲a̲l̲i̲g̲n̲}̲
+&amp;E(Y^{Z=1}|A^{…'>\begin{align}
+&amp;E(Y^{Z=1}|A^{0} = 0, A^{1} =1) - E(Y^{Z=0}|A^{0} = 0, A^{1} = 1) \\
+                &amp;= E(Y^{Z=1} - Y^{Z = 0}|compliers)\\
+                &amp;= E(Y^{A=1} - Y^{A = 0}|compliers)\\
+\end{align}
+</p>
+<p>This is causal because it contrasts counterfactuals in a common population. This is known as <strong>complier average causal effect (CACE)</strong>.</p>
+<ul>
+<li>This is a causal effect in a subpopulation, and that is why we call it &quot;local&quot;.</li>
+<li>No inference about defiers, always-takers, or never-takers.</li>
+</ul>
+<p>In the real world, for each person we observe an A and a Z, not <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><msup><mi>A</mi><mn>0</mn></msup><mo separator="true">,</mo><msup><mi>A</mi><mn>1</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">(A^0, A^1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></p>
+<table>
+<thead>
+<tr>
+<th>Z</th>
+<th style="text-align:center">A</th>
+<th><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>A</mi><mn>0</mn></msup></mrow><annotation encoding="application/x-tex">A^0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span></span></span></th>
+<th style="text-align:center"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>A</mi><mn>1</mn></msup></mrow><annotation encoding="application/x-tex">A^1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></th>
+<th style="text-align:right">Class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td style="text-align:center">0</td>
+<td>0</td>
+<td style="text-align:center">?</td>
+<td style="text-align:right">Never-takers or compliers</td>
+</tr>
+<tr>
+<td>0</td>
+<td style="text-align:center">1</td>
+<td>1</td>
+<td style="text-align:center">?</td>
+<td style="text-align:right">Always-takers or defiers</td>
+</tr>
+<tr>
+<td>1</td>
+<td style="text-align:center">0</td>
+<td>?</td>
+<td style="text-align:center">0</td>
+<td style="text-align:right">Never-takers or defiers</td>
+</tr>
+<tr>
+<td>1</td>
+<td style="text-align:center">1</td>
+<td>?</td>
+<td style="text-align:center">1</td>
+<td style="text-align:right">Always-takers or compliers</td>
+</tr>
+</tbody>
+</table>
+<p>Without additional assumptions, we cannot classify each subject into one of these categories. However, we can narrow it down to two options.</p>
+<h2 id="identifiability">Identifiability</h2>
+<p>Compliance classes are also known as <strong>principal strata</strong>. These are latent, not directly observable. In the next section we will talk about how we <strong>estimate</strong> the complier average causal effect and what assumptions are needed.</p>
+<h1 id="assumptions">Assumptions</h1>
+<h2 id="assumptions-about-ivs">Assumptions about IVs</h2>
+<p>A variable is an instrumental variable (IV) if:</p>
+<ol>
+<li>It is associated with the treatment;</li>
+<li>It affects the outcome only through its effect on treatment;
+<ul>
+<li>Z affects A, but it must not directly affect Y.</li>
+<li>This is known as the <strong>exclusion restriction</strong>.</li>
+</ul>
+</li>
+</ol>
+<h2 id="monotonicity-assumption">Monotonicity assumption</h2>
+<p>Above we have arrived at the conclusion that we are interested in the complier subgroups. The classes include defiers are not of interested. Therefore we need the another assumption. The <strong>monotonicity assumption</strong> is that there are no defiers.<br>
+* No one consistetnly does the opposite of what they are told.<br>
+* It is called monotonicity because the assumption is that the probability of treatment should increase with more encouragement.</p>
+<h1 id="causal-effect-identifcation-and-estimation">Causal effect identifcation and estimation</h1>
+<p>In this section we are going to discuss identification and estimation of causal effects from instrumental variable type of analysis.</p>
+<p>Recall that the goal is to estimate <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo>(</mo><msup><mi>Y</mi><mrow><mi>A</mi><mo>=</mo><mn>1</mn></mrow></msup><mo>−</mo><msup><mi>Y</mi><mrow><mi>A</mi><mo>=</mo><mn>0</mn></mrow></msup><mi mathvariant="normal">∣</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>l</mi><mi>i</mi><mi>e</mi><mi>r</mi><mi>s</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">E(Y^{A=1} - Y^{A = 0}|compliers)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">A</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">A</span><span class="mrel mtight">=</span><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">m</span><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">i</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">s</span><span class="mclose">)</span></span></span></span>. Let's begin with something we can identify, the intention to treat (ITT) effect:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo>(</mo><msup><mi>Y</mi><mrow><mi>Z</mi><mo>=</mo><mn>1</mn></mrow></msup><mo>−</mo><msup><mi>Y</mi><mrow><mi>Z</mi><mo>=</mo><mn>0</mn></mrow></msup><mo>)</mo><mo>=</mo><mi>E</mi><mo>(</mo><mi>Y</mi><mi mathvariant="normal">∣</mi><mi>Z</mi><mo>=</mo><mn>1</mn><mo>)</mo><mo>−</mo><mi>E</mi><mo>(</mo><mi>Y</mi><mi mathvariant="normal">∣</mi><mi>Z</mi><mo>=</mo><mn>0</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">E(Y^{Z=1} - Y^{Z = 0}) = E(Y|Z=1) - E(Y|Z=0)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1413309999999999em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.07153em;">Z</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1413309999999999em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.07153em;">Z</span><span class="mrel mtight">=</span><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span></span></span></span></span></p>
+<p>Given the condition that Z has no effect on the always-takers, never-takers and the monotonicity assumption, we can derive the following result:</p>
+<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: align at position 7: \begin{̲a̲l̲i̲g̲n̲}̲
+E(Y|Z=1) - E(Y…'>\begin{align}
+E(Y|Z=1) - E(Y|Z=0) = &amp;E(Y|Z = 1, compliers)P(compliers) \\
+                    &amp;- E(Y|Z = 0, compliers)P(compliers)
+\end{align}
+</p>
+<p>which implies</p>
+<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: align at position 7: \begin{̲a̲l̲i̲g̲n̲}̲
+\frac{E(Y|Z=1)…'>\begin{align}
+\frac{E(Y|Z=1) - E(Y|Z=0)}{P(compliers)} &amp;= E(Y|Z = 1, compliers)P(compliers) - E(Y|Z = 0, compliers)\\
+                                           &amp;= E(Y^{a=1}|compliers) - E(Y^{a=0}|compliers)\\
+                                           &amp;= CACE
+\end{align}
+</p>
+<p>Note that <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo>(</mo><mi>A</mi><mi mathvariant="normal">∣</mi><mi>Z</mi><mo>=</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">E(A|Z=1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span> is the proportion of people who are <strong>always takers or compliers</strong> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo>(</mo><mi>A</mi><mi mathvariant="normal">∣</mi><mi>Z</mi><mo>=</mo><mn>0</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">E(A|Z=0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span></span></span></span> is the proportion of people who are <strong>always takers</strong>. Therefore P(compliers) is just <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo>(</mo><mi>A</mi><mi mathvariant="normal">∣</mi><mi>Z</mi><mo>=</mo><mn>1</mn><mo>)</mo><mo>−</mo><mi>E</mi><mo>(</mo><mi>A</mi><mi mathvariant="normal">∣</mi><mi>Z</mi><mo>=</mo><mn>0</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">E(A|Z=1) - E(A|Z=0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span></span></span></span>.</p>
+<p>We can derive the expression of CACE as follows:</p>
+<p class='katex-block katex-error' title='ParseError: KaTeX parse error: No such environment: align at position 7: \begin{̲a̲l̲i̲g̲n̲}̲
+CACE &amp;= \frac{…'>\begin{align}
+CACE &amp;= \frac{E(Y|Z = 1) - E(Y|Z = 0)}{E(A|Z = 1) - E(A|Z = 0)}
+\end{align}
+</p>
+<p>The denominator is causal effect of treatment assignment on the treated received. The numerator is the ITT: causal effect of treatment assignment on the outcome.</p>
+<p>Note:</p>
+<ul>
+<li>If perfect compliance, CACE=ITT.</li>
+<li>Denominator always between 0 and 1. Thus, CACE will be at least as large as ITT. ITT is <strong>underestimate</strong> of CACE, because some people assigned to treatment did not take it.</li>
+</ul>
+<h1 id="two-stage-least-squares">Two stage least squares</h1>
+<p>Two stage least squares is a method for estimating causal effect when you have an instrumental variable.</p>
+<p>First step is to regress treatment received, A, on the intrumental variable, Z</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>A</mi><mi>i</mi></msub><mo>=</mo><msub><mi>α</mi><mn>0</mn></msub><mo>+</mo><msub><mi>Z</mi><mi>i</mi></msub><msub><mi>α</mi><mn>1</mn></msub><mo>+</mo><msub><mi>ϵ</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">A_{i} = \alpha_{0} + Z_{i} \alpha_{1} + \epsilon_{i}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">ϵ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p>where the rror term is mean 0, constant variance. By randomization, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>Z</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">Z_{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>ϵ</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\epsilon_{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">ϵ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> are independent.</p>
+<p>After that we can obtain the predicted value of A given Z: <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><msub><mi>A</mi><mi>i</mi></msub><mo>^</mo></mover><mo>=</mo><msub><mover accent="true"><mi>α</mi><mo>^</mo></mover><mn>0</mn></msub><mo>+</mo><msub><mi>Z</mi><mi>i</mi></msub><mover accent="true"><msub><mi>α</mi><mn>1</mn></msub><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{A_{i}} = \hat{\alpha}_{0} + Z_{i}\hat{\alpha_{1}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0967699999999998em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9467699999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.22222em;">^</span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></p>
+<p>The second stage is to regress the outcome, Y, on the fitted value from stage 1, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><msub><mi>A</mi><mi>i</mi></msub><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{A_{i}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0967699999999998em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9467699999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span>:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><mover accent="true"><msub><mi>A</mi><mi>i</mi></msub><mo>^</mo></mover><msub><mi>β</mi><mn>1</mn></msub><mo>+</mo><msub><mi>ϵ</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">Y_{i} = \beta_{0} + \hat{A_{i}} \beta_{1} + \epsilon_{i}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1412099999999998em;vertical-align:-0.19444em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9467699999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">ϵ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p>The estimate of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>β</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\beta_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is estimate of the causal effect.</p>
+<h1 id="data-example-in-r">Data example in R</h1>
+<p>This section is about how to carry out an instrumental variable analysis<br>
+in R. The variables are as follows:</p>
+<ul>
+<li>Z: indicator that the subject grew up near a 4 year college</li>
+<li>A: subject’s years of education</li>
+<li>Y: subject’s income</li>
+<li>X: covariates such as parents years of education, region of country,<br>
+age, race, IQ score from a test in HS, etc.</li>
+</ul>
+<h2 id="study-motivation">Study motivation</h2>
+<p>More schooling is associated with higher income, but is it due to the<br>
+fact that people with more schooling are different in other ways? That<br>
+is, we are concerning measured and unmeasured confounding.</p>
+<p>One proposal is to raise the proximity to college as an IV. Living near<br>
+a 4 year college is a type of <strong>encouragement</strong>.</p>
+<pre><code class="language-r"># install.packages(&quot;ivpack&quot;)
+library(ivpack)
+data(&quot;card.data&quot;)
+
+# VI is nearc4 (near 4 year college)
+# outcome is lwage (log of wage)
+# 'treatment' is educ (number of years of education)
+
+# you can take a look at descruptive statistivs of variables, but we skip this step here.
+
+# make education binary
+educ12 = card.data$educ&gt;12
+# estimate proportion of compliers
+compl_prop = mean(educ12[card.data$nearc4==1]) - mean(educ12[card.data$nearc4==0])
+cat(&quot;The proportion of complier is&quot;, compl_prop)
+</code></pre>
+<pre><code>## The proportion of complier is 0.1219293
+</code></pre>
+<p>We can see that the proportion is only 12%, the intrument is not<br>
+extremely strong but not so weak either. It seems like living near a<br>
+four year college does increase the chances of getting an education of<br>
+more than 12 years.</p>
+<pre><code class="language-r"># intention to treat effect
+itt = mean(card.data$lwage[card.data$nearc4==1]) - mean(card.data$lwage[card.data$nearc4==0])
+cat(&quot;The intention to treat effect is&quot;, itt)
+</code></pre>
+<pre><code>## The intention to treat effect is 0.1559075
+</code></pre>
+<pre><code class="language-r">cat(&quot;The complier average causal effect is&quot;, itt/compl_prop)
+</code></pre>
+<pre><code>## The complier average causal effect is 1.278672
+</code></pre>
+<pre><code class="language-r"># two stafe least squares
+## Stage 1: regress A on Z
+s1 = lm(educ12 ~ card.data$nearc4)
+## get predicted value of A given Z for each subject
+predtx = predict(s1,type = 'response')
+table(predtx)
+</code></pre>
+<pre><code>## predtx
+## 0.422152560083588  0.54408183146614 
+##               957              2053
+</code></pre>
+<p>We can see that the people who had encouragement had a probability of<br>
+0.54 to have an education for more than 12 years. It is slightly higher<br>
+than those who did not had encouragement.</p>
+<pre><code class="language-r"># stage 2: regress Y on predicted value of A
+lm(card.data$lwage~predtx)
+</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = card.data$lwage ~ predtx)
+## 
+## Coefficients:
+## (Intercept)       predtx  
+##       5.616        1.279
+</code></pre>
+<p>We can see that the CACE is 1.279. It is <strong>the same</strong> as the one we<br>
+estimated before by hand.</p>
+<h1 id="summary">Summary</h1>
+<p>That brings us the end of the causal inference series. We have gong through the definition of causal effect to the estimation of causal inference. <a href="https://bolinwu.blog/post/2021-05-08-CausalityIntroductionP2/">Part 2</a> talks about matching, which is used to solve the problem when we do not have randomized trials. <a href="https://bolinwu.blog/post/an-overview-of-causal-inference-part-3-inverse-probability-of-treatment-weighting-iptw/">Part 3</a> is about IPTW, which is an important method to solve the problem that the subject number in the two matching groups is unbalanced. In this post, we introduced intrumental variable to cope with the situation when the ignorability assumption is not fulfilled.</p>
+<p>My biggest impression after the past 2 months' study is that the statsiticians have made so much effort to develp the causal inference and make it as applicable to real world as possible. And I hope the readers can remember correlation does not equal to causal relationship!</p>
+
+        </div>
+        <!-- Share to Twitter, Weibo, Telegram -->
+        <div class="flex items-center">
+          <div class="mr-4 flex items-center">
+            <i class="ri-share-forward-line text-gray-500"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTwitter">
+            <i class="ri-twitter-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-red-500 hover:bg-red-100 dark:hover:bg-gray-600 inline-flex" @click="shareToWeibo">
+            <i class="ri-weibo-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-indigo-500 hover:bg-indigo-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTelegram">
+            <i class="ri-telegram-line"></i>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Prudence is a fountain of life to the prudent.
+</footer>
+    </div>
+
+    <!-- TOC Container -->
+    <div class="fixed right-0 bottom-0 mb-16 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white dark:bg-gray-500 dark:text-gray-200 hover:shadow-lg transition-all animated fadeInRight" @click="showToc = true">
+      <i class="ri-file-list-line"></i>
+    </div>
+
+    <div class="fixed right-0 top-0 bottom-0 overflow-y-auto w-64 bg-white dark:bg-gray-800 p-4 border-l border-gray-100 dark:border-gray-600 z-10 transition-fast" :class="{ '-mr-64': !showToc }">
+      <div class="flex mb-4 justify-end">
+        <div class="w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast" @click="showToc = false">
+          <i class="ri-close-line text-lg"></i>
+        </div>
+      </div>
+      <div class="post-toc-container">
+        <ul class="markdownIt-TOC">
+<li><a href="#introduction-to-instrumental-variables">Introduction to instrumental variables</a>
+<ul>
+<li><a href="#encouragement-design">Encouragement design</a></li>
+</ul>
+</li>
+<li><a href="#randomized-trials-with-noncompliance">Randomized trials with noncompliance</a></li>
+<li><a href="#compliance-classes">Compliance classes</a>
+<ul>
+<li><a href="#local-average-treatment-effect">Local average treatment effect</a></li>
+<li><a href="#identifiability">Identifiability</a></li>
+</ul>
+</li>
+<li><a href="#assumptions">Assumptions</a>
+<ul>
+<li><a href="#assumptions-about-ivs">Assumptions about IVs</a></li>
+<li><a href="#monotonicity-assumption">Monotonicity assumption</a></li>
+</ul>
+</li>
+<li><a href="#causal-effect-identifcation-and-estimation">Causal effect identifcation and estimation</a></li>
+<li><a href="#two-stage-least-squares">Two stage least squares</a></li>
+<li><a href="#data-example-in-r">Data example in R</a>
+<ul>
+<li><a href="#study-motivation">Study motivation</a></li>
+</ul>
+</li>
+<li><a href="#summary">Summary</a></li>
+</ul>
+
+      </div>
+    </div>
+
+    <!-- Back to top -->
+    <div class="fixed right-0 bottom-0 mb-4 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white hover:shadow-lg transition-all dark:bg-gray-500 dark:text-gray-200" @click="backToUp" v-show="scrolled">
+      <i class="ri-arrow-up-line"></i>
+    </div>
+  </div>
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Background of PhotoSwipe. 
+        It's a separate element as animating opacity is faster than rgba(). -->
+  <div class="pswp__bg">
+  </div>
+  <!-- Slides wrapper with overflow:hidden. -->
+  <div class="pswp__scroll-wrap">
+    <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+    <div class="pswp__container">
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+    </div>
+    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <!--  Controls are self-explanatory. Order can be changed. -->
+        <div class="pswp__counter">
+        </div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+        <!-- element will get class pswp__preloader--active when preloader is running -->
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip">
+        </div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://BolinWu-Gridea.github.io/media/scripts/main.js"></script>
+  
+  <!-- Code Highlight -->
+  
+    <script src="https://BolinWu-Gridea.github.io/media/prism.js"></script>
+    <script>
+      Prism.highlightAll()
+    </script>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+  <script>
+    //拿到预览框架，也就是上面的html代码
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    //定义图片数组变量
+    var imgitems;
+    /**
+    * 用于显示预览界面
+    * @param index 图片数组下标
+    */
+    function viewImg(index) {
+      //其它选项这里不做过多阐述，详情见官网
+      var pswpoptions = {
+        index: parseInt(index, 10), // 开始幻灯片索引。0是第一张幻灯片。必须是整数，而不是字符串。
+        bgOpacity: 0.7, // 背景透明度，0-1
+        maxSpreadZoom: 3, // 缩放级别，不要太大
+      };
+      //初始化并打开PhotoSwipe，pswpElement对应上面预览框架，PhotoSwipeUI_Default为皮肤，imgitems为图片数组，pswpoptions为选项
+      var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, imgitems, pswpoptions);
+      gallery.init()
+    }
+    /**
+    * 用于添加图片点击事件
+    * @param img 图片元素
+    * @param index 所属下标（在imgitems中的位置）
+    */
+    function addImgClick(img, index) {
+      img.onclick = function() {
+        viewImg(index)
+      }
+    }
+    /**
+    * 轮询所有图片，获取src、width、height等数据，加入imgitems，并给图片元素添加事件
+    * 最好在onload中执行该方法，本站因放在最底部，所以直接初始化
+    * 异步加载图片可在图片元素创建完成后调用此方法
+    */
+    function initImg() {
+      //重置图片数组
+      imgitems = [];
+      //查找class:markdown 下的所有img元素并遍历
+      var imgs = document.querySelectorAll('.markdown img');
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        //本站相册初始为loading图片，真实图片放在data-src
+        var ds = img.getAttribute("data-src");
+        //创建image对象，用于获取图片宽高
+        var imgtemp = new Image();
+        //判断是否存在data-src
+        if (ds != null && ds.length > 0) {
+          imgtemp.src = ds
+        } else {
+          imgtemp.src = img.src
+        }
+        //判断是否存在缓存
+        if (imgtemp.complete) {
+          var imgobj = {
+            "src": imgtemp.src,
+            "w": imgtemp.width,
+            "h": imgtemp.height,
+          };
+          imgitems[i] = imgobj;
+          addImgClick(img, i);
+        } else {
+          console.log('进来了2')
+          imgtemp.index = i;
+          imgtemp.img = img;
+          imgtemp.onload = function() {
+            var imgobj = {
+              "src": this.src,
+              "w": this.width,
+              "h": this.height,
+            };
+            //不要使用push，因为onload前后顺序会不同
+            imgitems[this.index] = imgobj
+            //添加点击事件
+            addImgClick(this.img, this.index);
+          }
+        }
+      }
+    }
+    //初始化
+    initImg();
+  </script>
+  
+  
+</body>
+
+</html>

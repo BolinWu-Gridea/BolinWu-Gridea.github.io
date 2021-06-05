@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2021-06-01T08:44:38.477Z</updated>
+    <updated>2021-06-05T07:50:32.942Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -12,11 +12,18 @@
     <icon>https://BolinWu-Gridea.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Bolin Wu</rights>
     <entry>
+        <title type="html"><![CDATA[An Overview of Causal Inference (Part 4: Instrumental variable)]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-4-instrumental-variable/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-4-instrumental-variable/">
+        </link>
+        <updated>2021-06-04T19:38:23.000Z</updated>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[An Overview of Causal Inference (Part 3: Inverse probability of treatment weighting, IPTW)]]></title>
         <id>https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-3-inverse-probability-of-treatment-weighting-iptw/</id>
         <link href="https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-3-inverse-probability-of-treatment-weighting-iptw/">
         </link>
-        <updated>2021-05-29T05:37:45.000Z</updated>
+        <updated>2021-05-28T23:37:45.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[An Overview of Causal Inference (Part 2: Propensity Score and Matching)]]></title>
@@ -73,12 +80,5 @@
         <link href="https://BolinWu-Gridea.github.io/post/2021-01-26-Kmeans/">
         </link>
         <updated>2021-01-24T12:00:00.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Modelling Daily Dow Jones Industrial Average by GARCH ]]></title>
-        <id>https://BolinWu-Gridea.github.io/post/2021-01-16-GARCH/</id>
-        <link href="https://BolinWu-Gridea.github.io/post/2021-01-16-GARCH/">
-        </link>
-        <updated>2021-01-15T05:00:00.000Z</updated>
     </entry>
 </feed>
