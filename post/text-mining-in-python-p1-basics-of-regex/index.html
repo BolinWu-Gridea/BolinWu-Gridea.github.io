@@ -1,0 +1,2351 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Text Mining Application in Python (Basics of RegEx) - Bolin Wu</title>
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/tailwind.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Text Mining Application in Python (Basics of RegEx) - Bolin Wu - Atom Feed" href="https://BolinWu-Gridea.github.io/atom.xml">
+
+    
+
+  <meta name="description" content="
+In this exercise, we&#39;ll be working with messy medical data and using RegEx in Python to extract dates of different form..." />
+  <meta property="og:title" content="Text Mining Application in Python (Basics of RegEx) - Bolin Wu">
+  <meta property="og:description" content="
+In this exercise, we&#39;ll be working with messy medical data and using RegEx in Python to extract dates of different form..." />
+  <meta property="og:type" content="articles">
+  <meta property="og:url" content="https://BolinWu-Gridea.github.io/post/text-mining-in-python-p1-basics-of-regex/" />
+  <meta property="og:image" content="https://BolinWu-Gridea.github.io/post-images/text-mining-in-python-p1-basics-of-regex.jpg">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:width" content="1200">
+  <meta name="twitter:title" content="Text Mining Application in Python (Basics of RegEx) - Bolin Wu">
+  <meta name="twitter:description" content="
+In this exercise, we&#39;ll be working with messy medical data and using RegEx in Python to extract dates of different form...">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://BolinWu-Gridea.github.io/post/text-mining-in-python-p1-basics-of-regex/">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+ 
+  
+    <link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/prism-atom-dark.css">
+  
+
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+  
+</head>
+
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
+    <a href="https://BolinWu-Gridea.github.io" class="fixed top-0 left-0 mt-4 bg-black text-white dark:text-gray-700 dark:bg-yellow-50 dark:hover:bg-black dark:hover:text-white inline-flex p-2 pl-8 hover:text-gray-700 hover:bg-yellow-50 font-bold z-10 transition-fast animated fadeInLeft">
+      Bolin Wu
+    </a>
+    <div class="max-w-4xl w-full mx-auto">
+      <div class="shadow-box bg-white dark:bg-gray-600 rounded-lg pt-32 md:pt-64 px-4 md:px-8 pb-8 animated fadeIn mb-8">
+        <h1 class="text-5xl font-semibold leading-normal pb-8 mb-8 border-b-8 border-gray-700">
+          Text Mining Application in Python (Basics of RegEx)
+        </h1>
+        
+          <img src="https://BolinWu-Gridea.github.io/post-images/text-mining-in-python-p1-basics-of-regex.jpg" alt="Text Mining Application in Python (Basics of RegEx)" class="block w-full mb-8">
+        
+        <div class="mb-8 flex flex-wrap">
+          <div class="text-gray-400 text-sm mr-4">2021-06-17 · 20 min read</div>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/GWOcOUTN0/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              Python
+            </a>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/VEzKzcSCvT/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              text-mining
+            </a>
+          
+        </div>
+        <div class="markdown mb-8" v-pre>
+          <!-- more -->
+<p>In this exercise, we'll be working with messy medical data and using <strong>RegEx</strong> in Python to extract dates of different formats.</p>
+<h1 id="introduction">Introduction</h1>
+<p>Each line of the <a href="https://drive.google.com/file/d/191dm-Wqq0GPujvdekVaoOo5bv4qu1TMS/view?usp=sharing">dates.txt</a> file corresponds to a medical note. Each note has a date that needs to be extracted, but each date is encoded in one of many formats.</p>
+<p>The goal of this exercise is to correctly identify all of the different date variants encoded in this dataset and to properly normalize and sort the dates.</p>
+<p>Here is a list of some of the possible variants in this dataset:</p>
+<ol>
+<li>04/20/2009; 04/20/09; 4/20/09; 4/3/09</li>
+<li>Mar-20-2009; Mar 20, 2009; March 20, 2009;  Mar. 20, 2009; Mar 20 2009;</li>
+<li>20 Mar 2009; 20 March 2009; 20 Mar. 2009; 20 March, 2009</li>
+<li>Mar 20th, 2009; Mar 21st, 2009; Mar 22nd, 2009</li>
+<li>Feb 2009; Sep 2009; Oct 2010</li>
+<li>6/2008; 12/2009</li>
+</ol>
+<p>Once we extracted these date patterns from the text, the next step is to sort them in ascending chronological order accoring to the following rules:</p>
+<ul>
+<li>Assume all dates in xx/xx/xx format are mm/dd/yy</li>
+<li>Assume all dates where year is encoded in only two digits are years from the 1900's (e.g. 1/5/89 is January 5th, 1989)</li>
+<li>If the day is missing (e.g. 9/2009), assume it is the first day of the month (e.g. September 1, 2009).</li>
+<li>If the month is missing (e.g. 2010), assume it is the first of January of that year (e.g. January 1, 2010).</li>
+<li>There could be potential typos as this is a raw, real-life derived dataset.</li>
+</ul>
+<p>With these rules in mind, find the correct date in each note and return a pandas Series in chronological order of the original Series' indices.</p>
+<p>For example if the original series was this:</p>
+<pre><code>0    1999
+1    2010
+2    1978
+3    2015
+4    1985
+</code></pre>
+<p>We should return this:</p>
+<pre><code>0    2
+1    4
+2    0
+3    1
+4    3
+</code></pre>
+<p>As a result, we could know the chronological order of the medical records in the text file.</p>
+<h1 id="import-data">Import data</h1>
+<p>I am doing this exercise on Google Colab. We can easily import the data from Google Drive to Colab by using the following code. More detailed instruction can be found <a href="https://stackoverflow.com/questions/46986398/import-data-into-google-colaboratory">here</a>.</p>
+<p>When reading the text, I removed the paranthesis in order to facilitate text cleaning.</p>
+<pre><code class="language-python"># use the following code if you want to connect colab to google drive
+from google.colab import drive
+
+drive.mount('/content/drive')
+</code></pre>
+<pre><code>Drive already mounted at /content/drive; to attempt to forcibly remount, call drive.mount(&quot;/content/drive&quot;, force_remount=True).
+</code></pre>
+<pre><code class="language-python">import pandas as pd
+import re as re
+
+doc = []
+with open('/content/drive/MyDrive/Bolin_DSPost/dates.txt') as file:
+    for line in file:
+      # remove the paranthesis in each record
+        line = re.sub('[()]', '', line)
+        doc.append(line)
+
+df = pd.Series(doc)
+df.head(10)
+</code></pre>
+<pre><code>0           03/25/93 Total time of visit in minutes:\n
+1                       6/18/85 Primary Care Doctor:\n
+2    sshe plans to move as of 7/8/71 In-Home Servic...
+3                7 on 9/27/75 Audit C Score Current:\n
+4    2/6/96 sleep studyPain Treatment Pain Level Nu...
+5                    .Per 7/06/79 Movement D/O note:\n
+6    4, 5/18/78 Patient's thoughts about current su...
+7    10/24/89 CPT Code: 90801 - Psychiatric Diagnos...
+8                         3/7/86 SOS-10 Total Score:\n
+9               4/10/71Score-1Audit C Score Current:\n
+dtype: object
+</code></pre>
+<h1 id="extract-date-and-text-cleaning">Extract date and text cleaning</h1>
+<p>Now we will proceed to cleaning the data. Instead of cleaning all the 6 types mentioned above at once, we will clean one type at a step. It will make debug more easily.</p>
+<p>Some useful resources of dealing with free text are listed as follows:</p>
+<p>Regular Expressions<br>
+<a href="https://docs.python.org/3/library/re.html">Regular expressions documentation in Python 3</a></p>
+<p>Tips and tricks of the trade for cleaning text in Python</p>
+<p>https://chrisalbon.com/python/basics/cleaning_text/</p>
+<p>https://www.analyticsvidhya.com/blog/2014/11/text-data-cleaning-steps-python/</p>
+<p>http://ieva.rocks/2016/08/07/cleaning-text-for-nlp/</p>
+<p>https://chrisalbon.com/python/cleaning_text.html</p>
+<h2 id="1-mmddyy-format">1. <em>mm/dd/yy</em> format</h2>
+<pre><code class="language-python"># 1 
+df1 = df.str.extract(r'(?P&lt;month&gt;\d{1,2})[/-](?P&lt;day&gt;\d{1,2})[/-](?P&lt;year&gt;\d{2,4})').dropna(how = 'any')
+df1
+#done
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>month</th>
+      <th>day</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>03</td>
+      <td>25</td>
+      <td>93</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>6</td>
+      <td>18</td>
+      <td>85</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7</td>
+      <td>8</td>
+      <td>71</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>9</td>
+      <td>27</td>
+      <td>75</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2</td>
+      <td>6</td>
+      <td>96</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>120</th>
+      <td>12</td>
+      <td>22</td>
+      <td>98</td>
+    </tr>
+    <tr>
+      <th>121</th>
+      <td>10</td>
+      <td>02</td>
+      <td>96</td>
+    </tr>
+    <tr>
+      <th>122</th>
+      <td>11</td>
+      <td>05</td>
+      <td>90</td>
+    </tr>
+    <tr>
+      <th>123</th>
+      <td>5</td>
+      <td>04</td>
+      <td>77</td>
+    </tr>
+    <tr>
+      <th>124</th>
+      <td>2</td>
+      <td>27</td>
+      <td>96</td>
+    </tr>
+  </tbody>
+</table>
+<p>125 rows × 3 columns</p>
+</div>
+<h2 id="2-mar-20-2009-mar-20-2009-march-20-2009-mar-20-2009-mar-20-2009-format">2. <em>Mar-20-2009; Mar 20, 2009; March 20, 2009;  Mar. 20, 2009; Mar 20 2009</em> format</h2>
+<pre><code class="language-python"># 2
+df2 = df.str.extract(r'(?P&lt;month&gt;(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*)[ ,.-]+(?P&lt;day&gt;\d{2,4})[ ,.-]+(?P&lt;year&gt;\d{2,4})').dropna(how = 'any')#.iloc[125]
+df2
+# done
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>month</th>
+      <th>day</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>194</th>
+      <td>April</td>
+      <td>11</td>
+      <td>1990</td>
+    </tr>
+    <tr>
+      <th>195</th>
+      <td>May</td>
+      <td>30</td>
+      <td>2001</td>
+    </tr>
+    <tr>
+      <th>196</th>
+      <td>Feb</td>
+      <td>18</td>
+      <td>1994</td>
+    </tr>
+    <tr>
+      <th>197</th>
+      <td>February</td>
+      <td>18</td>
+      <td>1981</td>
+    </tr>
+    <tr>
+      <th>198</th>
+      <td>October</td>
+      <td>11</td>
+      <td>2013</td>
+    </tr>
+    <tr>
+      <th>199</th>
+      <td>Jan</td>
+      <td>24</td>
+      <td>1986</td>
+    </tr>
+    <tr>
+      <th>200</th>
+      <td>July</td>
+      <td>26</td>
+      <td>1978</td>
+    </tr>
+    <tr>
+      <th>201</th>
+      <td>December</td>
+      <td>23</td>
+      <td>1999</td>
+    </tr>
+    <tr>
+      <th>202</th>
+      <td>May</td>
+      <td>15</td>
+      <td>1989</td>
+    </tr>
+    <tr>
+      <th>203</th>
+      <td>September</td>
+      <td>06</td>
+      <td>1995</td>
+    </tr>
+    <tr>
+      <th>204</th>
+      <td>Mar</td>
+      <td>10</td>
+      <td>1976</td>
+    </tr>
+    <tr>
+      <th>205</th>
+      <td>Jan</td>
+      <td>27</td>
+      <td>1983</td>
+    </tr>
+    <tr>
+      <th>206</th>
+      <td>October</td>
+      <td>23</td>
+      <td>1990</td>
+    </tr>
+    <tr>
+      <th>207</th>
+      <td>August</td>
+      <td>12</td>
+      <td>2004</td>
+    </tr>
+    <tr>
+      <th>208</th>
+      <td>September</td>
+      <td>01</td>
+      <td>2012</td>
+    </tr>
+    <tr>
+      <th>209</th>
+      <td>July</td>
+      <td>25</td>
+      <td>1983</td>
+    </tr>
+    <tr>
+      <th>210</th>
+      <td>August</td>
+      <td>11</td>
+      <td>1989</td>
+    </tr>
+    <tr>
+      <th>211</th>
+      <td>April</td>
+      <td>17</td>
+      <td>1992</td>
+    </tr>
+    <tr>
+      <th>212</th>
+      <td>July</td>
+      <td>24</td>
+      <td>1999</td>
+    </tr>
+    <tr>
+      <th>213</th>
+      <td>July</td>
+      <td>11</td>
+      <td>1997</td>
+    </tr>
+    <tr>
+      <th>214</th>
+      <td>Sep</td>
+      <td>10</td>
+      <td>1974</td>
+    </tr>
+    <tr>
+      <th>215</th>
+      <td>August</td>
+      <td>14</td>
+      <td>1981</td>
+    </tr>
+    <tr>
+      <th>216</th>
+      <td>Nov</td>
+      <td>11</td>
+      <td>1988</td>
+    </tr>
+    <tr>
+      <th>217</th>
+      <td>June</td>
+      <td>13</td>
+      <td>2011</td>
+    </tr>
+    <tr>
+      <th>218</th>
+      <td>May</td>
+      <td>14</td>
+      <td>1989</td>
+    </tr>
+    <tr>
+      <th>219</th>
+      <td>Dec</td>
+      <td>14</td>
+      <td>1975</td>
+    </tr>
+    <tr>
+      <th>220</th>
+      <td>June</td>
+      <td>25</td>
+      <td>2012</td>
+    </tr>
+    <tr>
+      <th>221</th>
+      <td>Oct</td>
+      <td>18</td>
+      <td>1980</td>
+    </tr>
+    <tr>
+      <th>222</th>
+      <td>May</td>
+      <td>15</td>
+      <td>1998</td>
+    </tr>
+    <tr>
+      <th>223</th>
+      <td>October</td>
+      <td>14</td>
+      <td>1974</td>
+    </tr>
+    <tr>
+      <th>224</th>
+      <td>July</td>
+      <td>25</td>
+      <td>1998</td>
+    </tr>
+    <tr>
+      <th>225</th>
+      <td>June</td>
+      <td>15</td>
+      <td>1972</td>
+    </tr>
+    <tr>
+      <th>226</th>
+      <td>January</td>
+      <td>07</td>
+      <td>1991</td>
+    </tr>
+    <tr>
+      <th>227</th>
+      <td>September</td>
+      <td>15</td>
+      <td>2011</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<h3 id="change-month-name-to-a-number">Change month name to a number</h3>
+<pre><code class="language-python"># # Change month name to a number
+def month_string_to_number(string):
+    m = {
+        'jan': 1,
+        'feb': 2,
+        'mar': 3,
+        'apr':4,
+         'may':5,
+         'jun':6,
+         'jul':7,
+         'aug':8,
+         'sep':9,
+         'oct':10,
+         'nov':11,
+         'dec':12
+        }
+    s = string.strip()[:3].lower()
+
+    try:
+        out = m[s]
+        return out
+    except:
+        raise ValueError('Not a month')
+
+# test if the function works
+month_string_to_number('October')
+
+</code></pre>
+<pre><code>10
+</code></pre>
+<p>Cool, it works!</p>
+<pre><code class="language-python">for index, row in df2.iterrows():
+    # print(row['month'])
+    row['month'] = month_string_to_number(row['month'])
+df2
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>month</th>
+      <th>day</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>194</th>
+      <td>4</td>
+      <td>11</td>
+      <td>1990</td>
+    </tr>
+    <tr>
+      <th>195</th>
+      <td>5</td>
+      <td>30</td>
+      <td>2001</td>
+    </tr>
+    <tr>
+      <th>196</th>
+      <td>2</td>
+      <td>18</td>
+      <td>1994</td>
+    </tr>
+    <tr>
+      <th>197</th>
+      <td>2</td>
+      <td>18</td>
+      <td>1981</td>
+    </tr>
+    <tr>
+      <th>198</th>
+      <td>10</td>
+      <td>11</td>
+      <td>2013</td>
+    </tr>
+    <tr>
+      <th>199</th>
+      <td>1</td>
+      <td>24</td>
+      <td>1986</td>
+    </tr>
+    <tr>
+      <th>200</th>
+      <td>7</td>
+      <td>26</td>
+      <td>1978</td>
+    </tr>
+    <tr>
+      <th>201</th>
+      <td>12</td>
+      <td>23</td>
+      <td>1999</td>
+    </tr>
+    <tr>
+      <th>202</th>
+      <td>5</td>
+      <td>15</td>
+      <td>1989</td>
+    </tr>
+    <tr>
+      <th>203</th>
+      <td>9</td>
+      <td>06</td>
+      <td>1995</td>
+    </tr>
+    <tr>
+      <th>204</th>
+      <td>3</td>
+      <td>10</td>
+      <td>1976</td>
+    </tr>
+    <tr>
+      <th>205</th>
+      <td>1</td>
+      <td>27</td>
+      <td>1983</td>
+    </tr>
+    <tr>
+      <th>206</th>
+      <td>10</td>
+      <td>23</td>
+      <td>1990</td>
+    </tr>
+    <tr>
+      <th>207</th>
+      <td>8</td>
+      <td>12</td>
+      <td>2004</td>
+    </tr>
+    <tr>
+      <th>208</th>
+      <td>9</td>
+      <td>01</td>
+      <td>2012</td>
+    </tr>
+    <tr>
+      <th>209</th>
+      <td>7</td>
+      <td>25</td>
+      <td>1983</td>
+    </tr>
+    <tr>
+      <th>210</th>
+      <td>8</td>
+      <td>11</td>
+      <td>1989</td>
+    </tr>
+    <tr>
+      <th>211</th>
+      <td>4</td>
+      <td>17</td>
+      <td>1992</td>
+    </tr>
+    <tr>
+      <th>212</th>
+      <td>7</td>
+      <td>24</td>
+      <td>1999</td>
+    </tr>
+    <tr>
+      <th>213</th>
+      <td>7</td>
+      <td>11</td>
+      <td>1997</td>
+    </tr>
+    <tr>
+      <th>214</th>
+      <td>9</td>
+      <td>10</td>
+      <td>1974</td>
+    </tr>
+    <tr>
+      <th>215</th>
+      <td>8</td>
+      <td>14</td>
+      <td>1981</td>
+    </tr>
+    <tr>
+      <th>216</th>
+      <td>11</td>
+      <td>11</td>
+      <td>1988</td>
+    </tr>
+    <tr>
+      <th>217</th>
+      <td>6</td>
+      <td>13</td>
+      <td>2011</td>
+    </tr>
+    <tr>
+      <th>218</th>
+      <td>5</td>
+      <td>14</td>
+      <td>1989</td>
+    </tr>
+    <tr>
+      <th>219</th>
+      <td>12</td>
+      <td>14</td>
+      <td>1975</td>
+    </tr>
+    <tr>
+      <th>220</th>
+      <td>6</td>
+      <td>25</td>
+      <td>2012</td>
+    </tr>
+    <tr>
+      <th>221</th>
+      <td>10</td>
+      <td>18</td>
+      <td>1980</td>
+    </tr>
+    <tr>
+      <th>222</th>
+      <td>5</td>
+      <td>15</td>
+      <td>1998</td>
+    </tr>
+    <tr>
+      <th>223</th>
+      <td>10</td>
+      <td>14</td>
+      <td>1974</td>
+    </tr>
+    <tr>
+      <th>224</th>
+      <td>7</td>
+      <td>25</td>
+      <td>1998</td>
+    </tr>
+    <tr>
+      <th>225</th>
+      <td>6</td>
+      <td>15</td>
+      <td>1972</td>
+    </tr>
+    <tr>
+      <th>226</th>
+      <td>1</td>
+      <td>07</td>
+      <td>1991</td>
+    </tr>
+    <tr>
+      <th>227</th>
+      <td>9</td>
+      <td>15</td>
+      <td>2011</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<h2 id="3-20-mar-2009-20-march-2009-20-mar-2009-20-march-2009-format">3. <em>20 Mar 2009; 20 March 2009; 20 Mar. 2009; 20 March, 2009</em> format</h2>
+<pre><code class="language-python"># 3
+df3 = df.str.extract(r'(?P&lt;day&gt;\d{1,2})[ ,.-](?P&lt;month&gt;(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*)[ ,.-](?P&lt;year&gt;\d{2,4})').dropna(how = 'any')#.iloc[125]
+#done
+df3
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>day</th>
+      <th>month</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>125</th>
+      <td>24</td>
+      <td>Jan</td>
+      <td>2001</td>
+    </tr>
+    <tr>
+      <th>126</th>
+      <td>10</td>
+      <td>Sep</td>
+      <td>2004</td>
+    </tr>
+    <tr>
+      <th>127</th>
+      <td>26</td>
+      <td>May</td>
+      <td>1982</td>
+    </tr>
+    <tr>
+      <th>128</th>
+      <td>28</td>
+      <td>June</td>
+      <td>2002</td>
+    </tr>
+    <tr>
+      <th>129</th>
+      <td>06</td>
+      <td>May</td>
+      <td>1972</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>189</th>
+      <td>21</td>
+      <td>Oct</td>
+      <td>1977</td>
+    </tr>
+    <tr>
+      <th>190</th>
+      <td>10</td>
+      <td>Aug</td>
+      <td>2000</td>
+    </tr>
+    <tr>
+      <th>191</th>
+      <td>30</td>
+      <td>Nov</td>
+      <td>1972</td>
+    </tr>
+    <tr>
+      <th>192</th>
+      <td>06</td>
+      <td>May</td>
+      <td>1993</td>
+    </tr>
+    <tr>
+      <th>193</th>
+      <td>18</td>
+      <td>Jan</td>
+      <td>1995</td>
+    </tr>
+  </tbody>
+</table>
+<p>69 rows × 3 columns</p>
+</div>
+<pre><code class="language-python"># change month name to number
+for index, row in df3.iterrows():
+    # print(row['month'])
+    row['month'] = month_string_to_number(row['month'])
+df3
+
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>day</th>
+      <th>month</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>125</th>
+      <td>24</td>
+      <td>1</td>
+      <td>2001</td>
+    </tr>
+    <tr>
+      <th>126</th>
+      <td>10</td>
+      <td>9</td>
+      <td>2004</td>
+    </tr>
+    <tr>
+      <th>127</th>
+      <td>26</td>
+      <td>5</td>
+      <td>1982</td>
+    </tr>
+    <tr>
+      <th>128</th>
+      <td>28</td>
+      <td>6</td>
+      <td>2002</td>
+    </tr>
+    <tr>
+      <th>129</th>
+      <td>06</td>
+      <td>5</td>
+      <td>1972</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>189</th>
+      <td>21</td>
+      <td>10</td>
+      <td>1977</td>
+    </tr>
+    <tr>
+      <th>190</th>
+      <td>10</td>
+      <td>8</td>
+      <td>2000</td>
+    </tr>
+    <tr>
+      <th>191</th>
+      <td>30</td>
+      <td>11</td>
+      <td>1972</td>
+    </tr>
+    <tr>
+      <th>192</th>
+      <td>06</td>
+      <td>5</td>
+      <td>1993</td>
+    </tr>
+    <tr>
+      <th>193</th>
+      <td>18</td>
+      <td>1</td>
+      <td>1995</td>
+    </tr>
+  </tbody>
+</table>
+<p>69 rows × 3 columns</p>
+</div>
+<h2 id="4-mar-20th-2009-mar-21st-2009-mar-22nd-2009-format">4. <em>Mar 20th, 2009; Mar 21st, 2009; Mar 22nd, 2009</em> format</h2>
+<pre><code class="language-python"># 4
+df.str.extract(r'((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*)[ ,.](\d{2,4})(?:th|st|rd), (\d{2,4})').dropna(how = 'any')
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div>
+<p>No record is written in this format.</p>
+<h2 id="5-feb-2009-sep-2009-oct-2010-format">5. <em>Feb 2009; Sep 2009; Oct 2010</em> format</h2>
+<p>Many records with date in this format have different noises. Therefore for this format I will first make a general regex expreesion to extract the majority date records in this formate. Then I will search for the records that are not extracted, find the reason and modify the regex expression.</p>
+<pre><code class="language-python"># 5
+df5_1 = df.str.extract(r'\D(?P&lt;day&gt; )(?P&lt;month&gt;(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*),?[ ](?P&lt;year&gt;\d{4})').dropna(how = 'any')#.iloc[125]
+df5_1
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>day</th>
+      <th>month</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>228</th>
+      <td></td>
+      <td>September</td>
+      <td>1985</td>
+    </tr>
+    <tr>
+      <th>229</th>
+      <td></td>
+      <td>June</td>
+      <td>2011</td>
+    </tr>
+    <tr>
+      <th>230</th>
+      <td></td>
+      <td>May</td>
+      <td>1986</td>
+    </tr>
+    <tr>
+      <th>231</th>
+      <td></td>
+      <td>May</td>
+      <td>2016</td>
+    </tr>
+    <tr>
+      <th>232</th>
+      <td></td>
+      <td>July</td>
+      <td>1977</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>337</th>
+      <td></td>
+      <td>Dec</td>
+      <td>2007</td>
+    </tr>
+    <tr>
+      <th>338</th>
+      <td></td>
+      <td>Apr</td>
+      <td>1998</td>
+    </tr>
+    <tr>
+      <th>339</th>
+      <td></td>
+      <td>March</td>
+      <td>2005</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td></td>
+      <td>May</td>
+      <td>1980</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td></td>
+      <td>March</td>
+      <td>1976</td>
+    </tr>
+  </tbody>
+</table>
+<p>98 rows × 3 columns</p>
+</div>
+<pre><code class="language-python">for index, row in df5_1.iterrows():
+    # print(row['month'])
+    row['month'] = month_string_to_number(row['month'])
+df5_1
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>day</th>
+      <th>month</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>228</th>
+      <td></td>
+      <td>9</td>
+      <td>1985</td>
+    </tr>
+    <tr>
+      <th>229</th>
+      <td></td>
+      <td>6</td>
+      <td>2011</td>
+    </tr>
+    <tr>
+      <th>230</th>
+      <td></td>
+      <td>5</td>
+      <td>1986</td>
+    </tr>
+    <tr>
+      <th>231</th>
+      <td></td>
+      <td>5</td>
+      <td>2016</td>
+    </tr>
+    <tr>
+      <th>232</th>
+      <td></td>
+      <td>7</td>
+      <td>1977</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>337</th>
+      <td></td>
+      <td>12</td>
+      <td>2007</td>
+    </tr>
+    <tr>
+      <th>338</th>
+      <td></td>
+      <td>4</td>
+      <td>1998</td>
+    </tr>
+    <tr>
+      <th>339</th>
+      <td></td>
+      <td>3</td>
+      <td>2005</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td></td>
+      <td>5</td>
+      <td>1980</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td></td>
+      <td>3</td>
+      <td>1976</td>
+    </tr>
+  </tbody>
+</table>
+<p>98 rows × 3 columns</p>
+</div>
+<p>Find missing indices:</p>
+<pre><code class="language-python"># find missing indices
+missing_indices = [index 
+                   for index in range(df5_1.index[0], df5_1.index[len(df5_1.index)-1])
+                   if index not in df5_1.index]
+
+</code></pre>
+<pre><code class="language-python">missing_indices
+</code></pre>
+<pre><code>[235,
+ 245,
+ 247,
+ 251,
+ 256,
+ 266,
+ 270,
+ 276,
+ 281,
+ 283,
+ 285,
+ 294,
+ 299,
+ 306,
+ 321,
+ 333,
+ 341]
+</code></pre>
+<p>We can see that some records are missing, e.g. 341.  Let us see how this record looks like.</p>
+<pre><code class="language-python">df.iloc[341]
+</code></pre>
+<pre><code>'.Nov 2007- Evaluation and treatment at CH ED/APS for acute alcohol and medication OD, with history of depression relapse and alcohol abuse PRIOR TWO WEEKS due to financial stress when she lost some Meteorological Technician work.  Discharged to detox and follow up with Fresenius Medical Care Center.\n'
+</code></pre>
+<pre><code class="language-python"># 5
+# fix one character right before Month, like yAug, 2004
+df5_2 = df.str.extract(r'^[\D\. ]?(?P&lt;day&gt;)(?P&lt;month&gt;(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*)[,. ]*(?P&lt;year&gt;\d{4})\D').dropna(how = 'any')#.iloc[]
+
+df5_2
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>day</th>
+      <th>month</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>235</th>
+      <td></td>
+      <td>Oct</td>
+      <td>2015</td>
+    </tr>
+    <tr>
+      <th>245</th>
+      <td></td>
+      <td>November</td>
+      <td>1990</td>
+    </tr>
+    <tr>
+      <th>247</th>
+      <td></td>
+      <td>May</td>
+      <td>1983</td>
+    </tr>
+    <tr>
+      <th>251</th>
+      <td></td>
+      <td>December</td>
+      <td>1998</td>
+    </tr>
+    <tr>
+      <th>256</th>
+      <td></td>
+      <td>Aug</td>
+      <td>1988</td>
+    </tr>
+    <tr>
+      <th>266</th>
+      <td></td>
+      <td>September</td>
+      <td>1999</td>
+    </tr>
+    <tr>
+      <th>270</th>
+      <td></td>
+      <td>May</td>
+      <td>2006</td>
+    </tr>
+    <tr>
+      <th>276</th>
+      <td></td>
+      <td>April</td>
+      <td>1986</td>
+    </tr>
+    <tr>
+      <th>281</th>
+      <td></td>
+      <td>Aug</td>
+      <td>2004</td>
+    </tr>
+    <tr>
+      <th>283</th>
+      <td></td>
+      <td>Feb</td>
+      <td>1977</td>
+    </tr>
+    <tr>
+      <th>285</th>
+      <td></td>
+      <td>Sep</td>
+      <td>1983</td>
+    </tr>
+    <tr>
+      <th>294</th>
+      <td></td>
+      <td>February</td>
+      <td>1983</td>
+    </tr>
+    <tr>
+      <th>299</th>
+      <td></td>
+      <td>March</td>
+      <td>1974</td>
+    </tr>
+    <tr>
+      <th>306</th>
+      <td></td>
+      <td>May</td>
+      <td>2004</td>
+    </tr>
+    <tr>
+      <th>333</th>
+      <td></td>
+      <td>November</td>
+      <td>1997</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td></td>
+      <td>Nov</td>
+      <td>2007</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<pre><code class="language-python">for index, row in df5_2.iterrows():
+    # print(row['month'])
+    row['month'] = month_string_to_number(row['month'])
+df5_2
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>day</th>
+      <th>month</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>235</th>
+      <td></td>
+      <td>10</td>
+      <td>2015</td>
+    </tr>
+    <tr>
+      <th>245</th>
+      <td></td>
+      <td>11</td>
+      <td>1990</td>
+    </tr>
+    <tr>
+      <th>247</th>
+      <td></td>
+      <td>5</td>
+      <td>1983</td>
+    </tr>
+    <tr>
+      <th>251</th>
+      <td></td>
+      <td>12</td>
+      <td>1998</td>
+    </tr>
+    <tr>
+      <th>256</th>
+      <td></td>
+      <td>8</td>
+      <td>1988</td>
+    </tr>
+    <tr>
+      <th>266</th>
+      <td></td>
+      <td>9</td>
+      <td>1999</td>
+    </tr>
+    <tr>
+      <th>270</th>
+      <td></td>
+      <td>5</td>
+      <td>2006</td>
+    </tr>
+    <tr>
+      <th>276</th>
+      <td></td>
+      <td>4</td>
+      <td>1986</td>
+    </tr>
+    <tr>
+      <th>281</th>
+      <td></td>
+      <td>8</td>
+      <td>2004</td>
+    </tr>
+    <tr>
+      <th>283</th>
+      <td></td>
+      <td>2</td>
+      <td>1977</td>
+    </tr>
+    <tr>
+      <th>285</th>
+      <td></td>
+      <td>9</td>
+      <td>1983</td>
+    </tr>
+    <tr>
+      <th>294</th>
+      <td></td>
+      <td>2</td>
+      <td>1983</td>
+    </tr>
+    <tr>
+      <th>299</th>
+      <td></td>
+      <td>3</td>
+      <td>1974</td>
+    </tr>
+    <tr>
+      <th>306</th>
+      <td></td>
+      <td>5</td>
+      <td>2004</td>
+    </tr>
+    <tr>
+      <th>333</th>
+      <td></td>
+      <td>11</td>
+      <td>1997</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td></td>
+      <td>11</td>
+      <td>2007</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<pre><code class="language-python"># find missing indices after the first search
+missing_indices = [index 
+                   for index in range(df5_1.index[0], df5_1.index[len(df5_1.index)-1])
+                   if index not in (df5_1.index | df5_2.index)]
+missing_indices
+</code></pre>
+<pre><code>[321]
+</code></pre>
+<p>Still, record 321 is missing.</p>
+<pre><code class="language-python">df.iloc[321]
+</code></pre>
+<pre><code>'2June, 1999 Audit C Score Current:\n'
+</code></pre>
+<pre><code class="language-python"># 5
+# fix one number right before Month, like 2June, 1999
+df5_3 = df.str.extract(r'[^]*[\D\. ](?P&lt;day&gt;)(?P&lt;month&gt;(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*)[,. ]*(?P&lt;year&gt;\d{4})\D').dropna(how = 'any')#.iloc[]
+df5_3
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>day</th>
+      <th>month</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>321</th>
+      <td></td>
+      <td>June</td>
+      <td>1999</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<pre><code class="language-python">for index, row in df5_3.iterrows():
+    # print(row['month'])
+    row['month'] = month_string_to_number(row['month'])
+df5_3
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>day</th>
+      <th>month</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>321</th>
+      <td></td>
+      <td>6</td>
+      <td>1999</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<h2 id="6-62008-122009-format">6. <em>6/2008; 12/2009</em> format</h2>
+<pre><code class="language-python"># 6 
+df6 = df.str.extract(r'(?:^| |~|[a-z])+-?(?P&lt;day&gt;)(?P&lt;month&gt;\d{1,2})[/-](?P&lt;year&gt;\d{4})').dropna(how = 'any')#.iloc[343:454]
+df6
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>day</th>
+      <th>month</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>343</th>
+      <td></td>
+      <td>6</td>
+      <td>1998</td>
+    </tr>
+    <tr>
+      <th>344</th>
+      <td></td>
+      <td>6</td>
+      <td>2005</td>
+    </tr>
+    <tr>
+      <th>345</th>
+      <td></td>
+      <td>10</td>
+      <td>1973</td>
+    </tr>
+    <tr>
+      <th>346</th>
+      <td></td>
+      <td>9</td>
+      <td>2005</td>
+    </tr>
+    <tr>
+      <th>347</th>
+      <td></td>
+      <td>03</td>
+      <td>1980</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>440</th>
+      <td></td>
+      <td>6</td>
+      <td>1989</td>
+    </tr>
+    <tr>
+      <th>441</th>
+      <td></td>
+      <td>9</td>
+      <td>1980</td>
+    </tr>
+    <tr>
+      <th>442</th>
+      <td></td>
+      <td>9</td>
+      <td>1992</td>
+    </tr>
+    <tr>
+      <th>443</th>
+      <td></td>
+      <td>9</td>
+      <td>2000</td>
+    </tr>
+    <tr>
+      <th>444</th>
+      <td></td>
+      <td>7</td>
+      <td>1981</td>
+    </tr>
+  </tbody>
+</table>
+<p>102 rows × 3 columns</p>
+</div>
+<h1 id="concatenate-the-extracted-dataframes">Concatenate the extracted dataframes</h1>
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+
+frames = [df1, df2, df3,df5_1,df5_2 ,df5_3,df6]
+
+result = pd.concat(frames)
+# replace empy string with 1
+result = result.replace(r'^\s*$', 1, regex=True)
+result
+
+
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>month</th>
+      <th>day</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>03</td>
+      <td>25</td>
+      <td>93</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>6</td>
+      <td>18</td>
+      <td>85</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7</td>
+      <td>8</td>
+      <td>71</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>9</td>
+      <td>27</td>
+      <td>75</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2</td>
+      <td>6</td>
+      <td>96</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>440</th>
+      <td>6</td>
+      <td>1</td>
+      <td>1989</td>
+    </tr>
+    <tr>
+      <th>441</th>
+      <td>9</td>
+      <td>1</td>
+      <td>1980</td>
+    </tr>
+    <tr>
+      <th>442</th>
+      <td>9</td>
+      <td>1</td>
+      <td>1992</td>
+    </tr>
+    <tr>
+      <th>443</th>
+      <td>9</td>
+      <td>1</td>
+      <td>2000</td>
+    </tr>
+    <tr>
+      <th>444</th>
+      <td>7</td>
+      <td>1</td>
+      <td>1981</td>
+    </tr>
+  </tbody>
+</table>
+<p>445 rows × 3 columns</p>
+</div>
+<pre><code class="language-python">df.shape
+</code></pre>
+<pre><code>(445,)
+</code></pre>
+<p>The numbers of rows of the concatenated result and the original text file are the same. Great!</p>
+<h1 id="final-text-cleaning-of-concatenated-dataframe">Final text cleaning of concatenated dataframe</h1>
+<ul>
+<li>Add leading zero.</li>
+<li>Fix the year number with only two digits.</li>
+<li>Merge the columns and convert the merged column to date type.</li>
+</ul>
+<pre><code class="language-python"># add the leading 0 and add 19 for those two-digit year
+for index, row in result.iterrows():
+    # print(len(row['year']))
+    if len(row['year'])&lt;3 :
+      row['year'] = '19' + row['year']
+    if len(str(row['day'])) == 1 :
+      row['day'] = '0' + str(row['day'])
+    if len(str(row['month'])) == 1 :
+      row['month'] = '0' + str(row['month'])
+result
+
+
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>month</th>
+      <th>day</th>
+      <th>year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>03</td>
+      <td>25</td>
+      <td>1993</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>06</td>
+      <td>18</td>
+      <td>1985</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>07</td>
+      <td>08</td>
+      <td>1971</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>09</td>
+      <td>27</td>
+      <td>1975</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>02</td>
+      <td>06</td>
+      <td>1996</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>440</th>
+      <td>06</td>
+      <td>01</td>
+      <td>1989</td>
+    </tr>
+    <tr>
+      <th>441</th>
+      <td>09</td>
+      <td>01</td>
+      <td>1980</td>
+    </tr>
+    <tr>
+      <th>442</th>
+      <td>09</td>
+      <td>01</td>
+      <td>1992</td>
+    </tr>
+    <tr>
+      <th>443</th>
+      <td>09</td>
+      <td>01</td>
+      <td>2000</td>
+    </tr>
+    <tr>
+      <th>444</th>
+      <td>07</td>
+      <td>01</td>
+      <td>1981</td>
+    </tr>
+  </tbody>
+</table>
+<p>445 rows × 3 columns</p>
+</div>
+<pre><code class="language-python">result = result.applymap(str)
+</code></pre>
+<pre><code class="language-python"># add merged column &quot;combine&quot;
+result[&quot;combine&quot;] =  result[&quot;year&quot;] + result[&quot;month&quot;] + result[&quot;day&quot;]
+
+result['combine'] = result['combine'].astype(int)
+</code></pre>
+<pre><code class="language-python"># check rows with NULL
+# is_NaN = df_findNA.isnull()
+# row_has_NaN = is_NaN.any(axis=1)
+# rows_with_NaN = df_findNA[row_has_NaN]
+# rows_with_NaN
+
+# check whch rows have unconverted month name
+# row_has_NaN = result['combine'].str.contains('April111990')
+# rows_with_NaN = result[row_has_NaN ]
+# rows_with_NaN
+</code></pre>
+<pre><code class="language-python">print (result.dtypes)
+
+</code></pre>
+<pre><code>0      19930325
+1      19850618
+2      19710708
+3      19750927
+4      19960206
+         ...   
+440    19890601
+441    19800901
+442    19920901
+443    20000901
+444    19810701
+Name: combine, Length: 445, dtype: int64
+</code></pre>
+<p>The dtype and form are perfectly cleaned.</p>
+<pre><code class="language-python">result['combine']
+</code></pre>
+<pre><code>month      object
+day        object
+year       object
+combine     int64
+dtype: object
+</code></pre>
+<h1 id="sort-the-date">Sort the date</h1>
+<pre><code class="language-python">
+result['combine'] = pd.to_datetime(result['combine'], format='%Y%m%d')
+
+date_for_sort = pd.to_datetime(result['combine'], format='%Y%m%d')
+
+date_for_sort = pd.DataFrame(date_for_sort)
+date_for_sort
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>combine</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1993-03-25</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1985-06-18</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1971-07-08</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1975-09-27</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1996-02-06</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>440</th>
+      <td>1989-06-01</td>
+    </tr>
+    <tr>
+      <th>441</th>
+      <td>1980-09-01</td>
+    </tr>
+    <tr>
+      <th>442</th>
+      <td>1992-09-01</td>
+    </tr>
+    <tr>
+      <th>443</th>
+      <td>2000-09-01</td>
+    </tr>
+    <tr>
+      <th>444</th>
+      <td>1981-07-01</td>
+    </tr>
+  </tbody>
+</table>
+<p>445 rows × 1 columns</p>
+</div>
+<pre><code class="language-python">date_for_sort = date_for_sort.sort_values(ascending=True, by = 'combine')
+date_for_sort.reset_index(inplace=True)
+date_for_sort
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>index</th>
+      <th>combine</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>9</td>
+      <td>1971-04-10</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>84</td>
+      <td>1971-05-18</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>1971-07-08</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>53</td>
+      <td>1971-07-11</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>28</td>
+      <td>1971-09-12</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>440</th>
+      <td>427</td>
+      <td>2016-05-01</td>
+    </tr>
+    <tr>
+      <th>441</th>
+      <td>141</td>
+      <td>2016-05-30</td>
+    </tr>
+    <tr>
+      <th>442</th>
+      <td>186</td>
+      <td>2016-10-13</td>
+    </tr>
+    <tr>
+      <th>443</th>
+      <td>161</td>
+      <td>2016-10-19</td>
+    </tr>
+    <tr>
+      <th>444</th>
+      <td>413</td>
+      <td>2016-11-01</td>
+    </tr>
+  </tbody>
+</table>
+<p>445 rows × 2 columns</p>
+</div>
+<pre><code class="language-python">date_for_sort['index']
+</code></pre>
+<pre><code>0        9
+1       84
+2        2
+3       53
+4       28
+      ... 
+440    427
+441    141
+442    186
+443    161
+444    413
+Name: index, Length: 445, dtype: int64
+</code></pre>
+<h1 id="some-takeaway">Some takeaway</h1>
+<ol>
+<li>Be patient. In order to make this post looks neat, I deleted many testing codes and false extractions. Do not lose heart if you tried multiple times but yet could not extract the desired date format from the text.</li>
+<li>Do preliminary cleaning when importing the file. In this exercise I only remove the paranthesis when reading the file. I believe that if I could do more cleaning already when reading the file, the following text cleaning will be easier. For example, pre-clean dirty text like 'c1995', 'k1976'.</li>
+</ol>
+<p>Thank you for reading, if there is any question please do not hesitate to let me know!</p>
+<figure data-type="image" tabindex="1"><img src="https://BolinWu-Gridea.github.io/post-images/1624010351345.jpg" alt="" loading="lazy"></figure>
+
+        </div>
+        <!-- Share to Twitter, Weibo, Telegram -->
+        <div class="flex items-center">
+          <div class="mr-4 flex items-center">
+            <i class="ri-share-forward-line text-gray-500"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTwitter">
+            <i class="ri-twitter-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-red-500 hover:bg-red-100 dark:hover:bg-gray-600 inline-flex" @click="shareToWeibo">
+            <i class="ri-weibo-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-indigo-500 hover:bg-indigo-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTelegram">
+            <i class="ri-telegram-line"></i>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Prudence is a fountain of life to the prudent.
+</footer>
+    </div>
+
+    <!-- TOC Container -->
+    <div class="fixed right-0 bottom-0 mb-16 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white dark:bg-gray-500 dark:text-gray-200 hover:shadow-lg transition-all animated fadeInRight" @click="showToc = true">
+      <i class="ri-file-list-line"></i>
+    </div>
+
+    <div class="fixed right-0 top-0 bottom-0 overflow-y-auto w-64 bg-white dark:bg-gray-800 p-4 border-l border-gray-100 dark:border-gray-600 z-10 transition-fast" :class="{ '-mr-64': !showToc }">
+      <div class="flex mb-4 justify-end">
+        <div class="w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast" @click="showToc = false">
+          <i class="ri-close-line text-lg"></i>
+        </div>
+      </div>
+      <div class="post-toc-container">
+        <ul class="markdownIt-TOC">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#import-data">Import data</a></li>
+<li><a href="#extract-date-and-text-cleaning">Extract date and text cleaning</a>
+<ul>
+<li><a href="#1-mmddyy-format">1. <em>mm/dd/yy</em> format</a></li>
+<li><a href="#2-mar-20-2009-mar-20-2009-march-20-2009-mar-20-2009-mar-20-2009-format">2. <em>Mar-20-2009; Mar 20, 2009; March 20, 2009;  Mar. 20, 2009; Mar 20 2009</em> format</a>
+<ul>
+<li><a href="#change-month-name-to-a-number">Change month name to a number</a></li>
+</ul>
+</li>
+<li><a href="#3-20-mar-2009-20-march-2009-20-mar-2009-20-march-2009-format">3. <em>20 Mar 2009; 20 March 2009; 20 Mar. 2009; 20 March, 2009</em> format</a></li>
+<li><a href="#4-mar-20th-2009-mar-21st-2009-mar-22nd-2009-format">4. <em>Mar 20th, 2009; Mar 21st, 2009; Mar 22nd, 2009</em> format</a></li>
+<li><a href="#5-feb-2009-sep-2009-oct-2010-format">5. <em>Feb 2009; Sep 2009; Oct 2010</em> format</a></li>
+<li><a href="#6-62008-122009-format">6. <em>6/2008; 12/2009</em> format</a></li>
+</ul>
+</li>
+<li><a href="#concatenate-the-extracted-dataframes">Concatenate the extracted dataframes</a></li>
+<li><a href="#final-text-cleaning-of-concatenated-dataframe">Final text cleaning of concatenated dataframe</a></li>
+<li><a href="#sort-the-date">Sort the date</a></li>
+<li><a href="#some-takeaway">Some takeaway</a></li>
+</ul>
+
+      </div>
+    </div>
+
+    <!-- Back to top -->
+    <div class="fixed right-0 bottom-0 mb-4 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white hover:shadow-lg transition-all dark:bg-gray-500 dark:text-gray-200" @click="backToUp" v-show="scrolled">
+      <i class="ri-arrow-up-line"></i>
+    </div>
+  </div>
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Background of PhotoSwipe. 
+        It's a separate element as animating opacity is faster than rgba(). -->
+  <div class="pswp__bg">
+  </div>
+  <!-- Slides wrapper with overflow:hidden. -->
+  <div class="pswp__scroll-wrap">
+    <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+    <div class="pswp__container">
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+    </div>
+    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <!--  Controls are self-explanatory. Order can be changed. -->
+        <div class="pswp__counter">
+        </div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+        <!-- element will get class pswp__preloader--active when preloader is running -->
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip">
+        </div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://BolinWu-Gridea.github.io/media/scripts/main.js"></script>
+  
+  <!-- Code Highlight -->
+  
+    <script src="https://BolinWu-Gridea.github.io/media/prism.js"></script>
+    <script>
+      Prism.highlightAll()
+    </script>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+  <script>
+    //拿到预览框架，也就是上面的html代码
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    //定义图片数组变量
+    var imgitems;
+    /**
+    * 用于显示预览界面
+    * @param index 图片数组下标
+    */
+    function viewImg(index) {
+      //其它选项这里不做过多阐述，详情见官网
+      var pswpoptions = {
+        index: parseInt(index, 10), // 开始幻灯片索引。0是第一张幻灯片。必须是整数，而不是字符串。
+        bgOpacity: 0.7, // 背景透明度，0-1
+        maxSpreadZoom: 3, // 缩放级别，不要太大
+      };
+      //初始化并打开PhotoSwipe，pswpElement对应上面预览框架，PhotoSwipeUI_Default为皮肤，imgitems为图片数组，pswpoptions为选项
+      var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, imgitems, pswpoptions);
+      gallery.init()
+    }
+    /**
+    * 用于添加图片点击事件
+    * @param img 图片元素
+    * @param index 所属下标（在imgitems中的位置）
+    */
+    function addImgClick(img, index) {
+      img.onclick = function() {
+        viewImg(index)
+      }
+    }
+    /**
+    * 轮询所有图片，获取src、width、height等数据，加入imgitems，并给图片元素添加事件
+    * 最好在onload中执行该方法，本站因放在最底部，所以直接初始化
+    * 异步加载图片可在图片元素创建完成后调用此方法
+    */
+    function initImg() {
+      //重置图片数组
+      imgitems = [];
+      //查找class:markdown 下的所有img元素并遍历
+      var imgs = document.querySelectorAll('.markdown img');
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        //本站相册初始为loading图片，真实图片放在data-src
+        var ds = img.getAttribute("data-src");
+        //创建image对象，用于获取图片宽高
+        var imgtemp = new Image();
+        //判断是否存在data-src
+        if (ds != null && ds.length > 0) {
+          imgtemp.src = ds
+        } else {
+          imgtemp.src = img.src
+        }
+        //判断是否存在缓存
+        if (imgtemp.complete) {
+          var imgobj = {
+            "src": imgtemp.src,
+            "w": imgtemp.width,
+            "h": imgtemp.height,
+          };
+          imgitems[i] = imgobj;
+          addImgClick(img, i);
+        } else {
+          console.log('进来了2')
+          imgtemp.index = i;
+          imgtemp.img = img;
+          imgtemp.onload = function() {
+            var imgobj = {
+              "src": this.src,
+              "w": this.width,
+              "h": this.height,
+            };
+            //不要使用push，因为onload前后顺序会不同
+            imgitems[this.index] = imgobj
+            //添加点击事件
+            addImgClick(this.img, this.index);
+          }
+        }
+      }
+    }
+    //初始化
+    initImg();
+  </script>
+  
+  
+</body>
+
+</html>
