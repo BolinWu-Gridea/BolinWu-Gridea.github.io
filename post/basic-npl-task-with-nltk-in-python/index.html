@@ -1,0 +1,701 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Basic NPL task with NLTK in Python - Bolin Wu</title>
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/tailwind.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Basic NPL task with NLTK in Python - Bolin Wu - Atom Feed" href="https://BolinWu-Gridea.github.io/atom.xml">
+
+    
+
+  <meta name="description" content="
+In this post I will share what are the basic NLP tasks and how to deal with different tasks by using the powerful NLTK ..." />
+  <meta property="og:title" content="Basic NPL task with NLTK in Python - Bolin Wu">
+  <meta property="og:description" content="
+In this post I will share what are the basic NLP tasks and how to deal with different tasks by using the powerful NLTK ..." />
+  <meta property="og:type" content="articles">
+  <meta property="og:url" content="https://BolinWu-Gridea.github.io/post/basic-npl-task-with-nltk-in-python/" />
+  <meta property="og:image" content="https://BolinWu-Gridea.github.io/post-images/basic-npl-task-with-nltk-in-python.jpg">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:width" content="1200">
+  <meta name="twitter:title" content="Basic NPL task with NLTK in Python - Bolin Wu">
+  <meta name="twitter:description" content="
+In this post I will share what are the basic NLP tasks and how to deal with different tasks by using the powerful NLTK ...">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://BolinWu-Gridea.github.io/post/basic-npl-task-with-nltk-in-python/">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+ 
+  
+    <link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/prism-atom-dark.css">
+  
+
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+  
+</head>
+
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
+    <a href="https://BolinWu-Gridea.github.io" class="fixed top-0 left-0 mt-4 bg-black text-white dark:text-gray-700 dark:bg-yellow-50 dark:hover:bg-black dark:hover:text-white inline-flex p-2 pl-8 hover:text-gray-700 hover:bg-yellow-50 font-bold z-10 transition-fast animated fadeInLeft">
+      Bolin Wu
+    </a>
+    <div class="max-w-4xl w-full mx-auto">
+      <div class="shadow-box bg-white dark:bg-gray-600 rounded-lg pt-32 md:pt-64 px-4 md:px-8 pb-8 animated fadeIn mb-8">
+        <h1 class="text-5xl font-semibold leading-normal pb-8 mb-8 border-b-8 border-gray-700">
+          Basic NPL task with NLTK in Python
+        </h1>
+        
+          <img src="https://BolinWu-Gridea.github.io/post-images/basic-npl-task-with-nltk-in-python.jpg" alt="Basic NPL task with NLTK in Python" class="block w-full mb-8">
+        
+        <div class="mb-8 flex flex-wrap">
+          <div class="text-gray-400 text-sm mr-4">2021-07-12 · 13 min read</div>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/zOshREnVK/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              Natural Language Process
+            </a>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/GWOcOUTN0/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              Python
+            </a>
+          
+        </div>
+        <div class="markdown mb-8" v-pre>
+          <!-- more -->
+<p>In this post I will share what are the basic NLP tasks and how to deal with different tasks by using the powerful NLTK library in Python.</p>
+<h1 id="basic-natural-language-processing">Basic natural language processing</h1>
+<p>Basic NLP includes any computation, manipulation of natural language in order to get insights about the words' meaning and how sentences are contructed is natural language processing.</p>
+<h2 id="nlp-board-specturm">NLP board specturm</h2>
+<p>NLP tasks may include:</p>
+<ul>
+<li>Counting words, counting frequency of words.</li>
+<li>Finding sentence boundaries.</li>
+<li>Part of speech tagging.</li>
+<li>Parsing the sentence structure.</li>
+<li>Identifying semantic words.</li>
+<li>Ifentifying entities in a sentences.</li>
+<li>Finding which pronoun refers to which entity.</li>
+</ul>
+<h2 id="natural-language-toolkit">Natural Language Toolkit</h2>
+<p>Natural Language Toolkit (NLTK). It is an opensouce library in Python and it provides support for most NLP tasks. It also provides access to numerous text corpora. In this post I will share some basic uses of NLTK.</p>
+<pre><code class="language-python">import nltk
+
+# if any module is not available we can use nltk.download() to intall it.
+# nltk.download()
+
+# we can also use the following command to directly download a specific module
+nltk.download(&quot;book&quot;)
+
+from nltk.book import *
+
+</code></pre>
+<pre><code>[nltk_data] Downloading collection 'book'
+[nltk_data]    | 
+...
+[nltk_data]  Done downloading collection book
+</code></pre>
+<pre><code class="language-python">text1
+</code></pre>
+<pre><code>&lt;Text: Moby Dick by Herman Melville 1851&gt;
+</code></pre>
+<pre><code class="language-python"># if we want to look at one sentence from each of the nine texts
+sents()
+</code></pre>
+<pre><code>sent1: Call me Ishmael .
+sent2: The family of Dashwood had long been settled in Sussex .
+sent3: In the beginning God created the heaven and the earth .
+sent4: Fellow - Citizens of the Senate and of the House of Representatives :
+sent5: I have a problem with people PMing me to lol JOIN
+sent6: SCENE 1 : [ wind ] [ clop clop clop ] KING ARTHUR : Whoa there !
+sent7: Pierre Vinken , 61 years old , will join the board as a nonexecutive director Nov. 29 .
+sent8: 25 SEXY MALE , seeks attrac older single lady , for discreet encounters .
+sent9: THE suburb of Saffron Park lay on the sunset side of London , as red and ragged as a cloud of sunset .
+</code></pre>
+<pre><code class="language-python">sent1
+</code></pre>
+<pre><code>['Call', 'me', 'Ishmael', '.']
+</code></pre>
+<pre><code class="language-python"># count the words of sentence 1 
+len(sent1)
+</code></pre>
+<pre><code>4
+</code></pre>
+<pre><code class="language-python"># if we want to count the words of the entire text 1
+len(text1)
+</code></pre>
+<pre><code>260819
+</code></pre>
+<pre><code class="language-python"># set(text1)
+</code></pre>
+<pre><code class="language-python"># find first 10 unique words of text 1
+list(set(text1))[:10]
+# the u code stands for the UTF8 encoding. Each token represents the UTF8 code string
+</code></pre>
+<pre><code>['vinegar', 'narrated', 'uninterpenetratingly', 'August', 'affirmative', 'subordinates', 'overbalance', 'Snarles', 'fulfiller', 'select']
+</code></pre>
+<pre><code class="language-python">dist = FreqDist(text1)
+# set of unique words in Wall Street Journal. Same as using len(set(text7))
+len(dist)
+</code></pre>
+<pre><code>19317
+</code></pre>
+<pre><code class="language-python">print(dist)
+</code></pre>
+<pre><code>&lt;FreqDist with 19317 samples and 260819 outcomes&gt;
+</code></pre>
+<pre><code class="language-python"># dist stores the individual frequencies of each word
+dist.most_common(10)
+</code></pre>
+<pre><code>[(',', 18713), ('the', 13721), ('.', 6862), ('of', 6536), ('and', 6024), ('a', 4569), ('to', 4542), (';', 4072), ('in', 3916), ('that', 2982)]
+</code></pre>
+<pre><code class="language-python"># this gives the actual words
+vocab1 = dist.keys()
+</code></pre>
+<pre><code class="language-python"># find how many times a particular word occurs
+</code></pre>
+<pre><code class="language-python">dist[u'four']
+</code></pre>
+<pre><code>74
+</code></pre>
+<pre><code class="language-python">dist[u'68']
+</code></pre>
+<pre><code>1
+</code></pre>
+<pre><code class="language-python"># find a word that is at leat of length 5 and occurs at least 100 times
+freqwords = [w for w in vocab1 if len(w) &gt; 5 and dist[w] &gt; 100]
+freqwords
+</code></pre>
+<pre><code>['called', 'through', 'almost', 'whales', 'thought', 'before', 'against', 'towards', 'things', 'nothing', 'without', 'should', 'little', 'seemed', 'though', 'captain', 'himself', 'moment', 'CHAPTER', 'something', 'Captain', 'between', 'whaling', 'another', 'Queequeg', 'Pequod', 'Starbuck']
+</code></pre>
+<h2 id="normalization-and-stemming">Normalization and stemming</h2>
+<p>Normalization is to transform a word to make it appear the same way or the count even though they look very different.</p>
+<pre><code class="language-python"># Different forms of the same &quot;word&quot;
+input1 = &quot;List liasted Lists listing listings&quot;
+</code></pre>
+<pre><code class="language-python">input1.rstrip()
+</code></pre>
+<pre><code>'List liasted Lists listing listings'
+</code></pre>
+<pre><code class="language-python">words1 = input1.lower().split(' ')
+</code></pre>
+<pre><code class="language-python">words1
+</code></pre>
+<pre><code>['list', 'liasted', 'lists', 'listing', 'listings']
+</code></pre>
+<pre><code class="language-python">porter = nltk.PorterStemmer()
+[porter.stem(t) for t in words1]
+</code></pre>
+<pre><code>['list', 'liast', 'list', 'list', 'list']
+</code></pre>
+<p>Lemmatization is similar to normalization. However, it transforms words to be abbrevations that are actually meaningful.</p>
+<pre><code class="language-python"># NLTK has a corpus of the universal declaration of human rights as one of its corpus.
+udhr = nltk.corpus.udhr.words('English-Latin1')
+</code></pre>
+<pre><code class="language-python">udhr[:20]
+</code></pre>
+<pre><code>['Universal', 'Declaration', 'of', 'Human', 'Rights', 'Preamble', 'Whereas', 'recognition', 'of', 'the', 'inherent', 'dignity', 'and', 'of', 'the', 'equal', 'and', 'inalienable', 'rights', 'of']
+</code></pre>
+<pre><code class="language-python">[porter.stem(t) for t in udhr[:20]]
+</code></pre>
+<pre><code>['univers', 'declar', 'of', 'human', 'right', 'preambl', 'wherea', 'recognit', 'of', 'the', 'inher', 'digniti', 'and', 'of', 'the', 'equal', 'and', 'inalien', 'right', 'of']
+</code></pre>
+<p>We can see from the results above that 'univers', 'declar' are not real words. Therefore, we want to use lemmatization, that is, stemming but resulting stems are all valid words.</p>
+<pre><code class="language-python">WNlemma = nltk.WordNetLemmatizer()
+</code></pre>
+<pre><code class="language-python">[WNlemma.lemmatize(t) for t in udhr[:20]]
+</code></pre>
+<pre><code>['Universal', 'Declaration', 'of', 'Human', 'Rights', 'Preamble', 'Whereas', 'recognition', 'of', 'the', 'inherent', 'dignity', 'and', 'of', 'the', 'equal', 'and', 'inalienable', 'right', 'of']
+</code></pre>
+<p>At first glance you may feel nothing has changes, but actually it does. For example rights is lemmatized to be right.</p>
+<h2 id="tokenization">Tokenization</h2>
+<p>Recall splitting a sentence into words/tokens by basic function.</p>
+<pre><code class="language-python">text11 = &quot;Today's weather isn't nice.&quot;
+text11.split(' ')
+</code></pre>
+<pre><code>[&quot;Today's&quot;, 'weather', &quot;isn't&quot;, 'nice.']
+</code></pre>
+<p>We can see that this is not a good approach. For example it splits the full stop and the last word as one word.</p>
+<p>NLTK can help with giving a better splitting.</p>
+<pre><code class="language-python"># NLTK has an in-built tokenizer
+text11 = &quot;Today's weather isn't nice.&quot;
+nltk.word_tokenize(text11)
+</code></pre>
+<pre><code>['Today', &quot;'s&quot;, 'weather', 'is', &quot;n't&quot;, 'nice', '.']
+</code></pre>
+<p>We can a nice splitted sentence. It does not only split the full stop sperately, but also splits <strong>&quot;isn't&quot;</strong> into <strong>'is'</strong> and <strong>&quot;n't&quot;</strong>. This can be useful if we want to detect negation.</p>
+<h2 id="sentence-splitting">Sentence Splitting</h2>
+<p>How would you split sentences from a long text string?</p>
+<pre><code class="language-python">text12 = &quot;This is the first sentence. A gallon of milk in the U.S. costs $2.99. Is this the third sentence? Yes, it is!&quot;
+# NLTK has an in-built sentence splitter too
+sentences = nltk.sent_tokenize(text12)
+len(sentences)
+</code></pre>
+<pre><code>4
+</code></pre>
+<pre><code class="language-python">sentences
+# the dots in 'U.S.' and '2.99' is not considered as full stop, great!
+</code></pre>
+<pre><code>['This is the first sentence.', 'A gallon of milk in the U.S. costs $2.99.', 'Is this the third sentence?', 'Yes, it is!']
+</code></pre>
+<h2 id="part-of-speech-pos-tagging">Part-of-speech (POS) Tagging</h2>
+<p>NLTK has an in-built POS tagging.</p>
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Word class</th>
+<th>Tag</th>
+<th>Word class</th>
+<th>Tag</th>
+<th>Word class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CC</td>
+<td>Conjunction</td>
+<td>JJ</td>
+<td>Adjective</td>
+<td>PRP</td>
+<td>Pronoun</td>
+</tr>
+<tr>
+<td>CD</td>
+<td>Cardinal</td>
+<td>MD</td>
+<td>Modal</td>
+<td>RB</td>
+<td>Adverb</td>
+</tr>
+<tr>
+<td>DT</td>
+<td>Determiner</td>
+<td>NN</td>
+<td>Noun</td>
+<td>SYM</td>
+<td>Symbol</td>
+</tr>
+<tr>
+<td>IN</td>
+<td>Preposition</td>
+<td>POS</td>
+<td>Possessive</td>
+<td>VB</td>
+<td>Verb</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python"># we can get help from the help.upenn_tagset
+nltk.help.upenn_tagset('MD')
+</code></pre>
+<pre><code>MD: modal auxiliary
+    can cannot could couldn't dare may might must need ought shall should
+    shouldn't will would
+</code></pre>
+<pre><code class="language-python">text11
+</code></pre>
+<pre><code>&quot;Today's weather isn't nice.&quot;
+</code></pre>
+<pre><code class="language-python">text13 = nltk.word_tokenize(text11)
+</code></pre>
+<pre><code class="language-python">nltk.pos_tag(text13)
+</code></pre>
+<pre><code>[('Today', 'NN'), (&quot;'s&quot;, 'POS'), ('weather', 'NN'), ('is', 'VBZ'), (&quot;n't&quot;, 'RB'), ('nice', 'JJ'), ('.', '.')]
+</code></pre>
+<h1 id="nltk-practice-with-real-text-file">NLTK practice with real text file</h1>
+<p>Not let us practice the uses of NLTK with <a href="https://drive.google.com/file/d/1f-ukAp2EHrB54pD95tFPjTsJhPxwPHMO/view?usp=sharing">Moby Dick by Herman Melville 1851</a>.</p>
+<h2 id="analyzing-moby-dick">Analyzing Moby Dick</h2>
+<pre><code class="language-python"># import data from google drive
+# use the following code if want to connect colab to google drive
+from google.colab import drive
+
+drive.mount('/content/drive')
+
+
+
+</code></pre>
+<pre><code>Drive already mounted at /content/drive; to attempt to forcibly remount, call drive.mount(&quot;/content/drive&quot;, force_remount=True).
+</code></pre>
+<pre><code class="language-python">with open('/content/drive/MyDrive/Bolin_DSPost/moby.txt', 'r') as f:
+    moby_raw = f.read()
+</code></pre>
+<pre><code class="language-python"># import nltk
+# nltk.download(&quot;book&quot;)
+# from nltk.book import *
+import pandas as pd
+import numpy as np
+
+# If you would like to work with the raw text you can use 'moby_raw'
+# with open('moby.txt', 'r') as f:
+#     moby_raw = f.read()
+    
+# If you would like to work with the novel in nltk.Text format you can use 'text1'
+moby_tokens = nltk.word_tokenize(moby_raw)
+text1 = nltk.Text(moby_tokens)
+</code></pre>
+<pre><code class="language-python">moby_tokens[:20]
+</code></pre>
+<pre><code>['[', 'Moby', 'Dick', 'by', 'Herman', 'Melville', '1851', ']', 'ETYMOLOGY', '.', '(', 'Supplied', 'by', 'a', 'Late', 'Consumptive', 'Usher', 'to', 'a', 'Grammar']
+</code></pre>
+<pre><code class="language-python">moby_raw[:20]
+</code></pre>
+<pre><code>'[Moby Dick by Herman'
+</code></pre>
+<pre><code class="language-python">text1[:20]
+</code></pre>
+<pre><code>['[', 'Moby', 'Dick', 'by', 'Herman', 'Melville', '1851', ']', 'ETYMOLOGY', '.', '(', 'Supplied', 'by', 'a', 'Late', 'Consumptive', 'Usher', 'to', 'a', 'Grammar']
+</code></pre>
+<h3 id="how-many-tokens-including-words-and-punctuation-symbols-are-in-text1">How many tokens, including words and punctuation symbols are in text1 ?</h3>
+<pre><code class="language-python">len(text1)
+</code></pre>
+<pre><code>254989
+</code></pre>
+<pre><code class="language-python"># or use built-in tokenization 
+len(nltk.word_tokenize(moby_raw))
+</code></pre>
+<pre><code>254989
+</code></pre>
+<h3 id="how-many-unique-tokens-does-text1-have">How many unique tokens does text1 have?</h3>
+<pre><code class="language-python">len(set(text1))
+</code></pre>
+<pre><code>20755
+</code></pre>
+<h3 id="if-we-use-lemmatization-for-the-verbs-how-many-unique-tokens-does-text1-have">If we use lemmatization for the verbs, how many unique tokens does text1 have?</h3>
+<pre><code class="language-python">from nltk.stem import WordNetLemmatizer
+lemmatizer = WordNetLemmatizer()
+lemmatized_verb = [lemmatizer.lemmatize(w, 'v') for w in text1]
+
+</code></pre>
+<pre><code class="language-python">lemmatized_verb[:15]
+</code></pre>
+<pre><code>['[', 'Moby', 'Dick', 'by', 'Herman', 'Melville', '1851', ']', 'ETYMOLOGY', '.', '(', 'Supplied', 'by', 'a', 'Late']
+</code></pre>
+<pre><code class="language-python">len(set(lemmatized_verb))
+</code></pre>
+<pre><code>16900
+</code></pre>
+<h3 id="what-is-the-lexical-diversity-of-the-text">What is the lexical diversity of the text?</h3>
+<pre><code class="language-python">len(set(moby_tokens))/ len(moby_tokens)
+</code></pre>
+<pre><code>0.08139566804842562
+</code></pre>
+<h3 id="how-many-tokens-are-late-or-late">How many tokens are 'late' or 'Late'?</h3>
+<pre><code class="language-python">dist = FreqDist(moby_tokens)
+dist[u'late'] + dist[u'Late']
+</code></pre>
+<pre><code>30
+</code></pre>
+<h3 id="what-are-the-top-20-most-frequently-occuring-unique-tokens-in-the-text">What are the top 20 most frequently occuring unique tokens in the text?</h3>
+<pre><code class="language-python">import operator
+# dist.items() converts dic to a list of tuples 
+# key=operator.itemgetter(n) indicates ordering by nth element
+
+sorted_dist = sorted(dist.items(), key=operator.itemgetter(1), reverse = True)[:20]
+sorted_dist
+
+
+</code></pre>
+<pre><code>[(',', 19204), ('the', 13715), ('.', 7308), ('of', 6513), ('and', 6010), ('a', 4545), ('to', 4515), (';', 4173), ('in', 3908), ('that', 2978), ('his', 2459), ('it', 2196), ('I', 2097), ('!', 1767), ('is', 1722), ('--', 1713), ('with', 1659), ('he', 1658), ('was', 1639), ('as', 1620)]
+</code></pre>
+<h3 id="what-are-the-tokens-have-a-length-of-greater-than-5-and-frequency-of-more-than-200">What are the tokens have a length of greater than 5 and frequency of more than 200?</h3>
+<pre><code class="language-python">vocab1 = dist.keys()
+freqwords = [w for w in vocab1 if len(w) &gt; 5 and dist[w] &gt; 200]
+sorted(freqwords)
+</code></pre>
+<pre><code>['Captain', 'Queequeg', 'before', 'himself', 'little', 'seemed', 'though', 'through', 'whales']
+</code></pre>
+<h3 id="find-the-longest-word-in-the-text-and-its-length">Find the longest word in the text and its length</h3>
+<pre><code class="language-python">length = max([len(w) for w in moby_tokens]) 
+longest_word =[w for w in moby_tokens if len(w) == length]
+# use ''.join() to make the result a string
+f_tuple = ( ''.join(longest_word),length)
+f_tuple
+</code></pre>
+<pre><code>(&quot;twelve-o'clock-at-night&quot;, 23)
+</code></pre>
+<h3 id="what-unique-words-have-a-frequency-of-more-than-2000-what-is-their-frequency">What unique words have a frequency of more than 2000? WHat is their frequency?</h3>
+<pre><code class="language-python"># make an empty dictionary to store the words and frequency
+fq_dic = {}
+for w in vocab1:
+  # use isalpha() to check if a token is a word and not punctuation
+    if w.isalpha() and dist[w] &gt; 2000:
+      fq_dic[w] = dist[w]
+result = sorted(fq_dic.items(), key = operator.itemgetter(1), reverse=True)
+
+# switch the column
+result = [(f,w) for (w,f) in result]
+</code></pre>
+<pre><code class="language-python">result
+</code></pre>
+<pre><code>[(13715, 'the'), (6513, 'of'), (6010, 'and'), (4545, 'a'), (4515, 'to'), (3908, 'in'), (2978, 'that'), (2459, 'his'), (2196, 'it'), (2097, 'I')]
+</code></pre>
+<h3 id="find-the-average-number-of-tokens-per-sentence">Find the average number of tokens per sentence</h3>
+<pre><code class="language-python">sentence = nltk.sent_tokenize(moby_raw)
+len(moby_tokens)/len(sentences)
+</code></pre>
+<pre><code>63747.25
+</code></pre>
+<h3 id="what-are-the-5-most-frequent-parts-of-speech-in-the-text-what-is-their-frequency">What are the 5 most frequent parts of speech in the text? What is their frequency?</h3>
+<pre><code class="language-python">from collections import Counter
+pos_token = nltk.pos_tag(moby_tokens)
+</code></pre>
+<pre><code class="language-python">pos_token[:20]
+</code></pre>
+<pre><code>[('[', 'JJ'), ('Moby', 'NNP'), ('Dick', 'NNP'), ('by', 'IN'), ('Herman', 'NNP'), ('Melville', 'NNP'), ('1851', 'CD'), (']', 'NNP'), ('ETYMOLOGY', 'NNP'), ('.', '.'), ('(', '('), ('Supplied', 'VBN'), ('by', 'IN'), ('a', 'DT'), ('Late', 'JJ'), ('Consumptive', 'NNP'), ('Usher', 'NNP'), ('to', 'TO'), ('a', 'DT'), ('Grammar', 'NNP')]
+</code></pre>
+<pre><code class="language-python">Counter((row[1] for row in pos_token)).most_common(5)
+# row[1] indicates count elements in the second columns
+</code></pre>
+<pre><code>[('NN', 32730), ('IN', 28657), ('DT', 25867), (',', 19204), ('JJ', 17620)]
+</code></pre>
+<h1 id="summary">Summary</h1>
+<p>When I am practicing NLTK, I find that it is important to identify the type of variables. Is it dictionary. series, or list, etc? As a beginner who is transforming from R user to Python user, I feel that finding appropriate command to handling with different types of variables is challenging. For example, the command to retrieve the top n elements of a list may not applicable for dictionary. I need to spend a lot time reading the documentation but I do enjoy the process.</p>
+<p>Python is powerful in handling the NLP tasks. In order to finish the tasks well, we need to have both good understanding of NLTK and other libries like pandas.</p>
+<p>Hope this post can be helpful to you, if there is any question please let me know. Cheers!</p>
+<figure data-type="image" tabindex="1"><img src="https://BolinWu-Gridea.github.io/post-images/1626090991897.jpg" alt="" loading="lazy"></figure>
+
+        </div>
+        <!-- Share to Twitter, Weibo, Telegram -->
+        <div class="flex items-center">
+          <div class="mr-4 flex items-center">
+            <i class="ri-share-forward-line text-gray-500"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTwitter">
+            <i class="ri-twitter-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-red-500 hover:bg-red-100 dark:hover:bg-gray-600 inline-flex" @click="shareToWeibo">
+            <i class="ri-weibo-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-indigo-500 hover:bg-indigo-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTelegram">
+            <i class="ri-telegram-line"></i>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Prudence is a fountain of life to the prudent.
+</footer>
+    </div>
+
+    <!-- TOC Container -->
+    <div class="fixed right-0 bottom-0 mb-16 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white dark:bg-gray-500 dark:text-gray-200 hover:shadow-lg transition-all animated fadeInRight" @click="showToc = true">
+      <i class="ri-file-list-line"></i>
+    </div>
+
+    <div class="fixed right-0 top-0 bottom-0 overflow-y-auto w-64 bg-white dark:bg-gray-800 p-4 border-l border-gray-100 dark:border-gray-600 z-10 transition-fast" :class="{ '-mr-64': !showToc }">
+      <div class="flex mb-4 justify-end">
+        <div class="w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast" @click="showToc = false">
+          <i class="ri-close-line text-lg"></i>
+        </div>
+      </div>
+      <div class="post-toc-container">
+        <ul class="markdownIt-TOC">
+<li><a href="#basic-natural-language-processing">Basic natural language processing</a>
+<ul>
+<li><a href="#nlp-board-specturm">NLP board specturm</a></li>
+<li><a href="#natural-language-toolkit">Natural Language Toolkit</a></li>
+<li><a href="#normalization-and-stemming">Normalization and stemming</a></li>
+<li><a href="#tokenization">Tokenization</a></li>
+<li><a href="#sentence-splitting">Sentence Splitting</a></li>
+<li><a href="#part-of-speech-pos-tagging">Part-of-speech (POS) Tagging</a></li>
+</ul>
+</li>
+<li><a href="#nltk-practice-with-real-text-file">NLTK practice with real text file</a>
+<ul>
+<li><a href="#analyzing-moby-dick">Analyzing Moby Dick</a>
+<ul>
+<li><a href="#how-many-tokens-including-words-and-punctuation-symbols-are-in-text1">How many tokens, including words and punctuation symbols are in text1 ?</a></li>
+<li><a href="#how-many-unique-tokens-does-text1-have">How many unique tokens does text1 have?</a></li>
+<li><a href="#if-we-use-lemmatization-for-the-verbs-how-many-unique-tokens-does-text1-have">If we use lemmatization for the verbs, how many unique tokens does text1 have?</a></li>
+<li><a href="#what-is-the-lexical-diversity-of-the-text">What is the lexical diversity of the text?</a></li>
+<li><a href="#how-many-tokens-are-late-or-late">How many tokens are 'late' or 'Late'?</a></li>
+<li><a href="#what-are-the-top-20-most-frequently-occuring-unique-tokens-in-the-text">What are the top 20 most frequently occuring unique tokens in the text?</a></li>
+<li><a href="#what-are-the-tokens-have-a-length-of-greater-than-5-and-frequency-of-more-than-200">What are the tokens have a length of greater than 5 and frequency of more than 200?</a></li>
+<li><a href="#find-the-longest-word-in-the-text-and-its-length">Find the longest word in the text and its length</a></li>
+<li><a href="#what-unique-words-have-a-frequency-of-more-than-2000-what-is-their-frequency">What unique words have a frequency of more than 2000? WHat is their frequency?</a></li>
+<li><a href="#find-the-average-number-of-tokens-per-sentence">Find the average number of tokens per sentence</a></li>
+<li><a href="#what-are-the-5-most-frequent-parts-of-speech-in-the-text-what-is-their-frequency">What are the 5 most frequent parts of speech in the text? What is their frequency?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#summary">Summary</a></li>
+</ul>
+
+      </div>
+    </div>
+
+    <!-- Back to top -->
+    <div class="fixed right-0 bottom-0 mb-4 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white hover:shadow-lg transition-all dark:bg-gray-500 dark:text-gray-200" @click="backToUp" v-show="scrolled">
+      <i class="ri-arrow-up-line"></i>
+    </div>
+  </div>
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Background of PhotoSwipe. 
+        It's a separate element as animating opacity is faster than rgba(). -->
+  <div class="pswp__bg">
+  </div>
+  <!-- Slides wrapper with overflow:hidden. -->
+  <div class="pswp__scroll-wrap">
+    <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+    <div class="pswp__container">
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+    </div>
+    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <!--  Controls are self-explanatory. Order can be changed. -->
+        <div class="pswp__counter">
+        </div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+        <!-- element will get class pswp__preloader--active when preloader is running -->
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip">
+        </div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://BolinWu-Gridea.github.io/media/scripts/main.js"></script>
+  
+  <!-- Code Highlight -->
+  
+    <script src="https://BolinWu-Gridea.github.io/media/prism.js"></script>
+    <script>
+      Prism.highlightAll()
+    </script>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+  <script>
+    //拿到预览框架，也就是上面的html代码
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    //定义图片数组变量
+    var imgitems;
+    /**
+    * 用于显示预览界面
+    * @param index 图片数组下标
+    */
+    function viewImg(index) {
+      //其它选项这里不做过多阐述，详情见官网
+      var pswpoptions = {
+        index: parseInt(index, 10), // 开始幻灯片索引。0是第一张幻灯片。必须是整数，而不是字符串。
+        bgOpacity: 0.7, // 背景透明度，0-1
+        maxSpreadZoom: 3, // 缩放级别，不要太大
+      };
+      //初始化并打开PhotoSwipe，pswpElement对应上面预览框架，PhotoSwipeUI_Default为皮肤，imgitems为图片数组，pswpoptions为选项
+      var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, imgitems, pswpoptions);
+      gallery.init()
+    }
+    /**
+    * 用于添加图片点击事件
+    * @param img 图片元素
+    * @param index 所属下标（在imgitems中的位置）
+    */
+    function addImgClick(img, index) {
+      img.onclick = function() {
+        viewImg(index)
+      }
+    }
+    /**
+    * 轮询所有图片，获取src、width、height等数据，加入imgitems，并给图片元素添加事件
+    * 最好在onload中执行该方法，本站因放在最底部，所以直接初始化
+    * 异步加载图片可在图片元素创建完成后调用此方法
+    */
+    function initImg() {
+      //重置图片数组
+      imgitems = [];
+      //查找class:markdown 下的所有img元素并遍历
+      var imgs = document.querySelectorAll('.markdown img');
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        //本站相册初始为loading图片，真实图片放在data-src
+        var ds = img.getAttribute("data-src");
+        //创建image对象，用于获取图片宽高
+        var imgtemp = new Image();
+        //判断是否存在data-src
+        if (ds != null && ds.length > 0) {
+          imgtemp.src = ds
+        } else {
+          imgtemp.src = img.src
+        }
+        //判断是否存在缓存
+        if (imgtemp.complete) {
+          var imgobj = {
+            "src": imgtemp.src,
+            "w": imgtemp.width,
+            "h": imgtemp.height,
+          };
+          imgitems[i] = imgobj;
+          addImgClick(img, i);
+        } else {
+          console.log('进来了2')
+          imgtemp.index = i;
+          imgtemp.img = img;
+          imgtemp.onload = function() {
+            var imgobj = {
+              "src": this.src,
+              "w": this.width,
+              "h": this.height,
+            };
+            //不要使用push，因为onload前后顺序会不同
+            imgitems[this.index] = imgobj
+            //添加点击事件
+            addImgClick(this.img, this.index);
+          }
+        }
+      }
+    }
+    //初始化
+    initImg();
+  </script>
+  
+  
+</body>
+
+</html>
