@@ -1,0 +1,919 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Text Classification in Python - Bolin Wu</title>
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/tailwind.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Text Classification in Python - Bolin Wu - Atom Feed" href="https://BolinWu-Gridea.github.io/atom.xml">
+
+    
+
+  <meta name="description" content="
+In the previous two posts, I have shared basic concepts and useful functions of text mining and NLP. In this third post..." />
+  <meta property="og:title" content="Text Classification in Python - Bolin Wu">
+  <meta property="og:description" content="
+In the previous two posts, I have shared basic concepts and useful functions of text mining and NLP. In this third post..." />
+  <meta property="og:type" content="articles">
+  <meta property="og:url" content="https://BolinWu-Gridea.github.io/post/text-classification-in-python/" />
+  <meta property="og:image" content="https://BolinWu-Gridea.github.io/post-images/text-classification-in-python.jpg">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:width" content="1200">
+  <meta name="twitter:title" content="Text Classification in Python - Bolin Wu">
+  <meta name="twitter:description" content="
+In the previous two posts, I have shared basic concepts and useful functions of text mining and NLP. In this third post...">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://BolinWu-Gridea.github.io/post/text-classification-in-python/">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+ 
+  
+    <link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/prism-atom-dark.css">
+  
+
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+  
+</head>
+
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
+    <a href="https://BolinWu-Gridea.github.io" class="fixed top-0 left-0 mt-4 bg-black text-white dark:text-gray-700 dark:bg-yellow-50 dark:hover:bg-black dark:hover:text-white inline-flex p-2 pl-8 hover:text-gray-700 hover:bg-yellow-50 font-bold z-10 transition-fast animated fadeInLeft">
+      Bolin Wu
+    </a>
+    <div class="max-w-4xl w-full mx-auto">
+      <div class="shadow-box bg-white dark:bg-gray-600 rounded-lg pt-32 md:pt-64 px-4 md:px-8 pb-8 animated fadeIn mb-8">
+        <h1 class="text-5xl font-semibold leading-normal pb-8 mb-8 border-b-8 border-gray-700">
+          Text Classification in Python
+        </h1>
+        
+          <img src="https://BolinWu-Gridea.github.io/post-images/text-classification-in-python.jpg" alt="Text Classification in Python" class="block w-full mb-8">
+        
+        <div class="mb-8 flex flex-wrap">
+          <div class="text-gray-400 text-sm mr-4">2021-07-24 · 26 min read</div>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/zOshREnVK/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              Natural Language Process
+            </a>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/GWOcOUTN0/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              Python
+            </a>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/VEzKzcSCvT/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              text-mining
+            </a>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/g7o3VtjDf5/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              supervised learning
+            </a>
+          
+        </div>
+        <div class="markdown mb-8" v-pre>
+          <!-- more -->
+<p>In the previous two posts, I have shared basic concepts and useful functions of <a href="https://bolinwu.blog/post/text-mining-in-python-p1-basics-of-regex/">text mining</a> and <a href="https://bolinwu.blog/post/basic-npl-task-with-nltk-in-python/">NLP</a>. In this third posts of text mining in Python, we finally proceed to the advanced part of text mining, that is, to build text classification model. In this post I will share the main tasks of text classification. Two useful classification models, their implementation in Python and methods of improving classification performance.</p>
+<h1 id="classification-of-text">Classification of Text</h1>
+<p>Text classification is one of the most interested topics in machine learning. Some examples include:</p>
+<ul>
+<li><strong>Topic identification</strong>: Is an article about sports or technology?</li>
+<li><strong>Spam detection</strong>: Is an email a spam or not?</li>
+<li><strong>Sentiment analysis</strong>: Is a movie review positive or negative?</li>
+<li><strong>Spelling correction</strong>: &quot;Weather&quot; or &quot;whether&quot;? &quot;Color&quot; or &quot;colour&quot;?</li>
+</ul>
+<h2 id="supervised-learning">Supervised learning</h2>
+<p>There are two phases of supervised learning: <strong>training phase</strong> and <strong>inference phase</strong>.</p>
+<p>At the training phase, we need to know</p>
+<ol>
+<li>what are the features, how could we represent them?</li>
+<li>What is the appropriate classification model?</li>
+<li>What are the model parameters?</li>
+</ol>
+<p>At the inference phase, we need to know</p>
+<ol>
+<li>what is the expected performance?</li>
+<li>How to measure the performance?</li>
+</ol>
+<h2 id="identifying-features-from-text">Identifying features from text</h2>
+<p>Textual data is unique in a way that features can be pulled out from the text in different granularities.</p>
+<p>The basic features in text is a set of <strong>words</strong>. For example, in English language, there are about 40,000 unique words. So you would have 40,000 features in common English. However, this number grows much larger in social media field since there are more unique word spellings.</p>
+<p>After we get so many features, one of the questions would be how to handle commonly-occuring words? In some cases, they are called stop words, like &quot;the&quot;. If we want to identify whether an article belongs to sport class, the word &quot;shoot&quot; is more important than &quot;the&quot;.</p>
+<p>The next step is normalization. In some cases we would like to make the words lowercase so that the extra feature of the same meaning is added. However, in some cases we may want to leave it as it is. For example, US in capitals would be the United States. Whereas if we make it in lowercase then it would be indistinguishable from the word &quot;us&quot;. We need to make the choice.</p>
+<p>There are also issues with stemming and lemmatization. For example, we do not want the plural nouns to be different features.</p>
+<h2 id="naive-bayes-classifiers">Naive Bayes Classifiers</h2>
+<p><a href="https://en.wikipedia.org/wiki/Naive_Bayes_classifier">Naive bayes classifiers</a> are one of the most commonly used classification models. The strength of this model is that it fits for both large and small data size and its speed is faster than Neural Network or Gradient Boosting Tree. The short-comming is that this model is not well explainable.</p>
+<p>Nive Bayes classifier is called naive because it assumes features are independent of each other, given the class label. For text classification tasks, it is considered as a very strong <strong>baseline model</strong>.</p>
+<h3 id="example-and-intuition">Example and intuition</h3>
+<p>To illustrate naive bayes classifiers, let us start with an example. Suppose we are interested in classifying search queries in three classes: Entertainment, Computer Science and Zoology. The most common class of the three is Entertainment and the least common class is Zoology (prior knowledge). If we get the query &quot;Python&quot;, shall we classify it as entertainment, computer science or zoology? This word could be the snake (Zoology), or the programming language (Computer Science) or as in Monty Python (Entertainment). Given the word &quot;Python&quot;, it is more likely to be Zoology than Entertainment. Given the words &quot;download Python&quot;, it is more likely to be Computer Science than Zoology.</p>
+<p>The intuition behind naive bayes classifier is that we update the likelihhod of the class given new information. We have prior probability: Pr(y = Entertainment), Pr(y = CS), Pr(y = Zoology). If we do not have any information, we may say Pr(y = Entertainment) is the largest. When there is new information comes in, we have posterior probability : Pr(y = Entertainment | x = &quot;Python&quot;) and the updated probability may tell us that it is less likely to be Entertainment class.</p>
+<p>According to the Bayes' Rule:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext>Posterior probability</mtext><mo>=</mo><mfrac><mrow><mtext>Prior probability</mtext><mo>×</mo><mtext>Likelihood</mtext></mrow><mtext>Evidence</mtext></mfrac></mrow><annotation encoding="application/x-tex">\text{Posterior probability} = \frac{ \text{Prior probability} \times \text{Likelihood} }{\text{Evidence}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord text"><span class="mord">Posterior probability</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.0574399999999997em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714399999999998em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">Evidence</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">Prior probability</span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord text"><span class="mord">Likelihood</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>r</mi><mo>(</mo><mi>y</mi><mi mathvariant="normal">∣</mi><mi>X</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mi>P</mi><mi>r</mi><mo>(</mo><mi>y</mi><mo>)</mo><mi>P</mi><mi>r</mi><mo>(</mo><mi>X</mi><mi mathvariant="normal">∣</mi><mi>y</mi><mo>)</mo></mrow><mrow><mi>P</mi><mi>r</mi><mo>(</mo><mi>X</mi><mo>)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">Pr(y|X) = \frac{Pr(y)Pr(X|y)}{Pr(X)}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.363em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>In our example it becomes:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>r</mi><mo>(</mo><mi>y</mi><mo>=</mo><mi>C</mi><mi>S</mi><mi mathvariant="normal">∣</mi><mi>X</mi><mo>=</mo><mtext>&quot;Python&quot;</mtext><mo>)</mo><mo>=</mo><mfrac><mrow><mi>P</mi><mi>r</mi><mo>(</mo><mi>y</mi><mo>=</mo><mi>C</mi><mi>S</mi><mo>)</mo><mi>P</mi><mi>r</mi><mo>(</mo><mtext>&quot;Python&quot;</mtext><mi mathvariant="normal">∣</mi><mi>y</mi><mo>=</mo><mi>C</mi><mi>S</mi><mo>)</mo></mrow><mrow><mi>P</mi><mi>r</mi><mo>(</mo><mtext>&quot;Python&quot;</mtext><mo>)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">Pr(y = CS|X = \text{&quot;Python&quot;}) = \frac{Pr(y = CS)Pr(\text{&quot;Python&quot;}|y = CS)}{Pr(\text{&quot;Python&quot;})}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">&quot;Python&quot;</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.363em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord text"><span class="mord">&quot;Python&quot;</span></span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mclose">)</span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord text"><span class="mord">&quot;Python&quot;</span></span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>In the naive bayes classification task, we are interested in finding</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>y</mi><mo>∗</mo></msup><mo>=</mo><munder><mo><mi mathvariant="normal">argmax</mi><mo>⁡</mo></mo><mi>y</mi></munder><mi>P</mi><mi>r</mi><mo>(</mo><mi>y</mi><mi mathvariant="normal">∣</mi><mi>X</mi><mo>)</mo><mo>=</mo><munder><mo><mi mathvariant="normal">argmax</mi><mo>⁡</mo></mo><mi>y</mi></munder><mi>P</mi><mi>r</mi><mo>(</mo><mi>y</mi><mo>)</mo><mo>×</mo><mi>P</mi><mi>r</mi><mo>(</mo><mi>X</mi><mi mathvariant="normal">∣</mi><mi>y</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">y^{*} = \underset{y}{\operatorname{argmax}} Pr(y|X) = \underset{y}{\operatorname{argmax}} Pr(y) \times Pr(X|y)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.933136em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∗</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.780548em;vertical-align:-1.030548em;"></span><span class="mord"><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43055999999999994em;"><span style="top:-2.20556em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop"><span class="mop"><span class="mord mathrm">a</span><span class="mord mathrm">r</span><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.030548em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.780548em;vertical-align:-1.030548em;"></span><span class="mord"><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43055999999999994em;"><span style="top:-2.20556em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop"><span class="mop"><span class="mord mathrm">a</span><span class="mord mathrm">r</span><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.030548em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span></span></p>
+<p>We can see that the denominator is removed because when given X, the Pr(X) is a constant. We only interested in finding the largest probability of y.</p>
+<p>By using the <strong>Naive assumtion</strong>: Given the class label, features are assumed to be independent of each other, we have:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>y</mi><mo>∗</mo></msup><mo>=</mo><munder><mo><mi mathvariant="normal">argmax</mi><mo>⁡</mo></mo><mi>y</mi></munder><mi>P</mi><mi>r</mi><mo>(</mo><mi>y</mi><mi mathvariant="normal">∣</mi><mi>X</mi><mo>)</mo><mo>=</mo><munder><mo><mi mathvariant="normal">argmax</mi><mo>⁡</mo></mo><mi>y</mi></munder><mi>P</mi><mi>r</mi><mo>(</mo><mi>y</mi><mo>)</mo><mo>×</mo><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mi>P</mi><mi>r</mi><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><mi>y</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">y^{*} = \underset{y}{\operatorname{argmax}} Pr(y|X) = \underset{y}{\operatorname{argmax}} Pr(y) \times \prod_{i=1}^{n} Pr(x_{i}|y)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.933136em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∗</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.780548em;vertical-align:-1.030548em;"></span><span class="mord"><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43055999999999994em;"><span style="top:-2.20556em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop"><span class="mop"><span class="mord mathrm">a</span><span class="mord mathrm">r</span><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.030548em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.780548em;vertical-align:-1.030548em;"></span><span class="mord"><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43055999999999994em;"><span style="top:-2.20556em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop"><span class="mop"><span class="mord mathrm">a</span><span class="mord mathrm">r</span><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.030548em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:2.929066em;vertical-align:-1.277669em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6513970000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∏</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span></span></p>
+<p>If we have the query &quot;Python download&quot;, we would have:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>y</mi><mo>∗</mo></msup><mo>=</mo><munder><mo><mi mathvariant="normal">argmax</mi><mo>⁡</mo></mo><mi>y</mi></munder><mi>P</mi><mi>r</mi><mo>(</mo><mi>y</mi><mo>)</mo><mo>×</mo><mi>P</mi><mi>r</mi><mo>(</mo><mtext>&quot;Python&quot;</mtext><mi mathvariant="normal">∣</mi><mi>y</mi><mo>)</mo><mo>×</mo><mi>P</mi><mi>r</mi><mo>(</mo><mtext>&quot;download&quot;</mtext><mi mathvariant="normal">∣</mi><mi>y</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">y^{*} = \underset{y}{\operatorname{argmax}} Pr(y) \times  Pr(\text{&quot;Python&quot;}|y) \times  Pr(\text{&quot;download&quot;}|y)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.933136em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∗</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.780548em;vertical-align:-1.030548em;"></span><span class="mord"><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43055999999999994em;"><span style="top:-2.20556em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop"><span class="mop"><span class="mord mathrm">a</span><span class="mord mathrm">r</span><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.030548em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord text"><span class="mord">&quot;Python&quot;</span></span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord text"><span class="mord">&quot;download&quot;</span></span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span></span></p>
+<p>where y = &quot;CS&quot;, &quot;Entertainment&quot; or &quot;Zoology&quot;.</p>
+<h3 id="what-are-the-parameters">What are the parameters?</h3>
+<ul>
+<li>Prior probabilities: Pr(y) for all y in Y.</li>
+<li>Likelihood <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>r</mi><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><mi>y</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">Pr(x_{i}|y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span> for all features <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">x_{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and labels y in all Y.</li>
+</ul>
+<p>Both of them can be required simply by counting the number of instances.</p>
+<h2 id="support-vector-machines">Support vector machines</h2>
+<p>Support Vector Machine (SVM) is also one of the first models that we should try when solving classification tasks. The advantages of SVM are that they have strong theoretical foundation and it tends to be the most accurate classifiers, especially in high-dimensional data. Here I would not go through the technical details but share some key points of using SVM instead.</p>
+<h3 id="applicable-for-numeric-features">Applicable for numeric features</h3>
+<p>SVM uses numbers to decide where to locate the boundaries. That being said, when we have categorical features, we  have to convert it into numeric features.</p>
+<h3 id="normalization">Normalization</h3>
+<p>When we use SVM we usually normaliza the features in to 0-1 range because we do not want one dimension to be pretty high and the other to be very low.</p>
+<h3 id="parameters">Parameters</h3>
+<ul>
+<li>C: This is the parameter of regularization. Larger values of C lead to less regularization. It encourage fitting training data as well as possible. Every data point is important.</li>
+<li>Kernals: There are linear kernels, RBF kernel, and polynomial kernel, etc. Usually Linear kernels work best for text data.</li>
+<li>multi_class: Indication of whether the label is binary class or multiple class. If it is multiple class we would choose ovr (one-vs-rest) instead of one vs one as it trains less classifiers.</li>
+</ul>
+<h1 id="toolkits-for-supervised-learning">Toolkits for supervised Learning</h1>
+<p>In Python there are quite a few available toolkits for supervised text classification.</p>
+<ul>
+<li>Scikit-learn: An open-source Machine Learning Library created by Google.</li>
+<li>NLTK: It interfaces with sklearn and other ML toolkits.</li>
+</ul>
+<p>Following is a snippet of code of training classifier and make prediction.</p>
+<pre><code># train naive bayes classifier
+# import library
+from sklearn import naive_bayes
+clfrNB = naive_bayes.MultinomialNB()
+
+# train the NBC model
+clfr.NB.fit(train_data, train_labels)
+
+# predict label for new data set
+predicted_label = clfrNB.predict(test_data)
+
+# evaluate the model
+metrics.f1_score(test_label, predicted_label, average = 'micro')
+
+# train SVM classifier
+from sklearn import svm
+clfrSVM = svm.SVC(kernel = 'linear', C = 0.1)
+
+# train the SVM model
+clfrSVM.fit(train_data, train_label)
+
+# make prediction
+predicted_labels = clfrSVM.predict(test_data)
+
+</code></pre>
+<h1 id="spam-detection-study">Spam detection study</h1>
+<p>We have learnt the theoretical understanding of text classification. Now let us dive into the application. In this case study we will explore text message data and create classification model to predict if a document is spam or not.</p>
+<h2 id="import-data-and-take-preliminary-inspection">Import data and take preliminary inspection</h2>
+<pre><code class="language-python"># import data from google drive
+# use the following code if want to connect colab to google drive
+from google.colab import drive
+
+drive.mount('/content/drive')
+
+</code></pre>
+<pre><code>Mounted at /content/drive
+</code></pre>
+<pre><code class="language-python">import pandas as pd
+import numpy as np
+
+spam_data = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Applied_Text_Mining_in_Python/TextClassification/spam.csv')
+
+spam_data['target'] = np.where(spam_data['target']=='spam',1,0)
+spam_data.head(10)
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>text</th>
+      <th>target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Go until jurong point, crazy.. Available only ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Ok lar... Joking wif u oni...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Free entry in 2 a wkly comp to win FA Cup fina...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>U dun say so early hor... U c already then say...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Nah I don't think he goes to usf, he lives aro...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>FreeMsg Hey there darling it's been 3 week's n...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Even my brother is not like to speak with me. ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>As per your request 'Melle Melle (Oru Minnamin...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>WINNER!! As a valued network customer you have...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Had your mobile 11 months or more? U R entitle...</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<pre><code class="language-python">spam_data.shape
+</code></pre>
+<pre><code>(5572, 2)
+</code></pre>
+<p>The total number of records is 5572.</p>
+<pre><code class="language-python"># split data into training set and test set
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(spam_data['text'], 
+                                                    spam_data['target'], 
+                                                    random_state=0)
+</code></pre>
+<pre><code class="language-python">X_train.shape
+</code></pre>
+<pre><code>(4179,)
+</code></pre>
+<pre><code class="language-python">X_train.head(10)
+</code></pre>
+<pre><code>872                       I'll text you when I drop x off
+831     Hi mate its RV did u hav a nice hol just a mes...
+1273    network operator. The service is free. For T &amp;...
+3314    FREE MESSAGE Activate your 500 FREE Text Messa...
+4929    Hi, the SEXYCHAT girls are waiting for you to ...
+4249                              How much for an eighth?
+3640    You can stop further club tones by replying \S...
+1132                  Good morning princess! How are you?
+3318                     Kay... Since we are out already 
+5241                            Its a part of checking IQ
+Name: text, dtype: object
+</code></pre>
+<h3 id="what-percentage-of-the-documents-in-spam_data-are-spam">What percentage of the documents in <code>spam_data</code> are spam?</h3>
+<pre><code class="language-python">print(&quot;The percentage of spam documents are {}&quot;.format(spam_data['target'].mean()))
+</code></pre>
+<pre><code>The percentage of spam documents are 0.13406317300789664
+</code></pre>
+<h3 id="what-is-the-average-length-of-documents-number-of-characters-for-not-spam-and-spam-documents">What is the average length of documents (number of characters) for not spam and spam documents?</h3>
+<pre><code class="language-python">spam_text = spam_data[spam_data['target'] ==1].loc[:,'text']
+ham_text = spam_data[spam_data['target'] ==0].loc[:,'text']
+avg_len_spam = sum([len(w) for w in spam_text]) / len(spam_text)
+avg_len_ham = sum([len(w) for w in ham_text]) / len(ham_text)
+{'avg for spam':avg_len_spam,'avg for not spam':avg_len_ham}
+</code></pre>
+<pre><code>{'avg for not spam': 71.02362694300518, 'avg for spam': 138.8661311914324}
+</code></pre>
+<p>The average length of spam is longer than not spam's.</p>
+<h3 id="what-is-the-average-number-of-digits-per-document-for-not-spam-and-spam-documents">What is the average number of digits per document for not spam and spam documents?</h3>
+<pre><code class="language-python">spam_text_DigitLen = spam_text.str.findall('(\d)').str.len()
+ham_text_DigitLen = ham_text.str.findall('(\d)').str.len()
+
+</code></pre>
+<pre><code class="language-python">{'not spam':sum(ham_text_DigitLen)/len(ham_text), 'spam':sum(spam_text_DigitLen)/len(spam_text)}
+</code></pre>
+<pre><code>{'not spam': 0.2992746113989637, 'spam': 15.759036144578314}
+</code></pre>
+<p>There are less digits per document for not spam documents.</p>
+<h3 id="what-is-the-average-number-of-non-word-characters-per-ducument-for-not-spam-and-spam-documents">What is the average number of non-word characters per ducument for not spam and spam documents?</h3>
+<pre><code class="language-python">spam_text_NonWordLen = spam_text.str.findall('\W').str.len()
+ham_text_NonWordLen = ham_text.str.findall('\W').str.len()
+{'not spam':sum(ham_text_NonWordLen)/len(ham_text), 'spam':sum(spam_text_NonWordLen)/len(spam_text)}
+</code></pre>
+<pre><code>{'not spam': 17.29181347150259, 'spam': 29.041499330655956}
+</code></pre>
+<p>The average number of non-word characters per document is smaller for the not spam.</p>
+<h3 id="fit-the-training-data-x_train-using-a-count-vectorizer-with-default-parameters">Fit the training data <code>X_train</code> using a Count Vectorizer with default parameters.</h3>
+<p>One thing worth noticing is that the computer can not deal with text directly. We have to convert text into a numeric representation that scikit-learn can use. The <strong>bag of words</strong> approach is a commonly used way to represent text in machine learning. It ignores structure and only counts the frequency of each word's occurance. Count Vectorizer allows us to use the bag-of-word approach by converting a collection of text innto a matrix of token counts.</p>
+<p>Fitting the Count Vectorizer consists of tokenization of the trained data and builing of the vocabulary. It tokenizes each document by finding all sequences of characters of at least two letters or numbers seperated by word boundaries. It converts everything to lowercase and builds a vocabulary using these tokens.</p>
+<pre><code class="language-python">from sklearn.feature_extraction.text import CountVectorizer
+vect = CountVectorizer().fit(X_train)
+
+
+</code></pre>
+<p>We can get the vocabulary by using the <em>get_feature_names</em></p>
+<pre><code class="language-python">vect.get_feature_names()[::1000]
+</code></pre>
+<pre><code>['00', 'arnt', 'csh11', 'goggles', 'loverboy', 'point', 'soup', 'wasted']
+</code></pre>
+<p>Looking at the every 1000th feature, we can have a small sense of what the vocabulary looks like. It is pretty messy, including misspellings and numbers.</p>
+<h3 id="check-the-total-number-of-features-words">Check the total number of features (words)</h3>
+<pre><code class="language-python"># check the length of total features
+len(vect.get_feature_names())
+</code></pre>
+<pre><code>7354
+</code></pre>
+<p>By checking the length of <em>get_feature_names</em>, we can see that we are working with over 7000 features.</p>
+<h3 id="find-the-longest-word">Find the longest word</h3>
+<pre><code class="language-python">max_len = max([len(w) for w in vect.get_feature_names()])
+longest_word = [w for w in vect.get_feature_names() if len(w) == max_len]
+# convert from list to string
+''.join(longest_word)
+</code></pre>
+<pre><code>'customer service representative'
+</code></pre>
+<p>Hmmmm, interesting, the &quot;longest word&quot; is not even a real word.</p>
+<h2 id="build-classification-model">Build classification model</h2>
+<p>Here I will show the procedures of implementing models and adding features. The final goal is to compare the classification performance of different models according to AUC score.</p>
+<h3 id="transform-input-data">Transform input data</h3>
+<p>Firstly, we need to fit and transform the training data <strong>X_train</strong> by uting the <em>transform</em> method. It gives us the bag-of-word representation of X_train. This representation is stored in a <strong>SciPy sparse matrix</strong>, where each row correspnds to a document and each column a word from our training vocabulary. The entries in this matrix are the number of times each word appears in each document. It is called <strong>sparse matrix</strong> because the number of words in the vocabulary is much larger than the number of words appear in a sigle review, most entries of this matrix are zero.</p>
+<pre><code class="language-python">X_train_vectorized = vect.transform(X_train)
+</code></pre>
+<pre><code class="language-python">X_train_vectorized.shape
+</code></pre>
+<pre><code>(4179, 7354)
+</code></pre>
+<p>We can see the number of rows equal to the size of training set and the number of columns equal to the number of features.</p>
+<h3 id="fit-model-and-evaluate-prediction">Fit model and evaluate prediction</h3>
+<p>Next, fit a fit a multinomial Naive Bayes classifier model with smoothing <code>alpha=0.1</code>. Find the area under the curve (AUC) score using the transformed test data.</p>
+<pre><code class="language-python">from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import roc_auc_score
+from sklearn import naive_bayes
+
+</code></pre>
+<pre><code class="language-python">
+clfrNB = naive_bayes.MultinomialNB(alpha=0.1)
+# train the NBC model
+clfrNB.fit(X_train_vectorized, y_train)
+predictions = clfrNB.predict(vect.transform(X_test))
+ROC_score = roc_auc_score(y_test,predictions)
+</code></pre>
+<pre><code class="language-python">ROC_score
+</code></pre>
+<pre><code>0.9720812182741116
+</code></pre>
+<h3 id="transform-data-by-tf-idf-instead">Transform data by tf-idf instead</h3>
+<p>Term frequency-inverse document frequency (<strong>tf-idf</strong>) allows us to weigh terms based on how important they are to the document. High weight is given to terms that appear oten in a particular document but do not appear aften in the corpus. Features with low tf-idf are either commonly used across all documents or rarely used and only occur in long documents. Features with high tf-idf are frequently used within specific documents but rarely used across all documents.</p>
+<p>let us fit and transform the training data <code>X_train</code> using a Tfidf Vectorizer with default parameters.</p>
+<p>What 10 features have the smallest tf-idf and what 10 have the largest tf-idf?</p>
+<pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
+# transform with tfidf
+vect = TfidfVectorizer().fit(X_train)
+# get feature name
+feature_names = np.array(vect.get_feature_names())
+# transform the vectorized data to sparse matrix representation
+X_train_vectorized = vect.transform(X_train)
+sorted_tfidf_index = X_train_vectorized.max(0).toarray()[0].argsort()
+
+
+</code></pre>
+<pre><code class="language-python"># the smallest tfidf
+tfidf_smallest = pd.Series(data = sorted(X_train_vectorized.max(0).toarray()[0])[:20], index = feature_names[sorted_tfidf_index[:20]])
+
+# the largest tfidf
+tfidf_largest = pd.Series(data = sorted(X_train_vectorized.max(0).toarray()[0])[:-21:-1], index = feature_names[sorted_tfidf_index[:-21:-1]])
+</code></pre>
+<pre><code class="language-python">tfidf_smallest
+</code></pre>
+<pre><code>sympathetic     0.074475
+healer          0.074475
+aaniye          0.074475
+dependable      0.074475
+companion       0.074475
+listener        0.074475
+athletic        0.074475
+exterminator    0.074475
+psychiatrist    0.074475
+pest            0.074475
+determined      0.074475
+chef            0.074475
+courageous      0.074475
+stylist         0.074475
+psychologist    0.074475
+organizer       0.074475
+pudunga         0.074475
+venaam          0.074475
+diwali          0.091250
+mornings        0.091250
+dtype: float64
+</code></pre>
+<pre><code class="language-python">tfidf_largest
+</code></pre>
+<pre><code>146tf150p    1.000000
+havent       1.000000
+home         1.000000
+okie         1.000000
+thanx        1.000000
+er           1.000000
+anything     1.000000
+lei          1.000000
+nite         1.000000
+yup          1.000000
+thank        1.000000
+ok           1.000000
+where        1.000000
+beerage      1.000000
+anytime      1.000000
+too          1.000000
+done         1.000000
+645          1.000000
+tick         0.980166
+blank        0.932702
+dtype: float64
+</code></pre>
+<p>We could make improvement on transformation by ignoring terms that have a document frequency strictly lower than <strong>3</strong>.</p>
+<p>To see if it helps, we fit a multinomial Naive Bayes classifier model with smoothing <code>alpha=0.1</code> and compute the area under the curve (AUC) score using the transformed test data.</p>
+<pre><code class="language-python">vect = TfidfVectorizer(min_df = 3).fit(X_train)
+X_train_vectorized = vect.transform(X_train)
+clfrNB = naive_bayes.MultinomialNB(alpha=0.1)
+# train the NBC model
+clfrNB.fit(X_train_vectorized, y_train)
+predictions = clfrNB.predict(vect.transform(X_test))
+ROC_score = roc_auc_score(y_test,predictions)
+ROC_score
+</code></pre>
+<pre><code>0.9416243654822335
+</code></pre>
+<p>This ROC is smaller than the model trained without tf-idf transformation.</p>
+<h3 id="update-tf-idf-and-add-feature">Update tf-idf and add feature</h3>
+<p>Fit and transform the training data X_train using a Tfidf Vectorizer ignoring terms that have a document frequency strictly lower than <strong>5</strong>.</p>
+<p>Using this document-term matrix and an additional feature, <strong>the length of document (number of characters)</strong>, fit a Support Vector Classification model with regularization <code>C=10000</code>. Then compute the area under the curve (AUC) score using the transformed test data.</p>
+<pre><code class="language-python"># the following function is to combine new features into the training data
+def add_feature(X, feature_to_add):
+    &quot;&quot;&quot;
+    Returns sparse feature matrix with added feature.
+    feature_to_add can also be a list of features.
+    &quot;&quot;&quot;
+    from scipy.sparse import csr_matrix, hstack
+    return hstack([X, csr_matrix(feature_to_add).T], 'csr')
+</code></pre>
+<pre><code class="language-python"># find the character length for each document
+text_train_len = [len(w) for w in X_train]
+text_test_len = [len(w) for w in X_test]
+
+# transform training data
+vect = TfidfVectorizer(min_df = 5).fit(X_train)
+X_train_vectorized = vect.transform(X_train)
+
+# add feature
+train_data = add_feature(X_train_vectorized, text_train_len )
+
+# prepare the test data
+X_test_vectorized = vect.transform(X_test)
+test_data = add_feature(X_test_vectorized,text_test_len)
+</code></pre>
+<pre><code class="language-python"># train SVM
+from sklearn.svm import SVC
+clfrSVM = SVC(C = 10000, gamma = 'auto')
+clfrSVM.fit(train_data, y_train)
+predictions = clfrSVM.predict(test_data)
+ROC_score = roc_auc_score(y_test,predictions)    
+ROC_score
+</code></pre>
+<pre><code>0.9581366823421557
+</code></pre>
+<p>After increasing the number of terms frequency to 5 and adding a length feature, ROC score is slightly incresed from 0.942 to 0.958.</p>
+<h3 id="update-context-feature-to-model">Update context feature to model</h3>
+<p>Next we want to know how to add <strong>context feature</strong>. Without it, the machine may comprehend the two phrases <em>&quot;not an issue, it is working&quot;</em> and <em>&quot;an issue, it is not working&quot;</em> as the same.</p>
+<p>We can implement <strong>n-grams</strong> to add context features. For example, if we add bi-gram, then the machine will treat <em>&quot;is working&quot;</em> as a set.</p>
+<p>Fit and transform the training data <code>X_train</code> using a Tfidf Vectorizer ignoring terms that have a document frequency strictly lower than <strong>5</strong> and using <strong>word n-grams from n=1 to n=3</strong> (unigrams, bigrams, and trigrams).</p>
+<p>Using this document-term matrix and the following additional features:</p>
+<ul>
+<li>the length of document (number of characters)</li>
+<li><strong>number of digits per document</strong></li>
+</ul>
+<p>fit a Logistic Regression model with regularization <code>C=100</code>. Then compute the area under the curve (AUC) score using the transformed test data.</p>
+<pre><code class="language-python"># find the desired features
+text_train_len = [len(w) for w in X_train]
+digit_train_len= X_train.str.findall('(\d)').str.len()
+text_test_len = [len(w) for w in X_test]
+digit_test_len= X_test.str.findall('(\d)').str.len()
+
+# transform training data
+vect = TfidfVectorizer(min_df = 5, ngram_range=(1,3)).fit(X_train)
+X_train_vectorized = vect.transform(X_train)
+# add feature when training
+train_data = add_feature(X_train_vectorized, [text_train_len, digit_train_len] )
+
+# prepare test data
+X_test_vectorized = vect.transform(X_test)
+# add features
+test_data = add_feature(X_test_vectorized,[text_test_len,digit_test_len])
+
+</code></pre>
+<pre><code class="language-python">from sklearn.linear_model import LogisticRegression
+logistic_model = LogisticRegression(C = 100)
+logistic_model.fit(train_data,y_train)
+predictions = logistic_model.predict(test_data)
+roc_auc_score(y_test, predictions)
+</code></pre>
+<pre><code>/usr/local/lib/python3.7/dist-packages/sklearn/linear_model/_logistic.py:940: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  extra_warning_msg=_LOGISTIC_SOLVER_CONVERGENCE_MSG)
+
+
+
+
+
+0.9759031798040846
+</code></pre>
+<p>We can see that the ROC score is even increased more from 0.958 to 0.976.</p>
+<p>Finally, fit and transform the training data X_train using a Count Vectorizer ignoring terms that have a document frequency strictly lower than <strong>5</strong> and using <strong>character n-grams from n=2 to n=5.</strong></p>
+<p>To tell Count Vectorizer to use character n-grams pass in <code>analyzer='char_wb'</code> which creates character n-grams only from text inside word boundaries. This should make the model more robust to spelling mistakes.</p>
+<p>Using this document-term matrix and the following additional features:</p>
+<ul>
+<li>the length of document (number of characters)</li>
+<li>number of digits per document</li>
+<li><strong>number of non-word characters (anything other than a letter, digit or underscore.)</strong></li>
+</ul>
+<p>fit a Logistic Regression model with regularization C=100. Then compute the area under the curve (AUC) score using the transformed test data.</p>
+<pre><code class="language-python"># get the added features
+text_train_len = [len(w) for w in X_train]
+# add digit length per document in training set
+digit_train_len= X_train.str.findall('(\d)').str.len()
+# add number of non-word character
+NWC_train_len = X_train.str.findall('\W').str.len()
+
+text_test_len = [len(w) for w in X_test]
+# add digit length per document in test set
+digit_test_len= X_test.str.findall('(\d)').str.len()
+# add number of non-word character
+NWC_test_len = X_test.str.findall('\W').str.len()
+
+# update the vectorizer and transform method
+vect = TfidfVectorizer(min_df = 5, ngram_range=(2,5), analyzer = 'char_wb').fit(X_train)
+X_train_vectorized = vect.transform(X_train)
+train_data = add_feature(X_train_vectorized, [text_train_len,digit_train_len,NWC_train_len] )
+
+# Prepare the test data
+X_test_vectorized = vect.transform(X_test)
+test_data = add_feature(X_test_vectorized,[text_test_len,digit_test_len,NWC_test_len])
+
+
+logistic_model = LogisticRegression(C = 100)
+logistic_model.fit(train_data, y_train)
+
+
+
+
+
+</code></pre>
+<pre><code>/usr/local/lib/python3.7/dist-packages/sklearn/linear_model/_logistic.py:940: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  extra_warning_msg=_LOGISTIC_SOLVER_CONVERGENCE_MSG)
+
+
+
+
+
+LogisticRegression(C=100, class_weight=None, dual=False, fit_intercept=True,
+                   intercept_scaling=1, l1_ratio=None, max_iter=100,
+                   multi_class='auto', n_jobs=None, penalty='l2',
+                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,
+                   warm_start=False)
+</code></pre>
+<pre><code class="language-python">predictions = logistic_model.predict(test_data)
+
+auc_score = roc_auc_score(y_test, predictions)
+auc_score
+</code></pre>
+<pre><code>0.972947048537426
+</code></pre>
+<p>Even we added three features, the ROC score does not improve much.</p>
+<p>Also <strong>find the 10 smallest and 10 largest coefficients from the model</strong></p>
+<pre><code class="language-python">sorted_coef_index = logistic_model.coef_[0].argsort()
+feature_names = np.array(vect.get_feature_names())
+print('Smallest coefs:\n{}\n'.format(feature_names[sorted_coef_index[:10]]))
+print('Largest coefs:\n{}'.format(feature_names[sorted_coef_index[:-11:-1]]))
+
+
+</code></pre>
+<pre><code>Smallest coefs:
+['..' 'i ' 'ca' 'if' ' i' '. ' 'if ' 't;' ' 6' ' if ']
+
+Largest coefs:
+['**' 'ww' '***' 'xt' 'co' '****' 'ex' 'uk' 'tone' 'ne']
+</code></pre>
+<p>By sorting the coefficients and looking at the ten smallest and ten largest coefficients, we can see the model has connected characters like '...', 'i', 'ca' to non spam documents. And character like '**', 'ww' as spam documents.</p>
+<h1 id="ending">Ending</h1>
+<p>In this post I have shared the principles of two classical text classification models, SVM and Naive Bayes Classifiers. Besides, I also showed a basic procedure of analyzing the text data.</p>
+<ol>
+<li>Read text file.</li>
+<li>Make an overall understanding of the data. Like the data size, the proportion of word's length in spam/not spam documents, etc. These could be potential additional features to the modelling.</li>
+<li>Vectorize and transform the data for modelling.</li>
+<li>Build the model and calculate the evaluation metric.</li>
+<li>Improve models' prediction performance by adding features and tring different ways of vectorization and transformation.</li>
+</ol>
+<p>The biggest challenge for me when doing the text classification is not building models, but to comprehend the functions of vectorizer and transform. Besides, it is important to review basic Regex functions because they are important to the text classification tasks.</p>
+
+        </div>
+        <!-- Share to Twitter, Weibo, Telegram -->
+        <div class="flex items-center">
+          <div class="mr-4 flex items-center">
+            <i class="ri-share-forward-line text-gray-500"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTwitter">
+            <i class="ri-twitter-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-red-500 hover:bg-red-100 dark:hover:bg-gray-600 inline-flex" @click="shareToWeibo">
+            <i class="ri-weibo-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-indigo-500 hover:bg-indigo-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTelegram">
+            <i class="ri-telegram-line"></i>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Prudence is a fountain of life to the prudent.
+</footer>
+    </div>
+
+    <!-- TOC Container -->
+    <div class="fixed right-0 bottom-0 mb-16 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white dark:bg-gray-500 dark:text-gray-200 hover:shadow-lg transition-all animated fadeInRight" @click="showToc = true">
+      <i class="ri-file-list-line"></i>
+    </div>
+
+    <div class="fixed right-0 top-0 bottom-0 overflow-y-auto w-64 bg-white dark:bg-gray-800 p-4 border-l border-gray-100 dark:border-gray-600 z-10 transition-fast" :class="{ '-mr-64': !showToc }">
+      <div class="flex mb-4 justify-end">
+        <div class="w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast" @click="showToc = false">
+          <i class="ri-close-line text-lg"></i>
+        </div>
+      </div>
+      <div class="post-toc-container">
+        <ul class="markdownIt-TOC">
+<li><a href="#classification-of-text">Classification of Text</a>
+<ul>
+<li><a href="#supervised-learning">Supervised learning</a></li>
+<li><a href="#identifying-features-from-text">Identifying features from text</a></li>
+<li><a href="#naive-bayes-classifiers">Naive Bayes Classifiers</a>
+<ul>
+<li><a href="#example-and-intuition">Example and intuition</a></li>
+<li><a href="#what-are-the-parameters">What are the parameters?</a></li>
+</ul>
+</li>
+<li><a href="#support-vector-machines">Support vector machines</a>
+<ul>
+<li><a href="#applicable-for-numeric-features">Applicable for numeric features</a></li>
+<li><a href="#normalization">Normalization</a></li>
+<li><a href="#parameters">Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#toolkits-for-supervised-learning">Toolkits for supervised Learning</a></li>
+<li><a href="#spam-detection-study">Spam detection study</a>
+<ul>
+<li><a href="#import-data-and-take-preliminary-inspection">Import data and take preliminary inspection</a>
+<ul>
+<li><a href="#what-percentage-of-the-documents-in-spam_data-are-spam">What percentage of the documents in <code>spam_data</code> are spam?</a></li>
+<li><a href="#what-is-the-average-length-of-documents-number-of-characters-for-not-spam-and-spam-documents">What is the average length of documents (number of characters) for not spam and spam documents?</a></li>
+<li><a href="#what-is-the-average-number-of-digits-per-document-for-not-spam-and-spam-documents">What is the average number of digits per document for not spam and spam documents?</a></li>
+<li><a href="#what-is-the-average-number-of-non-word-characters-per-ducument-for-not-spam-and-spam-documents">What is the average number of non-word characters per ducument for not spam and spam documents?</a></li>
+<li><a href="#fit-the-training-data-x_train-using-a-count-vectorizer-with-default-parameters">Fit the training data <code>X_train</code> using a Count Vectorizer with default parameters.</a></li>
+<li><a href="#check-the-total-number-of-features-words">Check the total number of features (words)</a></li>
+<li><a href="#find-the-longest-word">Find the longest word</a></li>
+</ul>
+</li>
+<li><a href="#build-classification-model">Build classification model</a>
+<ul>
+<li><a href="#transform-input-data">Transform input data</a></li>
+<li><a href="#fit-model-and-evaluate-prediction">Fit model and evaluate prediction</a></li>
+<li><a href="#transform-data-by-tf-idf-instead">Transform data by tf-idf instead</a></li>
+<li><a href="#update-tf-idf-and-add-feature">Update tf-idf and add feature</a></li>
+<li><a href="#update-context-feature-to-model">Update context feature to model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#ending">Ending</a></li>
+</ul>
+
+      </div>
+    </div>
+
+    <!-- Back to top -->
+    <div class="fixed right-0 bottom-0 mb-4 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white hover:shadow-lg transition-all dark:bg-gray-500 dark:text-gray-200" @click="backToUp" v-show="scrolled">
+      <i class="ri-arrow-up-line"></i>
+    </div>
+  </div>
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Background of PhotoSwipe. 
+        It's a separate element as animating opacity is faster than rgba(). -->
+  <div class="pswp__bg">
+  </div>
+  <!-- Slides wrapper with overflow:hidden. -->
+  <div class="pswp__scroll-wrap">
+    <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+    <div class="pswp__container">
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+    </div>
+    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <!--  Controls are self-explanatory. Order can be changed. -->
+        <div class="pswp__counter">
+        </div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+        <!-- element will get class pswp__preloader--active when preloader is running -->
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip">
+        </div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://BolinWu-Gridea.github.io/media/scripts/main.js"></script>
+  
+  <!-- Code Highlight -->
+  
+    <script src="https://BolinWu-Gridea.github.io/media/prism.js"></script>
+    <script>
+      Prism.highlightAll()
+    </script>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+  <script>
+    //拿到预览框架，也就是上面的html代码
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    //定义图片数组变量
+    var imgitems;
+    /**
+    * 用于显示预览界面
+    * @param index 图片数组下标
+    */
+    function viewImg(index) {
+      //其它选项这里不做过多阐述，详情见官网
+      var pswpoptions = {
+        index: parseInt(index, 10), // 开始幻灯片索引。0是第一张幻灯片。必须是整数，而不是字符串。
+        bgOpacity: 0.7, // 背景透明度，0-1
+        maxSpreadZoom: 3, // 缩放级别，不要太大
+      };
+      //初始化并打开PhotoSwipe，pswpElement对应上面预览框架，PhotoSwipeUI_Default为皮肤，imgitems为图片数组，pswpoptions为选项
+      var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, imgitems, pswpoptions);
+      gallery.init()
+    }
+    /**
+    * 用于添加图片点击事件
+    * @param img 图片元素
+    * @param index 所属下标（在imgitems中的位置）
+    */
+    function addImgClick(img, index) {
+      img.onclick = function() {
+        viewImg(index)
+      }
+    }
+    /**
+    * 轮询所有图片，获取src、width、height等数据，加入imgitems，并给图片元素添加事件
+    * 最好在onload中执行该方法，本站因放在最底部，所以直接初始化
+    * 异步加载图片可在图片元素创建完成后调用此方法
+    */
+    function initImg() {
+      //重置图片数组
+      imgitems = [];
+      //查找class:markdown 下的所有img元素并遍历
+      var imgs = document.querySelectorAll('.markdown img');
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        //本站相册初始为loading图片，真实图片放在data-src
+        var ds = img.getAttribute("data-src");
+        //创建image对象，用于获取图片宽高
+        var imgtemp = new Image();
+        //判断是否存在data-src
+        if (ds != null && ds.length > 0) {
+          imgtemp.src = ds
+        } else {
+          imgtemp.src = img.src
+        }
+        //判断是否存在缓存
+        if (imgtemp.complete) {
+          var imgobj = {
+            "src": imgtemp.src,
+            "w": imgtemp.width,
+            "h": imgtemp.height,
+          };
+          imgitems[i] = imgobj;
+          addImgClick(img, i);
+        } else {
+          console.log('进来了2')
+          imgtemp.index = i;
+          imgtemp.img = img;
+          imgtemp.onload = function() {
+            var imgobj = {
+              "src": this.src,
+              "w": this.width,
+              "h": this.height,
+            };
+            //不要使用push，因为onload前后顺序会不同
+            imgitems[this.index] = imgobj
+            //添加点击事件
+            addImgClick(this.img, this.index);
+          }
+        }
+      }
+    }
+    //初始化
+    initImg();
+  </script>
+  
+  
+</body>
+
+</html>
