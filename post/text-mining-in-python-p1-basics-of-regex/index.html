@@ -56,7 +56,7 @@ In this exercise, we&#39;ll be working with messy medical data and using RegEx i
           <img src="https://BolinWu-Gridea.github.io/post-images/text-mining-in-python-p1-basics-of-regex.jpg" alt="Text Mining Application in Python (RegEx)" class="block w-full mb-8">
         
         <div class="mb-8 flex flex-wrap">
-          <div class="text-gray-400 text-sm mr-4">2021-06-16 · 20 min read</div>
+          <div class="text-gray-400 text-sm mr-4">2021-06-16 · 21 min read</div>
           
             <a href="https://BolinWu-Gridea.github.io/tag/GWOcOUTN0/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
               <i class="ri-hashtag"></i>
@@ -71,10 +71,9 @@ In this exercise, we&#39;ll be working with messy medical data and using RegEx i
         </div>
         <div class="markdown mb-8" v-pre>
           <!-- more -->
-<p>In this exercise, we'll be working with messy medical data and using <strong>RegEx</strong> in Python to extract dates of different formats.</p>
+<p>In this exercise, we'll be working with messy medical data and using <strong>RegEx</strong> in Python to extract dates of different formats. The goal of this exercise is to correctly identify all of the different date variants encoded in this dataset and to properly standardize and sort the dates.</p>
 <h1 id="introduction">Introduction</h1>
 <p>Each line of the <a href="https://drive.google.com/file/d/191dm-Wqq0GPujvdekVaoOo5bv4qu1TMS/view?usp=sharing">dates.txt</a> file corresponds to a medical note. Each note has a date that needs to be extracted, but each date is encoded in one of many formats.</p>
-<p>The goal of this exercise is to correctly identify all of the different date variants encoded in this dataset and to properly normalize and sort the dates.</p>
 <p>Here is a list of some of the possible variants in this dataset:</p>
 <ol>
 <li>04/20/2009; 04/20/09; 4/20/09; 4/3/09</li>
@@ -108,6 +107,35 @@ In this exercise, we&#39;ll be working with messy medical data and using RegEx i
 4    3
 </code></pre>
 <p>As a result, we could know the chronological order of the medical records in the text file.</p>
+<h2 id="useful-cheetsheet">Useful cheetsheet</h2>
+<h3 id="meta-characters-character-matches">Meta-characters: Character matches</h3>
+<ul>
+<li>.: wildcard, matches a single character</li>
+<li>^: start of a string</li>
+<li>$: end of a string</li>
+<li>[]: matches one of the set of characters within []</li>
+<li>[a-z]: matches one of the range of characters a, b, ..., z</li>
+<li></li>
+<li>a|b: matches either a or b, where a and b are strings</li>
+<li>(): Scoping for operators.</li>
+<li>backslash: escape character for special characters (\t,\n,\b)</li>
+<li>\b: matches word boundary</li>
+<li>\d: any digit, equivalent to [^0-9]</li>
+<li>\D: any non-digit, equivalent to [^0-9]</li>
+<li>\s: any whitespace, equivalent to [\t\n\r\f\v]</li>
+<li>\S: any non-whitespace, equivalent to [^ \t\n\r\f\v]</li>
+<li>\w: Alphanumeric character, euivalent to [a-zA-Z0-9]</li>
+<li>\W: Non-alphanumeric, equivalent to [^a-zA-Z0-9]</li>
+</ul>
+<h3 id="meta-characters-repetitions">Meta-characters: Repetitions</h3>
+<ul>
+<li>*: matches zero or more occurences</li>
+<li>+: matches one or more occurrences</li>
+<li>?: matches zero or one occurences</li>
+<li>{n}: exactly n repetitions, 0 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>≤</mo></mrow><annotation encoding="application/x-tex">\leq</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719400000000001em;vertical-align:-0.13597em;"></span><span class="mrel">≤</span></span></span></span> n</li>
+<li>{,n}: at most n repetitions</li>
+<li>{m,n}: at least m and at most n repetitions</li>
+</ul>
 <h1 id="import-data">Import data</h1>
 <p>I am doing this exercise on Google Colab. We can easily import the data from Google Drive to Colab by using the following code. More detailed instruction can be found <a href="https://stackoverflow.com/questions/46986398/import-data-into-google-colaboratory">here</a>.</p>
 <p>When reading the text, I removed the paranthesis in order to facilitate text cleaning.</p>
@@ -2163,7 +2191,16 @@ Name: index, Length: 445, dtype: int64
       </div>
       <div class="post-toc-container">
         <ul class="markdownIt-TOC">
-<li><a href="#introduction">Introduction</a></li>
+<li><a href="#introduction">Introduction</a>
+<ul>
+<li><a href="#useful-cheetsheet">Useful cheetsheet</a>
+<ul>
+<li><a href="#meta-characters-character-matches">Meta-characters: Character matches</a></li>
+<li><a href="#meta-characters-repetitions">Meta-characters: Repetitions</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#import-data">Import data</a></li>
 <li><a href="#extract-date-and-text-cleaning">Extract date and text cleaning</a>
 <ul>
