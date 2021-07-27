@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2021-07-24T16:44:25.596Z</updated>
+    <updated>2021-07-27T10:22:41.660Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -16,7 +16,7 @@
         <id>https://BolinWu-Gridea.github.io/post/text-classification-in-python/</id>
         <link href="https://BolinWu-Gridea.github.io/post/text-classification-in-python/">
         </link>
-        <updated>2021-07-23T22:15:47.000Z</updated>
+        <updated>2021-07-23T16:15:47.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[Basic NLP with NLTK in Python]]></title>
@@ -37,35 +37,35 @@
         <id>https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-4-instrumental-variable/</id>
         <link href="https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-4-instrumental-variable/">
         </link>
-        <updated>2021-06-04T13:38:23.000Z</updated>
+        <updated>2021-06-04T07:38:23.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[An Overview of Causal Inference (Part 3: Inverse probability of treatment weighting, IPTW)]]></title>
         <id>https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-3-inverse-probability-of-treatment-weighting-iptw/</id>
         <link href="https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-3-inverse-probability-of-treatment-weighting-iptw/">
         </link>
-        <updated>2021-05-28T23:37:45.000Z</updated>
+        <updated>2021-05-28T17:37:45.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[An Overview of Causal Inference (Part 2: Propensity Score and Matching)]]></title>
         <id>https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/">
         </link>
-        <updated>2021-05-06T22:00:00.000Z</updated>
+        <updated>2021-05-06T16:00:00.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[An Overview of Causal Inference (Part 1: Causal Effects and Confounding)]]></title>
         <id>https://BolinWu-Gridea.github.io/post/2021-04-20-CausalityIntroductionP1/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2021-04-20-CausalityIntroductionP1/">
         </link>
-        <updated>2021-04-16T16:00:00.000Z</updated>
+        <updated>2021-04-16T10:00:00.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[Prediction of Children Anaemia Rate by LASSO]]></title>
         <id>https://BolinWu-Gridea.github.io/post/2021-03-09-LASSO/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2021-03-09-LASSO/">
         </link>
-        <updated>2021-03-07T22:00:00.000Z</updated>
+        <updated>2021-03-07T15:00:00.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[Classification of Image Data by Simple NN ]]></title>
@@ -79,6 +79,6 @@
         <id>https://BolinWu-Gridea.github.io/post/2021-02-18-DecisionTree/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2021-02-18-DecisionTree/">
         </link>
-        <updated>2021-02-07T08:00:00.000Z</updated>
+        <updated>2021-02-07T01:00:00.000Z</updated>
     </entry>
 </feed>
