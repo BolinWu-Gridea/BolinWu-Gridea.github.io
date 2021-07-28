@@ -155,7 +155,7 @@ print(Idamodel.print_topics(num_topics = 4, num_words = 5))
 <h2 id="build-similarity-score-function-from-scratch">Build similarity score function from scratch</h2>
 <p>For the first part, we will make functions <code>doc_to_synsets</code> and <code>similarity_score</code> which will be used by <code>document_path_similarity</code> to find the path similarity between two documents..</p>
 <ul>
-<li><strong><code>document_path_similarity:</code></strong> computes the symmetrical path similarity between two documents by finding the synsets in each document using <code>doc_to_synsets</code>, then computing similarities using <code>similarity_score</code>.</li>
+<li><code>document_path_similarity:</code> computes the symmetrical path similarity between two documents by finding the synsets in each document using <code>doc_to_synsets</code>, then computing similarities using <code>similarity_score</code>.</li>
 </ul>
 <pre><code class="language-python">import nltk
 import numpy as np
@@ -183,7 +183,7 @@ def convert_tag(tag):
 
 
 </code></pre>
-<p><strong><code>convert_tag:</code></strong> converts the tag given by <code>nltk.pos_tag</code> to a tag used by <code>wordnet.synsets</code>. We will need to use this function in <code>doc_to_synsets</code>.</p>
+<p><code>convert_tag:</code> converts the tag given by <code>nltk.pos_tag</code> to a tag used by <code>wordnet.synsets</code>. We will need to use this function in <code>doc_to_synsets</code>.</p>
 <p>We want to first formulate following functions:</p>
 <ul>
 <li><strong><code>doc_to_synsets:</code></strong> returns a list of synsets in document. This function first tokenizes and part of speech tags the document using <code>nltk.word_tokenize</code> and <code>nltk.pos_tag</code>. Then it should find each tokens corresponding synset using <code>wn.synsets(token, wordnet_tag)</code>. The first synset match should be used. If there is no match, that token is skipped.</li>
@@ -345,8 +345,8 @@ paraphrases.head()
 </div>
 <p>Next, we are interested in getting two pieces of information:</p>
 <ul>
-<li><strong><code>most_similar_docs:</code></strong> the pair of documents in paraphrases which has the maximum similarity score.</li>
-<li><strong><code>label_accuracy:</code></strong> find labels for the twenty pairs of documents by computing the similarity for each pair using <code>document_path_similarity</code>. Let the classifier rule be that if the score is greater than 0.75, label is paraphrase (1), else label is not paraphrase (0).</li>
+<li><code>most_similar_docs:</code> the pair of documents in paraphrases which has the maximum similarity score.</li>
+<li><code>label_accuracy:</code> find labels for the twenty pairs of documents by computing the similarity for each pair using <code>document_path_similarity</code>. Let the classifier rule be that if the score is greater than 0.75, label is paraphrase (1), else label is not paraphrase (0).</li>
 </ul>
 <pre><code class="language-python">import operator
 def most_similar_docs():
