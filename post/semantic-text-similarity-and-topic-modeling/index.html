@@ -186,9 +186,9 @@ def convert_tag(tag):
 <p><code>convert_tag:</code> converts the tag given by <code>nltk.pos_tag</code> to a tag used by <code>wordnet.synsets</code>. We will need to use this function in <code>doc_to_synsets</code>.</p>
 <p>We want to first formulate following functions:</p>
 <ul>
-<li><strong><code>doc_to_synsets:</code></strong> returns a list of synsets in document. This function first tokenizes and part of speech tags the document using <code>nltk.word_tokenize</code> and <code>nltk.pos_tag</code>. Then it should find each tokens corresponding synset using <code>wn.synsets(token, wordnet_tag)</code>. The first synset match should be used. If there is no match, that token is skipped.</li>
-<li><strong><code>similarity_score:</code></strong> returns the normalized similarity score of a list of synsets (s1) onto a second list of synsets (s2). For each synset in s1, find the synset in s2 with the largest similarity value. Sum all of the largest similarity values together and normalize this value by dividing it by the number of largest similarity values found. Missing values are ignored.</li>
-<li><strong><code>similarity_score:</code></strong> returns a normalized similarity score between two documents.</li>
+<li><code>doc_to_synsets:</code> returns a list of synsets in document. This function first tokenizes and part of speech tags the document using <code>nltk.word_tokenize</code> and <code>nltk.pos_tag</code>. Then it should find each tokens corresponding synset using <code>wn.synsets(token, wordnet_tag)</code>. The first synset match should be used. If there is no match, that token is skipped.</li>
+<li><code>similarity_score:</code> returns the normalized similarity score of a list of synsets (s1) onto a second list of synsets (s2). For each synset in s1, find the synset in s2 with the largest similarity value. Sum all of the largest similarity values together and normalize this value by dividing it by the number of largest similarity values found. Missing values are ignored.</li>
+<li><code>similarity_score:</code> returns a normalized similarity score between two documents.</li>
 </ul>
 <pre><code class="language-python">def doc_to_synsets(doc):
     token_text = nltk.word_tokenize(doc)
