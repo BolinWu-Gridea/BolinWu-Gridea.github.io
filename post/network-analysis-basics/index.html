@@ -1,0 +1,1250 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Network Analysis Basics - Bolin Wu</title>
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/tailwind.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Network Analysis Basics - Bolin Wu - Atom Feed" href="https://BolinWu-Gridea.github.io/atom.xml">
+
+    
+
+  <meta name="description" content="
+Networks is a set of objects (nodes) with interconnections (edges). Many complex structures can be represented by netwo..." />
+  <meta property="og:title" content="Network Analysis Basics - Bolin Wu">
+  <meta property="og:description" content="
+Networks is a set of objects (nodes) with interconnections (edges). Many complex structures can be represented by netwo..." />
+  <meta property="og:type" content="articles">
+  <meta property="og:url" content="https://BolinWu-Gridea.github.io/post/network-analysis-basics/" />
+  <meta property="og:image" content="https://BolinWu-Gridea.github.io/post-images/network-analysis-basics.jpg">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:width" content="1200">
+  <meta name="twitter:title" content="Network Analysis Basics - Bolin Wu">
+  <meta name="twitter:description" content="
+Networks is a set of objects (nodes) with interconnections (edges). Many complex structures can be represented by netwo...">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://BolinWu-Gridea.github.io/post/network-analysis-basics/">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+ 
+  
+    <link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/prism-atom-dark.css">
+  
+
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+  
+</head>
+
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
+    <a href="https://BolinWu-Gridea.github.io" class="fixed top-0 left-0 mt-4 bg-black text-white dark:text-gray-700 dark:bg-yellow-50 dark:hover:bg-black dark:hover:text-white inline-flex p-2 pl-8 hover:text-gray-700 hover:bg-yellow-50 font-bold z-10 transition-fast animated fadeInLeft">
+      Bolin Wu
+    </a>
+    <div class="max-w-4xl w-full mx-auto">
+      <div class="shadow-box bg-white dark:bg-gray-600 rounded-lg pt-32 md:pt-64 px-4 md:px-8 pb-8 animated fadeIn mb-8">
+        <h1 class="text-5xl font-semibold leading-normal pb-8 mb-8 border-b-8 border-gray-700">
+          Network Analysis Basics
+        </h1>
+        
+          <img src="https://BolinWu-Gridea.github.io/post-images/network-analysis-basics.jpg" alt="Network Analysis Basics" class="block w-full mb-8">
+        
+        <div class="mb-8 flex flex-wrap">
+          <div class="text-gray-400 text-sm mr-4">2021-08-05 · 18 min read</div>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/j6bxoCbAc/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              Network-Analysis
+            </a>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/GWOcOUTN0/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              Python
+            </a>
+          
+        </div>
+        <div class="markdown mb-8" v-pre>
+          <!-- more -->
+<p>Networks is a set of objects (nodes) with interconnections (edges). Many complex structures can be represented by networks. It is everywhere in different forms. For example, family network, Facebook communication network, subway network, food web, etc.</p>
+<p>There are plenty of things we can do with networks. For example, from an e-mail communication network we can detect if a rumor is likely to spread in the network. The people who is the most influential in the organization. From a friendship network, we can check if it is likely to split a club into two groups. From a network of flights around the world, we can examine which airports are at highest risk for virus spreading or parts of the world that are difficult to reach.</p>
+<h1 id="networkx-vocabulary">Networkx vocabulary</h1>
+<p>Network (or Graph) is a representation of connections among a set of items. Items are called nodes. Connections are called edges.</p>
+<p>In python we can build network like this:</p>
+<pre><code>import networkx as nx
+G = nx.Graph()
+G.add_edge('A', 'B')
+G.add_edge('B', 'C')
+</code></pre>
+<p>In network, there are symmetric and asymmetric relationships. They can be represented by <strong>undirected</strong> network and <strong>directed</strong> network respectively.</p>
+<pre><code># undirected network
+G = nx.Graph()
+G.add_edge('A', 'B')
+G.add_edge('B', 'C')
+
+# directed network
+G = nx.DiGraph()
+G.add_edge('A', 'B')
+G.add_edge('A', 'C')
+</code></pre>
+<h2 id="weighted-network">Weighted network</h2>
+<p>As we know, not all relationships are equal which means some edges can be weighted higher than others. That brings us to weighted network. Weighted network is a network where edges are assigned a weigtht. In Python this can be done by adding attribute 'weight'.</p>
+<pre><code>G = nx.Graph()
+G.add_edge('A', 'B', weight = 6)
+G.add_edge('B', 'C', weight = 12)
+</code></pre>
+<h2 id="signed-networks">Signed networks</h2>
+<p>Some networks can carry information about friendship and antagonism based on conflict or disagreement. <strong>Signed network</strong> is a network where edges are assigned positive or negative sign. This can be done in Python by adding attribute 'sign'.</p>
+<pre><code>G = nx.Graph()
+G.add_edge('A', 'B', sign = '+')
+</code></pre>
+<h2 id="other-edge-attributes">Other edge attributes</h2>
+<p>Edges can carry many other labels or attributes</p>
+<pre><code>G = nx.Graph()
+G.add_edge('A', 'B', relation = 'friend')
+G.add_edge('B', 'C', relation = 'coworker')
+</code></pre>
+<h2 id="multigraphs">Multigraphs</h2>
+<p>A pair of nodes can have more than one type of relationships simultaneously.</p>
+<pre><code>G = nx.MultiGraph()
+G.add_edge('A', 'B', relation = 'friend')
+G.add_edge('A', 'B', relation = 'neighbour')
+
+</code></pre>
+<h1 id="edge-attributes">Edge attributes</h1>
+<p>Here let us continue on assessing the loaded the Edge attributes.</p>
+<pre><code>G = nx.Graph()
+G.add_edge('A', 'B', relation = 'friend', weight = 6)
+G.add_edge('B', 'C', relation = 'coworker')
+
+# find the list of edges 
+G.edges()
+
+# list of all edges with attributes
+G.edges(data = True)
+
+# for particular attribute
+G.edges(data = 'relation')
+
+# attribute of specific edge
+G.edge['A']['B']
+
+# specific attribute of specific edge
+G.edge['A']['B']['weight']
+
+</code></pre>
+<p>For undirected graph, the order of A and B does not matter. However, for directed graph the order does matter.</p>
+<p>In MultiGraph:</p>
+<pre><code>G = nx.MultiGraph()
+G.add_edge('A', 'B', relation = 'friend', weight = 6)
+G.add_edge('A', 'B', relation = 'neighbour', weight = 10)
+
+# accessing edge attributes
+G.edge['A']['B'] # this gives a dictionary of attrbute per edge
+
+G.edge['A']['B'][0]['weight']
+
+</code></pre>
+<h1 id="node-attributes">Node attributes</h1>
+<p>To add node attributes, we can do as follows</p>
+<pre><code>G = nx.Graph()
+G.add_edge('A', 'B', weight = 6, relation = 'family')
+G.add_edge('B', 'C', weight = 13, relation = 'friend')
+
+# adding node attributes
+G.add_node('A', role = 'trader')
+G.add_node('B', role = 'trader')
+G.add_node('C', role = 'manager')
+
+</code></pre>
+<p>To assess node attributes:</p>
+<pre><code># list of all nodes
+G.nodes()
+
+# list of all nodes with attributes
+G.nodes(data = True)
+
+# role of node A
+G.node['A']['role']
+
+
+
+</code></pre>
+<h2 id="bipartite-graphs">Bipartite graphs</h2>
+<p>Bipartite graphs are whose nodes can be split into two sets L and R. Every edge connects an node in L with a node in R.  For example, if we have fans A, B, C and three basketball teams 1, 2, 3. If we ask each of the three fans to choose the teams they like. Then we can make a bipartite graphs out of their preference.</p>
+<pre><code>from networkx.algorithms import bipartite
+
+B = nx.Graph() # no separate class for bipartite graphs
+
+# label one set of nodes 0
+B.add_nodes_from(['A', 'B', 'C', 'D', 'E'], bipartite = 0)
+# label other set of nodes 1
+B.add_edges_from(['A',1],['B',1], ['C',1], ['C',3], ['D',2], ['E',3], ['E',4])
+</code></pre>
+<p>Check if a graph is bipartite:</p>
+<pre><code>bipartite.is_bipartite(B)
+</code></pre>
+<p>Check if a set of nodes is a bipartition of a graph:</p>
+<pre><code>X = set([1,2,3,4])
+bipartite.is_bipartite_node_set(B,X)
+</code></pre>
+<p>Get each set of nodes of a bipartite graph:</p>
+<pre><code>bipartite.sets(B)
+</code></pre>
+<p>If we ask for a graph that is not bipartite, then the code above will give error message.</p>
+<h3 id="projected-graphs">Projected graphs</h3>
+<p><strong>L-Bipartite graph projection</strong> is a network of nodes in group L, where a pair of nodes is connected if they have a common neighbor in R in the bipartite graph.</p>
+<p>Let us assume than A, B, C, D are a group of friends. 1, 2, 3 are a group of teams.</p>
+<pre><code>B = nx.Graph()
+B.add_edges_from([('A', 1), ('B', 1), ('C', 1), ('D', 1), ('B', 2), ('C', 2)])
+</code></pre>
+<p>Get a network of fans who have a team in common:</p>
+<pre><code>X = set(['A', 'B', 'C', 'D'])
+P = bipartite.projected_graph(B,X)
+</code></pre>
+<p>Get a network of teams who have a fan common:</p>
+<pre><code>X = set([1,2,3,4])
+P = bipartite.projected_graph(B,X)
+</code></pre>
+<p><strong>L-Bipartite weighted graph projection:</strong> An L-Bipartite graph projection with weights on the edges that are proportional to the number of common neighbors between the nodes. In Python we can get it as follows:</p>
+<pre><code>X = set([1,2,3,4])
+P = bipartite.weighted_projected_graph(B,X)
+
+</code></pre>
+<h1 id="graphs-manipulation-exercise">Graphs manipulation exercise</h1>
+<p>Eight employees at a small company were asked to choose 3 movies that they would most enjoy watching for the upcoming company movie night. These choices are stored in the file <a href="https://drive.google.com/file/d/11QlkKl814gcyXiHS1JgNgf-2pMXxSSgP/view?usp=sharing">Employee_Movie_Choices.txt</a>.</p>
+<p>A second file, <a href="https://drive.google.com/file/d/1-sKdOkBSgkgibbGVs5M1g8arMFR1R_J8/view?usp=sharing">Employee_Relationships.txt</a>, has data on the relationships between different coworkers.</p>
+<p>The relationship score has value of <code>-100</code> (Enemies) to <code>+100</code> (Best Friends). A value of zero means the two employees haven't interacted or are indifferent.</p>
+<h2 id="load-employee_movie_choicestxt-in-bipartite-graph">Load <code>Employee_Movie_Choices.txt</code> in bipartite graph</h2>
+<pre><code class="language-python"># import data from google drive
+# use the following code if want to connect colab to google drive
+from google.colab import drive
+
+drive.mount('/content/drive')
+
+</code></pre>
+<pre><code>Mounted at /content/drive
+</code></pre>
+<pre><code class="language-python">import networkx as nx
+import pandas as pd
+import numpy as np
+from networkx.algorithms import bipartite
+
+
+# This is the set of employees
+employees = set(['Pablo',
+                 'Lee',
+                 'Georgia',
+                 'Vincent',
+                 'Andy',
+                 'Frida',
+                 'Joan',
+                 'Claude'])
+
+# This is the set of movies
+movies = set(['The Shawshank Redemption',
+              'Forrest Gump',
+              'The Matrix',
+              'Anaconda',
+              'The Social Network',
+              'The Godfather',
+              'Monty Python and the Holy Grail',
+              'Snakes on a Plane',
+              'Kung Fu Panda',
+              'The Dark Knight',
+              'Mean Girls'])
+
+df_EC = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Applied_Social_Network_Analysis_in_Python/resources/Employee_Movie_Choices.txt', 
+sep = '\t')
+df_EC.head()
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>#Employee</th>
+      <th>Movie</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Andy</td>
+      <td>Anaconda</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Andy</td>
+      <td>Mean Girls</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Andy</td>
+      <td>The Matrix</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Claude</td>
+      <td>Anaconda</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Claude</td>
+      <td>Monty Python and the Holy Grail</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>Use <code>from_pandas_edgelist</code> to load dataframe in graph.</p>
+<pre><code class="language-python">G_bi = nx.from_pandas_edgelist(df_EC, '#Employee', 'Movie')
+G_bi
+</code></pre>
+<pre><code>&lt;networkx.classes.graph.Graph at 0x7f4d2248fbd0&gt;
+</code></pre>
+<pre><code class="language-python"># check the number of nodes
+G_bi.number_of_nodes()
+</code></pre>
+<pre><code>19
+</code></pre>
+<p>Let us see how the graph looks like.</p>
+<pre><code class="language-python">nx.draw_networkx(G_bi)
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://BolinWu-Gridea.github.io/post-images/1628172318719.png" alt="" loading="lazy"></figure>
+<p>The plot looks a bit messy. We can use matplotlib to fix it, but I would like to skip optimizing visualization here.</p>
+<h2 id="add-node-attribute">Add node attribute</h2>
+<p>First let us see how the nodes look like.</p>
+<pre><code class="language-python">G_bi.nodes()
+</code></pre>
+<pre><code>NodeView(('Andy', 'Anaconda', 'Mean Girls', 'The Matrix', 'Claude', 'Monty Python and the Holy Grail', 'Snakes on a Plane', 'Frida', 'The Shawshank Redemption', 'The Social Network', 'Georgia', 'Joan', 'Forrest Gump', 'Kung Fu Panda', 'Lee', 'Pablo', 'The Dark Knight', 'Vincent', 'The Godfather'))
+</code></pre>
+<p>It consists of employees' names and the movies name. Let us add an attribute <code>type</code> to the nodes so that it will be better understandable. This can be achieved by using <a href="https://networkx.org/documentation/stable/reference/generated/networkx.classes.function.set_node_attributes.html">set_node_attributes()</a> function.</p>
+<pre><code class="language-python"># st
+Dict = {}
+for name in employees:
+  Dict[name] = {'type' : 'employee'}
+for movie in movies:
+  Dict[movie] = {'type' : 'movie'}
+</code></pre>
+<pre><code class="language-python">Dict
+</code></pre>
+<pre><code>{'Anaconda': {'type': 'movie'},
+ 'Andy': {'type': 'employee'},
+ 'Claude': {'type': 'employee'},
+ 'Forrest Gump': {'type': 'movie'},
+ 'Frida': {'type': 'employee'},
+ 'Georgia': {'type': 'employee'},
+ 'Joan': {'type': 'employee'},
+ 'Kung Fu Panda': {'type': 'movie'},
+ 'Lee': {'type': 'employee'},
+ 'Mean Girls': {'type': 'movie'},
+ 'Monty Python and the Holy Grail': {'type': 'movie'},
+ 'Pablo': {'type': 'employee'},
+ 'Snakes on a Plane': {'type': 'movie'},
+ 'The Dark Knight': {'type': 'movie'},
+ 'The Godfather': {'type': 'movie'},
+ 'The Matrix': {'type': 'movie'},
+ 'The Shawshank Redemption': {'type': 'movie'},
+ 'The Social Network': {'type': 'movie'},
+ 'Vincent': {'type': 'employee'}}
+</code></pre>
+<pre><code class="language-python"># feed Dict to set_node_attributes function
+nx.set_node_attributes(G_bi, Dict)
+</code></pre>
+<pre><code class="language-python"># let us see if it is successful
+G_bi.nodes(data = True)
+</code></pre>
+<pre><code>NodeDataView({'Andy': {'type': 'employee'}, 'Anaconda': {'type': 'movie'}, 'Mean Girls': {'type': 'movie'}, 'The Matrix': {'type': 'movie'}, 'Claude': {'type': 'employee'}, 'Monty Python and the Holy Grail': {'type': 'movie'}, 'Snakes on a Plane': {'type': 'movie'}, 'Frida': {'type': 'employee'}, 'The Shawshank Redemption': {'type': 'movie'}, 'The Social Network': {'type': 'movie'}, 'Georgia': {'type': 'employee'}, 'Joan': {'type': 'employee'}, 'Forrest Gump': {'type': 'movie'}, 'Kung Fu Panda': {'type': 'movie'}, 'Lee': {'type': 'employee'}, 'Pablo': {'type': 'employee'}, 'The Dark Knight': {'type': 'movie'}, 'Vincent': {'type': 'employee'}, 'The Godfather': {'type': 'movie'}})
+</code></pre>
+<p>Great!</p>
+<h2 id="weighted-projection-graph">Weighted projection graph</h2>
+<p>Since an employee might choose more than one movies, and we want to know how many movies different pairs of employees may choose in common, we can find it through weighted projection graph.</p>
+<pre><code class="language-python">p = bipartite.weighted_projected_graph(G_bi,employees)
+</code></pre>
+<p>We can use the <code>to_pandas_edgelist</code> functiuon to find the dataframe form of graph.</p>
+<pre><code class="language-python">nx.to_pandas_edgelist (p)
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>source</th>
+      <th>target</th>
+      <th>weight</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Andy</td>
+      <td>Claude</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Andy</td>
+      <td>Pablo</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Andy</td>
+      <td>Frida</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Andy</td>
+      <td>Lee</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Andy</td>
+      <td>Joan</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Andy</td>
+      <td>Georgia</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Claude</td>
+      <td>Georgia</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Pablo</td>
+      <td>Frida</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Pablo</td>
+      <td>Vincent</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Frida</td>
+      <td>Vincent</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Lee</td>
+      <td>Joan</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>Notive that the original dataframe does not have the <strong>weight</strong> column. It tells us the number of common interested moveis of two employees. We may also find it by wrangling, however, with Network Analysis we can find it easily with several lines of code. So cool!</p>
+<h2 id="relationship-vs-types-of-movies">Relationship VS Types of movies</h2>
+<p>Suppose given the two data files, we would like to find out if people that have a high relationship score also like the same types of movies.</p>
+<pre><code class="language-python"># read relationship file
+df_R = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Applied_Social_Network_Analysis_in_Python/resources/Employee_Relationships.txt', delim_whitespace=True, 
+                    names = ['Employee1', 'Employee2', 'Relationship'] )
+df_R.head()
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Employee1</th>
+      <th>Employee2</th>
+      <th>Relationship</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Andy</td>
+      <td>Claude</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Andy</td>
+      <td>Frida</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Andy</td>
+      <td>Georgia</td>
+      <td>-10</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Andy</td>
+      <td>Joan</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Andy</td>
+      <td>Lee</td>
+      <td>-10</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>An overall process can be as follows:</p>
+<ol>
+<li>Find the graph forms of both dataframes.</li>
+<li>Merge the two graphs by <code>nx.compose</code> method.</li>
+<li>Use <code>to_pandas_edgelist</code> to transform the merged graph to dataframe.</li>
+<li>Clean dataframe.</li>
+<li>Find the correlation by <code>pd.corr</code> function</li>
+</ol>
+<pre><code class="language-python"># load in the relationship file 
+G_relations =nx.from_pandas_edgelist(df_R,'Employee1','Employee2', edge_attr =  'Relationship' )
+</code></pre>
+<pre><code class="language-python"># merge the two files
+merge_graph = nx.compose(p,G_relations)
+df_merge = nx.to_pandas_edgelist (merge_graph )
+</code></pre>
+<pre><code class="language-python">df_merge.head(15)
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>source</th>
+      <th>target</th>
+      <th>Relationship</th>
+      <th>weight</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Andy</td>
+      <td>Claude</td>
+      <td>0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Andy</td>
+      <td>Pablo</td>
+      <td>-10</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Andy</td>
+      <td>Frida</td>
+      <td>20</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Andy</td>
+      <td>Lee</td>
+      <td>-10</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Andy</td>
+      <td>Joan</td>
+      <td>30</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Andy</td>
+      <td>Georgia</td>
+      <td>-10</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Andy</td>
+      <td>Vincent</td>
+      <td>20</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Claude</td>
+      <td>Georgia</td>
+      <td>90</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Claude</td>
+      <td>Frida</td>
+      <td>0</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Claude</td>
+      <td>Joan</td>
+      <td>0</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Claude</td>
+      <td>Lee</td>
+      <td>0</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Claude</td>
+      <td>Pablo</td>
+      <td>10</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Claude</td>
+      <td>Vincent</td>
+      <td>0</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Pablo</td>
+      <td>Frida</td>
+      <td>50</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Pablo</td>
+      <td>Vincent</td>
+      <td>-20</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<pre><code class="language-python"># replace NaN with 0
+df_merge['weight'] = df_merge['weight'].replace(np.nan, 0)
+</code></pre>
+<pre><code class="language-python">df_merge.corr(method ='pearson')
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>weight</th>
+      <th>Relationship</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>weight</th>
+      <td>1.000000</td>
+      <td>0.906093</td>
+    </tr>
+    <tr>
+      <th>Relationship</th>
+      <td>0.906093</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>We can see that these two have strong correlation.</p>
+<h3 id="another-approach">Another approach</h3>
+<p>For some old versions of networkx, <code>to_pandas_edgelist</code> or <code>to_pandas_dataframe</code> can not give us the desired form of dataframe. In this case, we can slightly the change the step 3 above as follows:</p>
+<ol>
+<li>Find the graph forms of both dataframes.</li>
+<li>Merge the two graphs by <code>compose</code> method.</li>
+<li>Find the edges dictionary and use loop to get merged dataframe.</li>
+<li>Since we make the dataframe from dictionary, there can be nested dictionary in dataframe column. Therefore we need to clean the merged dataframe, in order to get the desired form.</li>
+<li>Find the correlation by <code>pd.corr</code> function</li>
+</ol>
+<pre><code class="language-python"># let us see how the edges look like
+merge_graph.edges(data = True)
+</code></pre>
+<pre><code>EdgeDataView([('Andy', 'Claude', {'weight': 1, 'Relationship': 0}), ('Andy', 'Pablo', {'weight': 1, 'Relationship': -10}), ('Andy', 'Frida', {'weight': 1, 'Relationship': 20}), ('Andy', 'Lee', {'weight': 1, 'Relationship': -10}), ('Andy', 'Joan', {'weight': 1, 'Relationship': 30}), ('Andy', 'Georgia', {'weight': 1, 'Relationship': -10}), ('Andy', 'Vincent', {'Relationship': 20}), ('Claude', 'Georgia', {'weight': 3, 'Relationship': 90}), ('Claude', 'Frida', {'Relationship': 0}), ('Claude', 'Joan', {'Relationship': 0}), ('Claude', 'Lee', {'Relationship': 0}), ('Claude', 'Pablo', {'Relationship': 10}), ('Claude', 'Vincent', {'Relationship': 0}), ('Pablo', 'Frida', {'weight': 2, 'Relationship': 50}), ('Pablo', 'Vincent', {'weight': 1, 'Relationship': -20}), ('Pablo', 'Georgia', {'Relationship': 0}), ('Pablo', 'Joan', {'Relationship': 0}), ('Pablo', 'Lee', {'Relationship': 0}), ('Frida', 'Vincent', {'weight': 2, 'Relationship': 60}), ('Frida', 'Georgia', {'Relationship': 0}), ('Frida', 'Joan', {'Relationship': 0}), ('Frida', 'Lee', {'Relationship': 0}), ('Vincent', 'Georgia', {'Relationship': 0}), ('Vincent', 'Joan', {'Relationship': 10}), ('Vincent', 'Lee', {'Relationship': 0}), ('Lee', 'Joan', {'weight': 3, 'Relationship': 70}), ('Lee', 'Georgia', {'Relationship': 10}), ('Joan', 'Georgia', {'Relationship': 0})])
+</code></pre>
+<pre><code class="language-python"># use loop to make dataframe
+rows = []
+for u,v,r in merge_graph.edges(data=True):
+     rows.append([u, v, r])
+</code></pre>
+<pre><code class="language-python">df_merge = pd.DataFrame(rows, columns=[&quot;Employee1&quot;, &quot;Employee2&quot;, &quot;Common&quot;])
+df_merge.head()
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Employee1</th>
+      <th>Employee2</th>
+      <th>Common</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Andy</td>
+      <td>Claude</td>
+      <td>{'weight': 1, 'Relationship': 0}</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Andy</td>
+      <td>Pablo</td>
+      <td>{'weight': 1, 'Relationship': -10}</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Andy</td>
+      <td>Frida</td>
+      <td>{'weight': 1, 'Relationship': 20}</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Andy</td>
+      <td>Lee</td>
+      <td>{'weight': 1, 'Relationship': -10}</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Andy</td>
+      <td>Joan</td>
+      <td>{'weight': 1, 'Relationship': 30}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>We can see that the <code>Common</code> column is not clean. Here, we can use <code>apply(pd.Series)</code> to split the column to.</p>
+<pre><code class="language-python">df_merge['Common'].apply(pd.Series).head()
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>weight</th>
+      <th>Relationship</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.0</td>
+      <td>-10.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1.0</td>
+      <td>20.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.0</td>
+      <td>-10.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.0</td>
+      <td>30.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>Then we combine the splitted columns to the original dataframe by <code>apply</code> and <code>concat</code> function.</p>
+<pre><code class="language-python">df_merge = pd.concat([df_merge.drop(['Common'], axis=1), df_merge['Common'].apply(pd.Series)], axis=1)
+</code></pre>
+<pre><code class="language-python">df_merge.head(15)
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Employee1</th>
+      <th>Employee2</th>
+      <th>weight</th>
+      <th>Relationship</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Andy</td>
+      <td>Claude</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Andy</td>
+      <td>Pablo</td>
+      <td>1.0</td>
+      <td>-10.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Andy</td>
+      <td>Frida</td>
+      <td>1.0</td>
+      <td>20.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Andy</td>
+      <td>Lee</td>
+      <td>1.0</td>
+      <td>-10.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Andy</td>
+      <td>Joan</td>
+      <td>1.0</td>
+      <td>30.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Andy</td>
+      <td>Georgia</td>
+      <td>1.0</td>
+      <td>-10.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Andy</td>
+      <td>Vincent</td>
+      <td>NaN</td>
+      <td>20.0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Claude</td>
+      <td>Georgia</td>
+      <td>3.0</td>
+      <td>90.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Claude</td>
+      <td>Frida</td>
+      <td>NaN</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Claude</td>
+      <td>Joan</td>
+      <td>NaN</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Claude</td>
+      <td>Lee</td>
+      <td>NaN</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Claude</td>
+      <td>Pablo</td>
+      <td>NaN</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Claude</td>
+      <td>Vincent</td>
+      <td>NaN</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Pablo</td>
+      <td>Frida</td>
+      <td>2.0</td>
+      <td>50.0</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Pablo</td>
+      <td>Vincent</td>
+      <td>1.0</td>
+      <td>-20.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>Cool! Afterwards we can clean the <strong>weight</strong> column and find correlation as mentioned above.</p>
+<h1 id="ending">Ending</h1>
+<p>When I was doing the last task, I met troubles with merging the two tables.</p>
+<p>Firstly, I tried to use <code>merge</code> function, however, I got stuck in choosing the join-on columns. Because in both dataframes, there are two emplyee names' columns. We do not care about the order of these two columns but the algorithm can detect the difference. Then, I spent a lot of time using the nested loop, and in each iteration, I tried to make a tuple of the two names and sort them, in hope of unifying the names order. However, it fails to give an elegant result.</p>
+<p>In the end, I found that composing two graphs is a great solution. If in both graphs have same nodes with same edges, they will be merged into one, while keeping the edge attributes. Therefore my biggest takeaway is that Network Analysis is a great data analysis method, as well as a nice wrangling tool.</p>
+<p>Hopefully this post can be helpful to you. Thank you for reading!</p>
+<p>Cheers!</p>
+
+        </div>
+        <!-- Share to Twitter, Weibo, Telegram -->
+        <div class="flex items-center">
+          <div class="mr-4 flex items-center">
+            <i class="ri-share-forward-line text-gray-500"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTwitter">
+            <i class="ri-twitter-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-red-500 hover:bg-red-100 dark:hover:bg-gray-600 inline-flex" @click="shareToWeibo">
+            <i class="ri-weibo-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-indigo-500 hover:bg-indigo-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTelegram">
+            <i class="ri-telegram-line"></i>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Prudence is a fountain of life to the prudent.
+</footer>
+    </div>
+
+    <!-- TOC Container -->
+    <div class="fixed right-0 bottom-0 mb-16 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white dark:bg-gray-500 dark:text-gray-200 hover:shadow-lg transition-all animated fadeInRight" @click="showToc = true">
+      <i class="ri-file-list-line"></i>
+    </div>
+
+    <div class="fixed right-0 top-0 bottom-0 overflow-y-auto w-64 bg-white dark:bg-gray-800 p-4 border-l border-gray-100 dark:border-gray-600 z-10 transition-fast" :class="{ '-mr-64': !showToc }">
+      <div class="flex mb-4 justify-end">
+        <div class="w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast" @click="showToc = false">
+          <i class="ri-close-line text-lg"></i>
+        </div>
+      </div>
+      <div class="post-toc-container">
+        <ul class="markdownIt-TOC">
+<li><a href="#networkx-vocabulary">Networkx vocabulary</a>
+<ul>
+<li><a href="#weighted-network">Weighted network</a></li>
+<li><a href="#signed-networks">Signed networks</a></li>
+<li><a href="#other-edge-attributes">Other edge attributes</a></li>
+<li><a href="#multigraphs">Multigraphs</a></li>
+</ul>
+</li>
+<li><a href="#edge-attributes">Edge attributes</a></li>
+<li><a href="#node-attributes">Node attributes</a>
+<ul>
+<li><a href="#bipartite-graphs">Bipartite graphs</a>
+<ul>
+<li><a href="#projected-graphs">Projected graphs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#graphs-manipulation-exercise">Graphs manipulation exercise</a>
+<ul>
+<li><a href="#load-employee_movie_choicestxt-in-bipartite-graph">Load <code>Employee_Movie_Choices.txt</code> in bipartite graph</a></li>
+<li><a href="#add-node-attribute">Add node attribute</a></li>
+<li><a href="#weighted-projection-graph">Weighted projection graph</a></li>
+<li><a href="#relationship-vs-types-of-movies">Relationship VS Types of movies</a>
+<ul>
+<li><a href="#another-approach">Another approach</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#ending">Ending</a></li>
+</ul>
+
+      </div>
+    </div>
+
+    <!-- Back to top -->
+    <div class="fixed right-0 bottom-0 mb-4 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white hover:shadow-lg transition-all dark:bg-gray-500 dark:text-gray-200" @click="backToUp" v-show="scrolled">
+      <i class="ri-arrow-up-line"></i>
+    </div>
+  </div>
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Background of PhotoSwipe. 
+        It's a separate element as animating opacity is faster than rgba(). -->
+  <div class="pswp__bg">
+  </div>
+  <!-- Slides wrapper with overflow:hidden. -->
+  <div class="pswp__scroll-wrap">
+    <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+    <div class="pswp__container">
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+    </div>
+    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <!--  Controls are self-explanatory. Order can be changed. -->
+        <div class="pswp__counter">
+        </div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+        <!-- element will get class pswp__preloader--active when preloader is running -->
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip">
+        </div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://BolinWu-Gridea.github.io/media/scripts/main.js"></script>
+  
+  <!-- Code Highlight -->
+  
+    <script src="https://BolinWu-Gridea.github.io/media/prism.js"></script>
+    <script>
+      Prism.highlightAll()
+    </script>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+  <script>
+    //拿到预览框架，也就是上面的html代码
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    //定义图片数组变量
+    var imgitems;
+    /**
+    * 用于显示预览界面
+    * @param index 图片数组下标
+    */
+    function viewImg(index) {
+      //其它选项这里不做过多阐述，详情见官网
+      var pswpoptions = {
+        index: parseInt(index, 10), // 开始幻灯片索引。0是第一张幻灯片。必须是整数，而不是字符串。
+        bgOpacity: 0.7, // 背景透明度，0-1
+        maxSpreadZoom: 3, // 缩放级别，不要太大
+      };
+      //初始化并打开PhotoSwipe，pswpElement对应上面预览框架，PhotoSwipeUI_Default为皮肤，imgitems为图片数组，pswpoptions为选项
+      var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, imgitems, pswpoptions);
+      gallery.init()
+    }
+    /**
+    * 用于添加图片点击事件
+    * @param img 图片元素
+    * @param index 所属下标（在imgitems中的位置）
+    */
+    function addImgClick(img, index) {
+      img.onclick = function() {
+        viewImg(index)
+      }
+    }
+    /**
+    * 轮询所有图片，获取src、width、height等数据，加入imgitems，并给图片元素添加事件
+    * 最好在onload中执行该方法，本站因放在最底部，所以直接初始化
+    * 异步加载图片可在图片元素创建完成后调用此方法
+    */
+    function initImg() {
+      //重置图片数组
+      imgitems = [];
+      //查找class:markdown 下的所有img元素并遍历
+      var imgs = document.querySelectorAll('.markdown img');
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        //本站相册初始为loading图片，真实图片放在data-src
+        var ds = img.getAttribute("data-src");
+        //创建image对象，用于获取图片宽高
+        var imgtemp = new Image();
+        //判断是否存在data-src
+        if (ds != null && ds.length > 0) {
+          imgtemp.src = ds
+        } else {
+          imgtemp.src = img.src
+        }
+        //判断是否存在缓存
+        if (imgtemp.complete) {
+          var imgobj = {
+            "src": imgtemp.src,
+            "w": imgtemp.width,
+            "h": imgtemp.height,
+          };
+          imgitems[i] = imgobj;
+          addImgClick(img, i);
+        } else {
+          console.log('进来了2')
+          imgtemp.index = i;
+          imgtemp.img = img;
+          imgtemp.onload = function() {
+            var imgobj = {
+              "src": this.src,
+              "w": this.width,
+              "h": this.height,
+            };
+            //不要使用push，因为onload前后顺序会不同
+            imgitems[this.index] = imgobj
+            //添加点击事件
+            addImgClick(this.img, this.index);
+          }
+        }
+      }
+    }
+    //初始化
+    initImg();
+  </script>
+  
+  
+</body>
+
+</html>

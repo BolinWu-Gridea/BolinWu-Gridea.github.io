@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2021-07-30T13:36:38.554Z</updated>
+    <updated>2021-08-05T14:07:48.326Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -11,6 +11,13 @@
     <logo>https://BolinWu-Gridea.github.io/images/avatar.png</logo>
     <icon>https://BolinWu-Gridea.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Bolin Wu</rights>
+    <entry>
+        <title type="html"><![CDATA[Network Analysis Basics]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/network-analysis-basics/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/network-analysis-basics/">
+        </link>
+        <updated>2021-08-05T08:04:44.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Semantic Text Similarity and Topic Modeling ]]></title>
         <id>https://BolinWu-Gridea.github.io/post/semantic-text-similarity-and-topic-modeling/</id>
@@ -73,12 +80,5 @@
         <link href="https://BolinWu-Gridea.github.io/post/2021-03-09-LASSO/">
         </link>
         <updated>2021-03-07T15:00:00.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Classification of Image Data by Simple NN ]]></title>
-        <id>https://BolinWu-Gridea.github.io/post/2021-02-09-SimpleNN/</id>
-        <link href="https://BolinWu-Gridea.github.io/post/2021-02-09-SimpleNN/">
-        </link>
-        <updated>2021-02-07T14:00:00.000Z</updated>
     </entry>
 </feed>
