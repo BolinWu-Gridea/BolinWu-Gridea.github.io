@@ -1,0 +1,452 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Network Connectivity - Bolin Wu</title>
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/tailwind.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Network Connectivity - Bolin Wu - Atom Feed" href="https://BolinWu-Gridea.github.io/atom.xml">
+
+    
+
+  <meta name="description" content="
+In this post I will briefly share the connectivity related concepts and functions like clustering coefficient, distance..." />
+  <meta property="og:title" content="Network Connectivity - Bolin Wu">
+  <meta property="og:description" content="
+In this post I will briefly share the connectivity related concepts and functions like clustering coefficient, distance..." />
+  <meta property="og:type" content="articles">
+  <meta property="og:url" content="https://BolinWu-Gridea.github.io/post/network-connectivity/" />
+  <meta property="og:image" content="https://BolinWu-Gridea.github.io/images/avatar.png">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:width" content="1200">
+  <meta name="twitter:title" content="Network Connectivity - Bolin Wu">
+  <meta name="twitter:description" content="
+In this post I will briefly share the connectivity related concepts and functions like clustering coefficient, distance...">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://BolinWu-Gridea.github.io/post/network-connectivity/">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+ 
+  
+    <link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/prism-atom-dark.css">
+  
+
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+  
+</head>
+
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
+    <a href="https://BolinWu-Gridea.github.io" class="fixed top-0 left-0 mt-4 bg-black text-white dark:text-gray-700 dark:bg-yellow-50 dark:hover:bg-black dark:hover:text-white inline-flex p-2 pl-8 hover:text-gray-700 hover:bg-yellow-50 font-bold z-10 transition-fast animated fadeInLeft">
+      Bolin Wu
+    </a>
+    <div class="max-w-4xl w-full mx-auto">
+      <div class="shadow-box bg-white dark:bg-gray-600 rounded-lg pt-32 md:pt-64 px-4 md:px-8 pb-8 animated fadeIn mb-8">
+        <h1 class="text-5xl font-semibold leading-normal pb-8 mb-8 border-b-8 border-gray-700">
+          Network Connectivity
+        </h1>
+        
+        <div class="mb-8 flex flex-wrap">
+          <div class="text-gray-400 text-sm mr-4">2021-08-17 · 6 min read</div>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/j6bxoCbAc/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              Network-Analysis
+            </a>
+          
+            <a href="https://BolinWu-Gridea.github.io/tag/GWOcOUTN0/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              Python
+            </a>
+          
+        </div>
+        <div class="markdown mb-8" v-pre>
+          <!-- more -->
+<p>In this post I will briefly share the connectivity related concepts and functions like clustering coefficient, distance measures, and connection robustness.</p>
+<h1 id="clustering-coefficient">Clustering coefficient</h1>
+<p><strong>Tradic Closure</strong> is the tendency for people who share lots of connections. People who share lots of friends have an increased likelihood of becoming connected themselves. One measure of the degree to which nodes in a network tend to &quot;cluster&quot; or form tranglies is <strong>clustering coefficient</strong></p>
+<h3 id="local-clustering-coefficient">Local clustering coefficient</h3>
+<p>The local clustering coefficient of Node C can be calculated as follows:</p>
+<p class='katex-block katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;#&#039; at position 13: \frac{\text{#̲ of pairs of C&#039;…'>\frac{\text{# of pairs of C&#039;s friends who are friends}}{\text{# of pairs of C&#039;s friends}}
+</p>
+<p>We assume that the local clustering coefficient of a node of degree less than 2 to be 0.</p>
+<p>In NetworkX:</p>
+<pre><code>G = nx.Graph()
+nx.clustering(G, 'Node Name')
+</code></pre>
+<h2 id="global-clustering-coefficient">Global clustering coefficient</h2>
+<p>We may also want to measure the clustering on the whole network.</p>
+<ul>
+<li>Approach 1: Average local clustering coefficient over all nodes in the graph.</li>
+<li>Approach 2: Measureing clustering on the whole network. Transitivity = <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mtext>3*Number of closed trads</mtext><mtext>Number of open triads</mtext></mfrac></mrow><annotation encoding="application/x-tex">\frac{\text{3*Number of closed trads}}{\text{Number of open triads}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.400108em;vertical-align:-0.481108em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9189999999999999em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">Number of open triads</span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">3*Number of closed trads</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.481108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>. It weights nodes with large degree higher.</li>
+</ul>
+<p>In Python you can find the average local clustering coefficient and transitivity as follows.</p>
+<pre><code>nx.transitivity(G)
+nx.average_clustering(G)
+</code></pre>
+<h1 id="distance-measures">Distance Measures</h1>
+<p>Sometimes we would like to know how far nodes are away from each other. Distance between two nodes is the length of the shortest path between them. In Python we can find it as follows:</p>
+<pre><code>nx.shortest_path(G,'A', 'B')
+nx.shortest_path_length(G, 'A','B')
+</code></pre>
+<p><strong>Average distance</strong> characterize the average distance between all pairs of nodes in a graph.</p>
+<pre><code>nx.average_shortest_path_length(G)
+</code></pre>
+<p><strong>Diameter</strong> is the maximum distance between any pair of nodes.</p>
+<pre><code>nx.diameter(G)
+</code></pre>
+<p><strong>Eccentricity</strong> is the largest distance between node n and all other nodes.</p>
+<pre><code>nx.eccentricity(G)
+</code></pre>
+<p>The <strong>radius</strong> of a graph is the minimum eccentricity.</p>
+<pre><code>nx.radius(G)
+</code></pre>
+<p>The <strong>periphery</strong> of a graph is the set of nodes that have eccentricity equal to the diameter.</p>
+<pre><code>nx.periphery(G)
+</code></pre>
+<p>The <strong>center</strong> of a graph is the set of nodes that have eccentricity equal to the radius.</p>
+<pre><code>nx.center(G)
+</code></pre>
+<p>We can practice with an example. The graph data is from networkx library.</p>
+<pre><code class="language-python">import networkx as nx
+G = nx.karate_club_graph()
+</code></pre>
+<pre><code class="language-python">G = nx.convert_node_labels_to_integers(G, first_label= 1)
+</code></pre>
+<pre><code class="language-python">nx.draw_networkx(G)
+</code></pre>
+<!-- more -->
+<figure data-type="image" tabindex="1"><img src="https://BolinWu-Gridea.github.io/post-images/1629273298940.png" alt="" loading="lazy"></figure>
+<pre><code class="language-python"># find average shortest path
+nx.average_shortest_path_length(G)
+</code></pre>
+<pre><code>2.408199643493761
+</code></pre>
+<pre><code class="language-python"># find radius
+nx.radius(G)
+</code></pre>
+<pre><code>3
+</code></pre>
+<pre><code class="language-python"># diameter
+nx.diameter(G)
+</code></pre>
+<pre><code>5
+</code></pre>
+<pre><code class="language-python"># center
+nx.center(G)
+</code></pre>
+<pre><code>[1, 2, 3, 4, 9, 14, 20, 32]
+</code></pre>
+<h1 id="connected-graphs">Connected graphs</h1>
+<p>For directed and undirected graphs, we have different concepts for connected graphs.</p>
+<h3 id="undirected-graph">Undirected graph</h3>
+<p>An undiredted graph is <strong>connected</strong> if, for every pair nodes, there is a path between them.</p>
+<pre><code># check if a graph is connected
+nx.is_connected(G)
+</code></pre>
+<p>Connected component is a set of nodes satisfying the following two conditions:</p>
+<ol>
+<li>Every node in the subset has a path to every other node.</li>
+<li>No other node has a path to any node in the subset.</li>
+</ol>
+<pre><code># the number of connected component subset
+nx.number_connected_components(G)
+
+# the specific connected component
+sorted(nx.connected_components(G))
+
+# the connected components of a node
+nx.node_connected_component(G, 'M')
+</code></pre>
+<h2 id="directed-graph">Directed graph</h2>
+<p>A directed graph is <strong>strongly connected</strong> if, for every pair nodes u and v, there is a directed path from u to v and a directed path from v to u.</p>
+<pre><code># check if a graph is strongly connected
+nx.is_strongly_connected(G)
+</code></pre>
+<p>A directed graph is <strong>weakly connected</strong> if replacing all directed edges with undirected edges produces a connected undirected graph.</p>
+<pre><code># check if weakly connected
+nx.is_weakly_connected(G)
+</code></pre>
+<p>Strongly connected component is a subset of nodes such as:</p>
+<ol>
+<li>Every node in the subset has a direct path to every other node.</li>
+<li>No other node has a directed path to and from every node in the subset.</li>
+</ol>
+<pre><code># find strongly connected components
+sorted(nx.strongly_connected_components(G))
+</code></pre>
+<h1 id="connectivity-and-robustness-in-networks">Connectivity and Robustness in Networks</h1>
+<p>Network robustness is the ability of a network to maintain its general structural properties when it faces failures or attacks. The typical attack is the removal of nodes or edges. The structural properties refer to connectivity.</p>
+<p>Some examples are airport closures and internet router interruption.</p>
+<p>We can measure the robustness by <strong>node connectivity</strong>, which is the smallest number of nodes to be removed from this graph in order to disconnect it.</p>
+<pre><code># the smallest number 
+nx.node_connectivity(G_un)
+
+# the specific node name
+nx.minimum_node_cut(G_un)
+</code></pre>
+<p>Another question we can ask is what is the samllest number of edges that can be removed from this graph in order to disconnect it, a.k.a <strong>edge connectivity</strong>?</p>
+<pre><code># minumum number of edges
+nx.edge_connectivity(G_un)
+
+# specific edges
+nx.minimum_edge_cut(G_un)
+</code></pre>
+<p>Robus networks have large minimum node and edge cuts.</p>
+<h3 id="simple-path">Simple path</h3>
+<p>If we have a directed graph G and we want to know all the options to send a messages from node G to nodel L.</p>
+<pre><code># all options
+sorted(nx.all_simple_paths(G,'G', 'L'))
+</code></pre>
+<p>If we want to block all the options, how many nodes do we need to remove?</p>
+<pre><code># the number of nodes need to remove in order to eliminate the connection
+nx.node_connectivity(G, 'G', 'L')
+
+# the specific node name
+nx.minimum_node_cut(G, 'G', 'L')
+</code></pre>
+<p>What about removing edges instead of nodes?</p>
+<pre><code># check the minimum number of edges need to be removed
+nx.edge_connectivity(G, 'G', 'L')
+
+# specific edges
+nx.minimum_edge_cut(G. 'G', 'L')
+</code></pre>
+<h1 id="ending">Ending</h1>
+<p>Here I briefly shared the essential concepts and functions about Network connectivity. Hope this can be useful to you:)</p>
+
+        </div>
+        <!-- Share to Twitter, Weibo, Telegram -->
+        <div class="flex items-center">
+          <div class="mr-4 flex items-center">
+            <i class="ri-share-forward-line text-gray-500"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTwitter">
+            <i class="ri-twitter-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-red-500 hover:bg-red-100 dark:hover:bg-gray-600 inline-flex" @click="shareToWeibo">
+            <i class="ri-weibo-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-indigo-500 hover:bg-indigo-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTelegram">
+            <i class="ri-telegram-line"></i>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Prudence is a fountain of life to the prudent.
+</footer>
+    </div>
+
+    <!-- TOC Container -->
+    <div class="fixed right-0 bottom-0 mb-16 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white dark:bg-gray-500 dark:text-gray-200 hover:shadow-lg transition-all animated fadeInRight" @click="showToc = true">
+      <i class="ri-file-list-line"></i>
+    </div>
+
+    <div class="fixed right-0 top-0 bottom-0 overflow-y-auto w-64 bg-white dark:bg-gray-800 p-4 border-l border-gray-100 dark:border-gray-600 z-10 transition-fast" :class="{ '-mr-64': !showToc }">
+      <div class="flex mb-4 justify-end">
+        <div class="w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast" @click="showToc = false">
+          <i class="ri-close-line text-lg"></i>
+        </div>
+      </div>
+      <div class="post-toc-container">
+        <ul class="markdownIt-TOC">
+<li><a href="#clustering-coefficient">Clustering coefficient</a><br>
+*
+<ul>
+<li><a href="#local-clustering-coefficient">Local clustering coefficient</a></li>
+<li><a href="#global-clustering-coefficient">Global clustering coefficient</a></li>
+</ul>
+</li>
+<li><a href="#distance-measures">Distance Measures</a></li>
+<li><a href="#connected-graphs">Connected graphs</a><br>
+*
+<ul>
+<li><a href="#undirected-graph">Undirected graph</a></li>
+<li><a href="#directed-graph">Directed graph</a></li>
+</ul>
+</li>
+<li><a href="#connectivity-and-robustness-in-networks">Connectivity and Robustness in Networks</a><br>
+*
+<ul>
+<li><a href="#simple-path">Simple path</a></li>
+</ul>
+</li>
+<li><a href="#ending">Ending</a></li>
+</ul>
+
+      </div>
+    </div>
+
+    <!-- Back to top -->
+    <div class="fixed right-0 bottom-0 mb-4 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white hover:shadow-lg transition-all dark:bg-gray-500 dark:text-gray-200" @click="backToUp" v-show="scrolled">
+      <i class="ri-arrow-up-line"></i>
+    </div>
+  </div>
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Background of PhotoSwipe. 
+        It's a separate element as animating opacity is faster than rgba(). -->
+  <div class="pswp__bg">
+  </div>
+  <!-- Slides wrapper with overflow:hidden. -->
+  <div class="pswp__scroll-wrap">
+    <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+    <div class="pswp__container">
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+    </div>
+    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <!--  Controls are self-explanatory. Order can be changed. -->
+        <div class="pswp__counter">
+        </div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+        <!-- element will get class pswp__preloader--active when preloader is running -->
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip">
+        </div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://BolinWu-Gridea.github.io/media/scripts/main.js"></script>
+  
+  <!-- Code Highlight -->
+  
+    <script src="https://BolinWu-Gridea.github.io/media/prism.js"></script>
+    <script>
+      Prism.highlightAll()
+    </script>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+  <script>
+    //拿到预览框架，也就是上面的html代码
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    //定义图片数组变量
+    var imgitems;
+    /**
+    * 用于显示预览界面
+    * @param index 图片数组下标
+    */
+    function viewImg(index) {
+      //其它选项这里不做过多阐述，详情见官网
+      var pswpoptions = {
+        index: parseInt(index, 10), // 开始幻灯片索引。0是第一张幻灯片。必须是整数，而不是字符串。
+        bgOpacity: 0.7, // 背景透明度，0-1
+        maxSpreadZoom: 3, // 缩放级别，不要太大
+      };
+      //初始化并打开PhotoSwipe，pswpElement对应上面预览框架，PhotoSwipeUI_Default为皮肤，imgitems为图片数组，pswpoptions为选项
+      var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, imgitems, pswpoptions);
+      gallery.init()
+    }
+    /**
+    * 用于添加图片点击事件
+    * @param img 图片元素
+    * @param index 所属下标（在imgitems中的位置）
+    */
+    function addImgClick(img, index) {
+      img.onclick = function() {
+        viewImg(index)
+      }
+    }
+    /**
+    * 轮询所有图片，获取src、width、height等数据，加入imgitems，并给图片元素添加事件
+    * 最好在onload中执行该方法，本站因放在最底部，所以直接初始化
+    * 异步加载图片可在图片元素创建完成后调用此方法
+    */
+    function initImg() {
+      //重置图片数组
+      imgitems = [];
+      //查找class:markdown 下的所有img元素并遍历
+      var imgs = document.querySelectorAll('.markdown img');
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        //本站相册初始为loading图片，真实图片放在data-src
+        var ds = img.getAttribute("data-src");
+        //创建image对象，用于获取图片宽高
+        var imgtemp = new Image();
+        //判断是否存在data-src
+        if (ds != null && ds.length > 0) {
+          imgtemp.src = ds
+        } else {
+          imgtemp.src = img.src
+        }
+        //判断是否存在缓存
+        if (imgtemp.complete) {
+          var imgobj = {
+            "src": imgtemp.src,
+            "w": imgtemp.width,
+            "h": imgtemp.height,
+          };
+          imgitems[i] = imgobj;
+          addImgClick(img, i);
+        } else {
+          console.log('进来了2')
+          imgtemp.index = i;
+          imgtemp.img = img;
+          imgtemp.onload = function() {
+            var imgobj = {
+              "src": this.src,
+              "w": this.width,
+              "h": this.height,
+            };
+            //不要使用push，因为onload前后顺序会不同
+            imgitems[this.index] = imgobj
+            //添加点击事件
+            addImgClick(this.img, this.index);
+          }
+        }
+      }
+    }
+    //初始化
+    initImg();
+  </script>
+  
+  
+</body>
+
+</html>
