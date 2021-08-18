@@ -65,68 +65,17 @@
           Network Connectivity
         </a>
       </h2>
-      <div class="mb-4 text-xs text-gray-500">2021-08-17</div>
+      <div class="mb-4 text-xs text-gray-500">2021-08-16</div>
       <div class="mb-4 text-gray-500 dark:text-gray-300">
-        <!-- more -->
-<p>In this post I will briefly share the connectivity related concepts and functions like clustering coefficient, distance measures, and connection robustness.</p>
-<h1 id="clustering-coefficient">Clustering coefficient</h1>
-<p><strong>Tradic Closure</strong> is the tendency for people who share lots of connections. People who share lots of friends have an increased likelihood of becoming connected themselves. One measure of the degree to which nodes in a network tend to &quot;cluster&quot; or form tranglies is <strong>clustering coefficient</strong></p>
-<h3 id="local-clustering-coefficient">Local clustering coefficient</h3>
-<p>The local clustering coefficient of Node C can be calculated as follows:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;#&#039; at position 13: \frac{\text{#̲ of pairs of C&#039;…'>\frac{\text{# of pairs of C&#039;s friends who are friends}}{\text{# of pairs of C&#039;s friends}}
-</p>
-<p>We assume that the local clustering coefficient of a node of degree less than 2 to be 0.</p>
-<p>In NetworkX:</p>
-<pre><code>G = nx.Graph()
-nx.clustering(G, 'Node Name')
-</code></pre>
-<h2 id="global-clustering-coefficient">Global clustering coefficient</h2>
-<p>We may also want to measure the clustering on the whole network.</p>
-<ul>
-<li>Approach 1: Average local clustering coefficient over all nodes in the graph.</li>
-<li>Approach 2: Measureing clustering on the whole network. Transitivity = <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mtext>3*Number of closed trads</mtext><mtext>Number of open triads</mtext></mfrac></mrow><annotation encoding="application/x-tex">\frac{\text{3*Number of closed trads}}{\text{Number of open triads}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.400108em;vertical-align:-0.481108em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9189999999999999em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">Number of open triads</span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">3*Number of closed trads</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.481108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>. It weights nodes with large degree higher.</li>
-</ul>
-<p>In Python you can find the average local clustering coefficient and transitivity as follows.</p>
-<pre><code>nx.transitivity(G)
-nx.average_clustering(G)
-</code></pre>
-<h1 id="distance-measures">Distance Measures</h1>
-<p>Sometimes we would like to know how far nodes are away from each other. Distance between two nodes is the length of the shortest path between them. In Python we can find it as follows:</p>
-<pre><code>nx.shortest_path(G,'A', 'B')
-nx.shortest_path_length(G, 'A','B')
-</code></pre>
-<p><strong>Average distance</strong> characterize the average distance between all pairs of nodes in a graph.</p>
-<pre><code>nx.average_shortest_path_length(G)
-</code></pre>
-<p><strong>Diameter</strong> is the maximum distance between any pair of nodes.</p>
-<pre><code>nx.diameter(G)
-</code></pre>
-<p><strong>Eccentricity</strong> is the largest distance between node n and all other nodes.</p>
-<pre><code>nx.eccentricity(G)
-</code></pre>
-<p>The <strong>radius</strong> of a graph is the minimum eccentricity.</p>
-<pre><code>nx.radius(G)
-</code></pre>
-<p>The <strong>periphery</strong> of a graph is the set of nodes that have eccentricity equal to the diameter.</p>
-<pre><code>nx.periphery(G)
-</code></pre>
-<p>The <strong>center</strong> of a graph is the set of nodes that have eccentricity equal to the radius.</p>
-<pre><code>nx.center(G)
-</code></pre>
-<p>We can practice with an example. The graph data is from networkx library.</p>
-<pre><code class="language-python">import networkx as nx
-G = nx.karate_club_graph()
-</code></pre>
-<pre><code class="language-python">G = nx.convert_node_labels_to_integers(G, first_label= 1)
-</code></pre>
-<pre><code class="language-python">nx.draw_networkx(G)
-</code></pre>
-
+        
+In this post I will briefly share the connectivity related concepts and functions like clustering coefficient, distance...
       </div>
       <a href="https://BolinWu-Gridea.github.io/post/network-connectivity/" class="btn">
         Read more
       </a>
     </div>
+    
+      <img class="flex-shrink-0 self-start md:ml-4 mb-4 md:mb-0 rounded-sm object-cover featured-img order-1 md:order-2 w-full h-40 md:w-56 md:h-32" loading="lazy" src="https://BolinWu-Gridea.github.io/post-images/network-connectivity.jpg" alt="Network Connectivity">
     
   </div>
 
