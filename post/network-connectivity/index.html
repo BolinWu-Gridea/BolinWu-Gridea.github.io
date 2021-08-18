@@ -15,10 +15,10 @@
     
 
   <meta name="description" content="
-In this post I will briefly share the connectivity related concepts and functions like clustering coefficient, distance..." />
+In this post I will briefly share the connectivity related concepts and functions of clustering coefficient, distance m..." />
   <meta property="og:title" content="Network Connectivity - Bolin Wu">
   <meta property="og:description" content="
-In this post I will briefly share the connectivity related concepts and functions like clustering coefficient, distance..." />
+In this post I will briefly share the connectivity related concepts and functions of clustering coefficient, distance m..." />
   <meta property="og:type" content="articles">
   <meta property="og:url" content="https://BolinWu-Gridea.github.io/post/network-connectivity/" />
   <meta property="og:image" content="https://BolinWu-Gridea.github.io/post-images/network-connectivity.jpg">
@@ -26,7 +26,7 @@ In this post I will briefly share the connectivity related concepts and function
   <meta property="og:image:width" content="1200">
   <meta name="twitter:title" content="Network Connectivity - Bolin Wu">
   <meta name="twitter:description" content="
-In this post I will briefly share the connectivity related concepts and functions like clustering coefficient, distance...">
+In this post I will briefly share the connectivity related concepts and functions of clustering coefficient, distance m...">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://BolinWu-Gridea.github.io/post/network-connectivity/">
 
@@ -56,7 +56,7 @@ In this post I will briefly share the connectivity related concepts and function
           <img src="https://BolinWu-Gridea.github.io/post-images/network-connectivity.jpg" alt="Network Connectivity" class="block w-full mb-8">
         
         <div class="mb-8 flex flex-wrap">
-          <div class="text-gray-400 text-sm mr-4">2021-08-16 · 6 min read</div>
+          <div class="text-gray-400 text-sm mr-4">2021-08-13 · 6 min read</div>
           
             <a href="https://BolinWu-Gridea.github.io/tag/j6bxoCbAc/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
               <i class="ri-hashtag"></i>
@@ -71,13 +71,13 @@ In this post I will briefly share the connectivity related concepts and function
         </div>
         <div class="markdown mb-8" v-pre>
           <!-- more -->
-<p>In this post I will briefly share the connectivity related concepts and functions like clustering coefficient, distance measures, and connection robustness.</p>
+<p>In this post I will briefly share the connectivity related concepts and functions of clustering coefficient, distance measures, and connection robustness.</p>
 <h1 id="clustering-coefficient">Clustering coefficient</h1>
 <p><strong>Tradic Closure</strong> is the tendency for people who share lots of connections. People who share lots of friends have an increased likelihood of becoming connected themselves. One measure of the degree to which nodes in a network tend to &quot;cluster&quot; or form tranglies is <strong>clustering coefficient</strong></p>
 <h2 id="local-clustering-coefficient">Local clustering coefficient</h2>
 <p>The local clustering coefficient of Node C can be calculated as follows:</p>
-<p class='katex-block katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;#&#039; at position 13: \frac{\text{#̲ of pairs of C&#039;…'>\frac{\text{# of pairs of C&#039;s friends who are friends}}{\text{# of pairs of C&#039;s friends}}
-</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mtext>number of pairs of C’s friends who are friends</mtext><mtext>number of pairs of C’s friends</mtext></mfrac></mrow><annotation encoding="application/x-tex">\frac{\text{number of pairs of C&#x27;s friends who are friends}}{\text{number of pairs of C&#x27;s friends}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.25188em;vertical-align:-0.8804400000000001em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714399999999998em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">number of pairs of C’s friends</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">number of pairs of C’s friends who are friends</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804400000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
 <p>We assume that the local clustering coefficient of a node of degree less than 2 to be 0.</p>
 <p>In NetworkX:</p>
 <pre><code>G = nx.Graph()
@@ -125,7 +125,14 @@ G = nx.karate_club_graph()
 <pre><code class="language-python">nx.draw_networkx(G)
 </code></pre>
 <!-- more -->
-<figure data-type="image" tabindex="1"><img src="https://BolinWu-Gridea.github.io/post-images/1629273298940.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://BolinWu-Gridea.github.io/post-images/1629276228029.png" alt="" loading="lazy"></figure>
+<figure>
+  <img src="{{ site.url }}{{ site.baseurl }}file://Users/bolin/Documents/Gridea/post-images/1629273298940.png" alt="none" style="width:100%">
+  <figcaption> Example Network Graph </figcaption>
+</figure>
+<p><img src="file://Users/bolin/Documents/Gridea/post-images/1629276228029.png"
+     alt="Markdown Monster icon"
+     style="float: left; margin-right: 10px;" /></p>
 <pre><code class="language-python"># find average shortest path
 nx.average_shortest_path_length(G)
 </code></pre>
