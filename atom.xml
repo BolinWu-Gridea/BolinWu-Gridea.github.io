@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2021-08-20T12:42:56.463Z</updated>
+    <updated>2021-08-20T12:49:44.928Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -16,7 +16,7 @@
         <id>https://BolinWu-Gridea.github.io/post/network-influence-measures/</id>
         <link href="https://BolinWu-Gridea.github.io/post/network-influence-measures/">
         </link>
-        <updated>2021-08-19T00:24:21.000Z</updated>
+        <updated>2021-08-18T12:24:21.000Z</updated>
         <summary type="html"><![CDATA[<p>Closeness centrality can tell us how to find <strong>important nodes</strong> in a network. The important nodes could disseminate information to many nodes or prevent epidemics, or hubs in a transportaion network, etc.</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>Closeness centrality can tell us how to find <strong>important nodes</strong> in a network. The important nodes could disseminate information to many nodes or prevent epidemics, or hubs in a transportaion network, etc.</p>
@@ -89,28 +89,28 @@
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[An Overview of Causal Inference (Part 4: Instrumental variable)]]></title>
+        <title type="html"><![CDATA[Causal Inference Overview (Part 4: Instrumental variable)]]></title>
         <id>https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-4-instrumental-variable/</id>
         <link href="https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-4-instrumental-variable/">
         </link>
-        <updated>2021-06-04T07:38:23.000Z</updated>
+        <updated>2021-06-04T01:38:23.000Z</updated>
     </entry>
     <entry>
-        <title type="html"><![CDATA[An Overview of Causal Inference (Part 3: Inverse probability of treatment weighting, IPTW)]]></title>
+        <title type="html"><![CDATA[Causal Inference Overview (Part 3: Inverse probability of treatment weighting, IPTW)]]></title>
         <id>https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-3-inverse-probability-of-treatment-weighting-iptw/</id>
         <link href="https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-3-inverse-probability-of-treatment-weighting-iptw/">
         </link>
-        <updated>2021-05-28T11:37:45.000Z</updated>
+        <updated>2021-05-28T05:37:45.000Z</updated>
         <summary type="html"><![CDATA[<p>In this post we will continue on discussing the estimate of causal effects. We will talk about intuition of IPTW, some key definitions like weighting, marginal structual models. And in the end we will show a data example in R.</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>In this post we will continue on discussing the estimate of causal effects. We will talk about intuition of IPTW, some key definitions like weighting, marginal structual models. And in the end we will show a data example in R.</p>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[An Overview of Causal Inference (Part 2: Propensity Score and Matching)]]></title>
+        <title type="html"><![CDATA[Causal Inference Overview (Part 2: Propensity Score and Matching)]]></title>
         <id>https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/">
         </link>
-        <updated>2021-05-06T10:00:00.000Z</updated>
+        <updated>2021-05-06T04:00:00.000Z</updated>
     </entry>
 </feed>
