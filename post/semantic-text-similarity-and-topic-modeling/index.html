@@ -14,19 +14,16 @@
 
     
 
-  <meta name="description" content="
-Topic modeling is a useful tool for people to grasp a general picture of a long text document. Compared with LSTM or RN..." />
+  <meta name="description" content="Topic modeling is a useful tool for people to grasp a general picture of a long text document. Compared with LSTM or RNN..." />
   <meta property="og:title" content="Semantic Text Similarity and Topic Modeling  - Bolin Wu">
-  <meta property="og:description" content="
-Topic modeling is a useful tool for people to grasp a general picture of a long text document. Compared with LSTM or RN..." />
+  <meta property="og:description" content="Topic modeling is a useful tool for people to grasp a general picture of a long text document. Compared with LSTM or RNN..." />
   <meta property="og:type" content="articles">
   <meta property="og:url" content="https://BolinWu-Gridea.github.io/post/semantic-text-similarity-and-topic-modeling/" />
   <meta property="og:image" content="https://BolinWu-Gridea.github.io/post-images/semantic-text-similarity-and-topic-modeling.jpg">
   <meta property="og:image:height" content="630">
   <meta property="og:image:width" content="1200">
   <meta name="twitter:title" content="Semantic Text Similarity and Topic Modeling  - Bolin Wu">
-  <meta name="twitter:description" content="
-Topic modeling is a useful tool for people to grasp a general picture of a long text document. Compared with LSTM or RN...">
+  <meta name="twitter:description" content="Topic modeling is a useful tool for people to grasp a general picture of a long text document. Compared with LSTM or RNN...">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://BolinWu-Gridea.github.io/post/semantic-text-similarity-and-topic-modeling/">
 
@@ -56,7 +53,7 @@ Topic modeling is a useful tool for people to grasp a general picture of a long 
           <img src="https://BolinWu-Gridea.github.io/post-images/semantic-text-similarity-and-topic-modeling.jpg" alt="Semantic Text Similarity and Topic Modeling " class="block w-full mb-8">
         
         <div class="mb-8 flex flex-wrap">
-          <div class="text-gray-400 text-sm mr-4">2021-07-28 · 19 min read</div>
+          <div class="text-gray-400 text-sm mr-4">2021-07-27 · 19 min read</div>
           
             <a href="https://BolinWu-Gridea.github.io/tag/zOshREnVK/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
               <i class="ri-hashtag"></i>
@@ -70,12 +67,11 @@ Topic modeling is a useful tool for people to grasp a general picture of a long 
           
         </div>
         <div class="markdown mb-8" v-pre>
-          <!-- more -->
-<p>Topic modeling is a useful tool for people to grasp a general picture of a long text document. Compared with LSTM or RNN, topic model is more or less for observatory purpose rather than prediction. In this post I will share the measure of similarity among words, the concept of topic modeling and its application in Python.</p>
+          <p>Topic modeling is a useful tool for people to grasp a general picture of a long text document. Compared with LSTM or RNN, topic model is more or less for observatory purpose rather than prediction. In this post I will share the measure of similarity among words, the concept of topic modeling and its application in Python.</p>
 <!-- more -->
-<h2 id="semantic-text-similarity">Semantic text similarity</h2>
+<h1 id="semantic-text-similarity">Semantic text similarity</h1>
 <p>If we have a text document or a text passage and a sentence. Based on the information in the text passage, we need to say whether the sentence is correct or it derives its meaning from there or not. This is a typical task of semantic similarity. One of the useful resources for semantic similarity analysis is <strong>WordNet</strong>.</p>
-<h3 id="wordnet">WordNet</h3>
+<h2 id="wordnet">WordNet</h2>
 <p>WordNet is a semantic dictionary of words, interlinked by semantic relations. It is mostly developped in English but not it also available for quite a few other languages. It includes rich linguistic information like part of speech, sense of a word, derivationally related forms, etc. WordNet organizes information in a hierarchy. An example could be like <a href="https://www.google.com/url?sa=i&amp;url=https%3A%2F%2Fwww.semanticscholar.org%2Fpaper%2FA-New-Measure-of-Word-Semantic-Similarity-Based-on-Qin-Lu%2Fd3a0c2a70d3d39a5b41b4ef8c4890a481307259f%2Ffigure%2F0&amp;psig=AOvVaw3_5C9ml5D5en1Tn0pVOZ3d&amp;ust=1627380418249000&amp;source=images&amp;cd=vfe&amp;ved=0CAsQjRxqFwoTCLDaktS-gPICFQAAAAAdAAAAABAJ">this</a>.One measure of using such hierarchy is by <strong>path similarity</strong>. It is calculated by finding the shortest path between the two concepts. One way to find it is to count how many steps is needed to take to get from one word to the other in the hierarchy. Similarity measure inversely related to path distance.</p>
 <p>In Python, WordNet can be imported through NLTK.</p>
 <pre><code>import nltk
@@ -90,7 +86,7 @@ train = wn.synset('train.n.01’)
 <p>Once we find the proper meaning of the word, we could find the path similarity as follows.</p>
 <pre><code>bus.path_similarity(train)
 </code></pre>
-<h3 id="distributional-similarity">Distributional similarity</h3>
+<h2 id="distributional-similarity">Distributional similarity</h2>
 <p>The other different measure of similarity is using distributional similarity and collections. The intuition is that two wrods that frequently appears together are more likely to be semantically related. Like &quot;Play at zoo.&quot;, &quot;Play at amusement park&quot;. Both &quot;amusement park&quot; and &quot;zoo&quot; appears together with &quot;play&quot;. Therefore these two words could be closely related. We can define the range of context by words within a small window, or specific syntactic relation to the taget word, etc.</p>
 <p>Once we have defined the context, we can find the strength of correlation. The criteria could be occurance frequency of a word. For example,&quot;is&quot; is a very frequent word, so it has high chance of co-occuring with other words. Therefore it should be paid less weight. One measure is <strong>Pointwise Mutual Information</strong></p>
 <p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext>PMI(w,c) = log[P(w,c)/P(w)P(c)]</mtext></mrow><annotation encoding="application/x-tex">\text{PMI(w,c) = log[P(w,c)/P(w)P(c)]}
@@ -112,7 +108,7 @@ finder.nbest(bigram_measures.pmi, 10)
 finder.apply_freq_filter(10)
 </code></pre>
 <p>From the discussion above we find that finding similarity between words and text is important and WordNet is a useful tool to identify the semantic relationship. NLTK offers great assistance to such task.</p>
-<h2 id="topic-modeling">Topic modeling</h2>
+<h1 id="topic-modeling">Topic modeling</h1>
 <p>Topic modeling is a coarse-level analysis of what is in a text collection. It is an exploratory tool used for text mining which can help us to have a general understanding of the text type. For example, is it about sports, or business, or pilitics.<br>
 Topic modeling is a coarse-level analysis of what is in a text collection. It can help us to have a general understanding of the text type. For example, it can tell us if the text is about sports, or business, or pilitics.</p>
 <p>What is known are the text corpus and number of topics. What is not known are the actual topics and the topic distribution for each document.</p>
@@ -500,15 +496,14 @@ list(ldamodel.get_document_topics(corpus_new))[:5]
       </div>
       <div class="post-toc-container">
         <ul class="markdownIt-TOC">
-<li>
-<ul>
 <li><a href="#semantic-text-similarity">Semantic text similarity</a>
 <ul>
 <li><a href="#wordnet">WordNet</a></li>
 <li><a href="#distributional-similarity">Distributional similarity</a></li>
 </ul>
 </li>
-<li><a href="#topic-modeling">Topic modeling</a></li>
+<li><a href="#topic-modeling">Topic modeling</a>
+<ul>
 <li><a href="#lda">LDA</a></li>
 </ul>
 </li>

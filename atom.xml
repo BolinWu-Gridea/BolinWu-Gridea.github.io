@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2021-08-19T08:38:41.309Z</updated>
+    <updated>2021-08-20T12:42:56.463Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -12,46 +12,81 @@
     <icon>https://BolinWu-Gridea.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Bolin Wu</rights>
     <entry>
+        <title type="html"><![CDATA[Network Influence Measures ]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/network-influence-measures/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/network-influence-measures/">
+        </link>
+        <updated>2021-08-19T00:24:21.000Z</updated>
+        <summary type="html"><![CDATA[<p>Closeness centrality can tell us how to find <strong>important nodes</strong> in a network. The important nodes could disseminate information to many nodes or prevent epidemics, or hubs in a transportaion network, etc.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Closeness centrality can tell us how to find <strong>important nodes</strong> in a network. The important nodes could disseminate information to many nodes or prevent epidemics, or hubs in a transportaion network, etc.</p>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Network Connectivity]]></title>
         <id>https://BolinWu-Gridea.github.io/post/network-connectivity/</id>
         <link href="https://BolinWu-Gridea.github.io/post/network-connectivity/">
         </link>
-        <updated>2021-08-11T19:54:08.000Z</updated>
+        <updated>2021-08-11T13:54:08.000Z</updated>
+        <summary type="html"><![CDATA[<p>In this post I will briefly share the connectivity related concepts and functions of clustering coefficient, distance measures, and connection robustness.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>In this post I will briefly share the connectivity related concepts and functions of clustering coefficient, distance measures, and connection robustness.</p>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[Network Analysis Basics]]></title>
         <id>https://BolinWu-Gridea.github.io/post/network-analysis-basics/</id>
         <link href="https://BolinWu-Gridea.github.io/post/network-analysis-basics/">
         </link>
-        <updated>2021-08-04T08:04:44.000Z</updated>
+        <updated>2021-08-04T02:04:44.000Z</updated>
+        <summary type="html"><![CDATA[<p>Networks is a set of objects (nodes) with interconnections (edges). Many complex structures can be represented by networks. It is everywhere in different forms. For example, family network, Facebook communication network, subway network, food web, etc.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Networks is a set of objects (nodes) with interconnections (edges). Many complex structures can be represented by networks. It is everywhere in different forms. For example, family network, Facebook communication network, subway network, food web, etc.</p>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[Semantic Text Similarity and Topic Modeling ]]></title>
         <id>https://BolinWu-Gridea.github.io/post/semantic-text-similarity-and-topic-modeling/</id>
         <link href="https://BolinWu-Gridea.github.io/post/semantic-text-similarity-and-topic-modeling/">
         </link>
-        <updated>2021-07-27T23:47:50.000Z</updated>
+        <updated>2021-07-27T11:47:50.000Z</updated>
+        <summary type="html"><![CDATA[<p>Topic modeling is a useful tool for people to grasp a general picture of a long text document. Compared with LSTM or RNN, topic model is more or less for observatory purpose rather than prediction. In this post I will share the measure of similarity among words, the concept of topic modeling and its application in Python.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Topic modeling is a useful tool for people to grasp a general picture of a long text document. Compared with LSTM or RNN, topic model is more or less for observatory purpose rather than prediction. In this post I will share the measure of similarity among words, the concept of topic modeling and its application in Python.</p>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[Text Classification in Python]]></title>
         <id>https://BolinWu-Gridea.github.io/post/text-classification-in-python/</id>
         <link href="https://BolinWu-Gridea.github.io/post/text-classification-in-python/">
         </link>
-        <updated>2021-07-23T04:15:47.000Z</updated>
+        <updated>2021-07-22T22:15:47.000Z</updated>
+        <summary type="html"><![CDATA[<p>In the previous two posts, I have shared basic concepts and useful functions of <a href="https://bolinwu.blog/post/text-mining-in-python-p1-basics-of-regex/">text mining</a> and <a href="https://bolinwu.blog/post/basic-npl-task-with-nltk-in-python/">NLP</a>. In this third post of text mining in Python, we finally proceed to the advanced part of text mining, that is, to build text classification model. In this post I will share the main tasks of text classification. Two useful classification models, their implementation in Python and methods of improving classification performance.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>In the previous two posts, I have shared basic concepts and useful functions of <a href="https://bolinwu.blog/post/text-mining-in-python-p1-basics-of-regex/">text mining</a> and <a href="https://bolinwu.blog/post/basic-npl-task-with-nltk-in-python/">NLP</a>. In this third post of text mining in Python, we finally proceed to the advanced part of text mining, that is, to build text classification model. In this post I will share the main tasks of text classification. Two useful classification models, their implementation in Python and methods of improving classification performance.</p>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[Basic NLP with NLTK in Python]]></title>
         <id>https://BolinWu-Gridea.github.io/post/basic-npl-task-with-nltk-in-python/</id>
         <link href="https://BolinWu-Gridea.github.io/post/basic-npl-task-with-nltk-in-python/">
         </link>
-        <updated>2021-07-10T23:42:00.000Z</updated>
+        <updated>2021-07-10T17:42:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>In this post I will share what are the basic NLP tasks and how to deal with different tasks by using the powerful NLTK library in Python.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>In this post I will share what are the basic NLP tasks and how to deal with different tasks by using the powerful NLTK library in Python.</p>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[Text Mining Application in Python (RegEx)]]></title>
         <id>https://BolinWu-Gridea.github.io/post/text-mining-in-python-p1-basics-of-regex/</id>
         <link href="https://BolinWu-Gridea.github.io/post/text-mining-in-python-p1-basics-of-regex/">
         </link>
-        <updated>2021-06-16T03:51:12.000Z</updated>
+        <updated>2021-06-15T21:51:12.000Z</updated>
+        <summary type="html"><![CDATA[<p>In this exercise, we'll be working with messy medical data and using <strong>RegEx</strong> in Python to extract dates of different formats. The goal of this exercise is to correctly identify all of the different date variants encoded in this dataset and to properly standardize and sort the dates.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>In this exercise, we'll be working with messy medical data and using <strong>RegEx</strong> in Python to extract dates of different formats. The goal of this exercise is to correctly identify all of the different date variants encoded in this dataset and to properly standardize and sort the dates.</p>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[An Overview of Causal Inference (Part 4: Instrumental variable)]]></title>
@@ -65,20 +100,17 @@
         <id>https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-3-inverse-probability-of-treatment-weighting-iptw/</id>
         <link href="https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-3-inverse-probability-of-treatment-weighting-iptw/">
         </link>
-        <updated>2021-05-28T17:37:45.000Z</updated>
+        <updated>2021-05-28T11:37:45.000Z</updated>
+        <summary type="html"><![CDATA[<p>In this post we will continue on discussing the estimate of causal effects. We will talk about intuition of IPTW, some key definitions like weighting, marginal structual models. And in the end we will show a data example in R.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>In this post we will continue on discussing the estimate of causal effects. We will talk about intuition of IPTW, some key definitions like weighting, marginal structual models. And in the end we will show a data example in R.</p>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[An Overview of Causal Inference (Part 2: Propensity Score and Matching)]]></title>
         <id>https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/</id>
         <link href="https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/">
         </link>
-        <updated>2021-05-06T16:00:00.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[An Overview of Causal Inference (Part 1: Causal Effects and Confounding)]]></title>
-        <id>https://BolinWu-Gridea.github.io/post/2021-04-20-CausalityIntroductionP1/</id>
-        <link href="https://BolinWu-Gridea.github.io/post/2021-04-20-CausalityIntroductionP1/">
-        </link>
-        <updated>2021-04-16T10:00:00.000Z</updated>
+        <updated>2021-05-06T10:00:00.000Z</updated>
     </entry>
 </feed>
