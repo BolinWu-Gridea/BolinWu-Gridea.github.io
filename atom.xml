@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2021-08-20T12:49:44.928Z</updated>
+    <updated>2021-08-26T09:28:03.332Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -82,7 +82,7 @@
         <id>https://BolinWu-Gridea.github.io/post/text-mining-in-python-p1-basics-of-regex/</id>
         <link href="https://BolinWu-Gridea.github.io/post/text-mining-in-python-p1-basics-of-regex/">
         </link>
-        <updated>2021-06-15T21:51:12.000Z</updated>
+        <updated>2021-06-15T09:51:12.000Z</updated>
         <summary type="html"><![CDATA[<p>In this exercise, we'll be working with messy medical data and using <strong>RegEx</strong> in Python to extract dates of different formats. The goal of this exercise is to correctly identify all of the different date variants encoded in this dataset and to properly standardize and sort the dates.</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>In this exercise, we'll be working with messy medical data and using <strong>RegEx</strong> in Python to extract dates of different formats. The goal of this exercise is to correctly identify all of the different date variants encoded in this dataset and to properly standardize and sort the dates.</p>
