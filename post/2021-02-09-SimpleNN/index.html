@@ -14,19 +14,16 @@
 
     
 
-  <meta name="description" content="
-Intuitively, simple neural network is a combination of many (linear) transformations, which is similar to mixture model..." />
+  <meta name="description" content="Intuitively, simple neural network is a combination of many (linear) transformations, which is similar to mixture model ..." />
   <meta property="og:title" content="Classification of Image Data by Simple NN  - Bolin Wu">
-  <meta property="og:description" content="
-Intuitively, simple neural network is a combination of many (linear) transformations, which is similar to mixture model..." />
+  <meta property="og:description" content="Intuitively, simple neural network is a combination of many (linear) transformations, which is similar to mixture model ..." />
   <meta property="og:type" content="articles">
   <meta property="og:url" content="https://BolinWu-Gridea.github.io/post/2021-02-09-SimpleNN/" />
   <meta property="og:image" content="https://BolinWu-Gridea.github.io/post-images/2021-02-09-SimpleNN.jpg">
   <meta property="og:image:height" content="630">
   <meta property="og:image:width" content="1200">
   <meta name="twitter:title" content="Classification of Image Data by Simple NN  - Bolin Wu">
-  <meta name="twitter:description" content="
-Intuitively, simple neural network is a combination of many (linear) transformations, which is similar to mixture model...">
+  <meta name="twitter:description" content="Intuitively, simple neural network is a combination of many (linear) transformations, which is similar to mixture model ...">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://BolinWu-Gridea.github.io/post/2021-02-09-SimpleNN/">
 
@@ -65,11 +62,7 @@ Intuitively, simple neural network is a combination of many (linear) transformat
           
         </div>
         <div class="markdown mb-8" v-pre>
-          <!-- more -->
-<p>Intuitively, simple neural network is a combination of many (linear) transformations, which is similar to mixture model in some way. It allows to transform the input data in a more sophisticated way that a single linear model could not achieve. Simple neural network is the foundation for many other more advanced neural network models e.g., Recurrent Neural Network and Long Short Term Memory (LSTM). By the way, I posted a project of LSTM <a href="https://bolinwu-gridea.github.io/post/2020-01-14-ML-Wine/">here</a> please feel free to check it out if you are interested.</p>
-<!-- more -->
-<p>If you have not heard of neural network before, this video may help you to easily grasp the idea:<br>
-<a href="http://www.youtube.com/watch?v=CqOfi41LfDw" title="StatQuest"><img src="http://img.youtube.com/vi/CqOfi41LfDw/0.jpg" alt="" loading="lazy"></a></p>
+          <p>Intuitively, simple neural network is a combination of many (linear) transformations, which is similar to mixture model in some way. It allows to transform the input data in a more sophisticated way that a single linear model could not achieve. Simple neural network is the foundation for many other more advanced neural network models e.g., Recurrent Neural Network and Long Short Term Memory (LSTM). By the way, I posted a project of LSTM <a href="https://bolinwu-gridea.github.io/post/2020-01-14-ML-Wine/">here</a> please feel free to check it out if you are interested.</p>
 <p>The content of this post includes:</p>
 <ol>
 <li>The basics of <strong>feedforward neural network</strong>.</li>
@@ -77,6 +70,9 @@ Intuitively, simple neural network is a combination of many (linear) transformat
 <li>Several useful parameter tunings.</li>
 </ol>
 <p>The main reference is <a href="https://www.deeplearningbook.org">Deep Learning, Goodfellow et al</a>, Chapter 6.</p>
+<!-- more -->
+<p>If you have not heard of neural network before, this video may help you to easily grasp the idea:<br>
+<a href="http://www.youtube.com/watch?v=CqOfi41LfDw" title="StatQuest"><img src="http://img.youtube.com/vi/CqOfi41LfDw/0.jpg" alt="" loading="lazy"></a></p>
 <h1 id="neural-network-basics">Neural Network Basics</h1>
 <p>At first, let us implement a straight forward neural network mathematically. We assume our single hidden layer network to be:</p>
 <p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo separator="true">,</mo><mi>W</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>w</mi><mo separator="true">,</mo><mi>b</mi><mo>)</mo><mo>=</mo><msup><mi>w</mi><mi>T</mi></msup><mi>m</mi><mi>a</mi><mi>x</mi><mo>(</mo><mn>0</mn><mo separator="true">,</mo><msup><mi>W</mi><mi>T</mi></msup><mi>x</mi><mo>+</mo><mi>c</mi><mo>)</mo><mo>+</mo><mi>b</mi></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
