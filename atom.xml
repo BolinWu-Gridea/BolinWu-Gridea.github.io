@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2023-05-29T18:58:15.370Z</updated>
+    <updated>2023-05-29T18:59:50.802Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -12,11 +12,11 @@
     <icon>https://BolinWu-Gridea.github.io/favicon.ico</icon>
     <rights>All rights reserved 2023, Bolin Wu</rights>
     <entry>
-        <title type="html"><![CDATA[Survival Analysis 1: Basic concepts]]></title>
+        <title type="html"><![CDATA[Survival Analysis 1: Basic concepts and three fundamental functions]]></title>
         <id>https://BolinWu-Gridea.github.io/post/survivalanalysis-1/</id>
         <link href="https://BolinWu-Gridea.github.io/post/survivalanalysis-1/">
         </link>
-        <updated>2023-04-08T06:52:25.000Z</updated>
+        <updated>2023-04-08T00:52:25.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[Network Influence Measures ]]></title>
