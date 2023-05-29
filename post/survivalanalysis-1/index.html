@@ -62,7 +62,7 @@ Introdu...">
           <img src="https://bigdata.go.th/wp-content/uploads/2020/09/Screenshot-2020-10-06-093522.png" alt="Survival Analysis 1: Basic concepts and three fundamental functions" class="block w-full mb-8">
         
         <div class="mb-8 flex flex-wrap">
-          <div class="text-gray-400 text-sm mr-4">2023-04-08 · 11 min read</div>
+          <div class="text-gray-400 text-sm mr-4">2023-04-07 · 11 min read</div>
           
             <a href="https://BolinWu-Gridea.github.io/tag/2FtU2ZTmt/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
               <i class="ri-hashtag"></i>
@@ -204,7 +204,8 @@ experienced</strong> the event of interest (uncensored).</li>
 <li>Therefore, the hazard function contains information on <strong>both censored<br>
 and uncensored</strong> observations. This is the exact reason why hazard<br>
 function is of core interest in survival analysis. When we have hazard<br>
-function, we are making good use of the censored observations.</li>
+function, we are making good use of the censored and uncensored<br>
+observations.</li>
 </ul>
 <p>For mathematics details please see section below.</p>
 <h2 id="mathematics-deduction">Mathematics deduction</h2>
@@ -240,11 +241,9 @@ h(t) \Delta t &amp; \cong P(t &lt; T &lt; t + \Delta t | T \geq t) \\
 <p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mi>f</mi><mo>(</mo><mi>t</mi><mo>)</mo></mrow><mrow><mi>S</mi><mo>(</mo><mi>t</mi><mo>)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">h(t) = \frac{f(t)}{S(t)}
 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">h</span><span class="mopen">(</span><span class="mord mathdefault">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.363em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mopen">(</span><span class="mord mathdefault">t</span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">t</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
 <h1 id="end-thoughts">End thoughts</h1>
-<p>In this post I have briefly shared the three fundamental functions in<br>
-survival analysis. And I have shared why the hazard function is so<br>
-crucial in survival analysis and how it takes both observations that<br>
-have experienced interest event and that have been censored into<br>
-account.</p>
+<p>In this post I have briefly shared motivation of survival analysis and<br>
+three fundamental functions. And I have shared the reason that hazard function<br>
+is so crucial in survival analysis.</p>
 <p>Personally speaking, the moment when I get to the end of the<br>
 mathematical deduction of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mi>f</mi><mo>(</mo><mi>t</mi><mo>)</mo></mrow><mrow><mi>S</mi><mo>(</mo><mi>t</mi><mo>)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">h(t) = \frac{f(t)}{S(t)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">h</span><span class="mopen">(</span><span class="mord mathdefault">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.53em;vertical-align:-0.52em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05764em;">S</span><span class="mopen mtight">(</span><span class="mord mathdefault mtight">t</span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10764em;">f</span><span class="mopen mtight">(</span><span class="mord mathdefault mtight">t</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>, I gasped with<br>
 admiration in my heart: it is so beautiful!</p>
