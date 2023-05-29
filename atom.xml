@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2023-04-10T06:30:22.165Z</updated>
+    <updated>2023-05-29T18:58:15.370Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -11,6 +11,13 @@
     <logo>https://BolinWu-Gridea.github.io/images/avatar.png</logo>
     <icon>https://BolinWu-Gridea.github.io/favicon.ico</icon>
     <rights>All rights reserved 2023, Bolin Wu</rights>
+    <entry>
+        <title type="html"><![CDATA[Survival Analysis 1: Basic concepts]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/survivalanalysis-1/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/survivalanalysis-1/">
+        </link>
+        <updated>2023-04-08T06:52:25.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Network Influence Measures ]]></title>
         <id>https://BolinWu-Gridea.github.io/post/network-influence-measures/</id>
@@ -108,17 +115,6 @@
         <summary type="html"><![CDATA[<p>In this post we will continue on discussing the estimate of causal effects. We will talk about intuition of IPTW, some key definitions like weighting, marginal structual models. And in the end we will show a data example in R.</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>In this post we will continue on discussing the estimate of causal effects. We will talk about intuition of IPTW, some key definitions like weighting, marginal structual models. And in the end we will show a data example in R.</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Causal Inference Overview (Part 2: Propensity Score and Matching)]]></title>
-        <id>https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/</id>
-        <link href="https://BolinWu-Gridea.github.io/post/2021-05-08-CausalityIntroductionP2/">
-        </link>
-        <updated>2021-05-05T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>In the <a href="https://bolinwu.blog/post/2021-04-20-CausalityIntroductionP1/">Part 1</a> we talked about the basic concepts of causal effect and confounding. In this post we will proceeed with discussing about how to control the confounders with matching.</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>In the <a href="https://bolinwu.blog/post/2021-04-20-CausalityIntroductionP1/">Part 1</a> we talked about the basic concepts of causal effect and confounding. In this post we will proceeed with discussing about how to control the confounders with matching.</p>
 ]]></content>
     </entry>
 </feed>
