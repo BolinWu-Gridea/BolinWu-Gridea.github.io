@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2023-07-25T13:32:52.043Z</updated>
+    <updated>2023-07-25T13:36:00.399Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -16,10 +16,10 @@
         <id>https://BolinWu-Gridea.github.io/post/survival-analysis-2-non-parametric-estimation-of-survival-functions/</id>
         <link href="https://BolinWu-Gridea.github.io/post/survival-analysis-2-non-parametric-estimation-of-survival-functions/">
         </link>
-        <updated>2023-07-22T06:10:07.000Z</updated>
-        <summary type="html"><![CDATA[<p>This post talks about the concepts of survival function estimations and corresponding calculation both manually and in R.</p>
+        <updated>2023-07-22T00:10:07.000Z</updated>
+        <summary type="html"><![CDATA[<p>Concepts of survival function estimations and corresponding calculations both manually and in R.</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>This post talks about the concepts of survival function estimations and corresponding calculation both manually and in R.</p>
+        <content type="html"><![CDATA[<p>Concepts of survival function estimations and corresponding calculations both manually and in R.</p>
 ]]></content>
     </entry>
     <entry>
@@ -27,10 +27,10 @@
         <id>https://BolinWu-Gridea.github.io/post/survivalanalysis-1/</id>
         <link href="https://BolinWu-Gridea.github.io/post/survivalanalysis-1/">
         </link>
-        <updated>2023-05-28T13:05:32.000Z</updated>
-        <summary type="html"><![CDATA[<p>Three pillows of survival analysis:  survivor function, density function, hazard function. This post covers their concepts and relationship among them.</p>
+        <updated>2023-05-28T07:05:32.000Z</updated>
+        <summary type="html"><![CDATA[<p>This post covers their concepts and relationship among the three pillows of survival analysis:  survivor function, density function, hazard function.</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>Three pillows of survival analysis:  survivor function, density function, hazard function. This post covers their concepts and relationship among them.</p>
+        <content type="html"><![CDATA[<p>This post covers their concepts and relationship among the three pillows of survival analysis:  survivor function, density function, hazard function.</p>
 ]]></content>
     </entry>
     <entry>
