@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2023-07-25T13:21:52.332Z</updated>
+    <updated>2023-07-25T13:32:52.043Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -16,22 +16,10 @@
         <id>https://BolinWu-Gridea.github.io/post/survival-analysis-2-non-parametric-estimation-of-survival-functions/</id>
         <link href="https://BolinWu-Gridea.github.io/post/survival-analysis-2-non-parametric-estimation-of-survival-functions/">
         </link>
-        <updated>2023-07-22T12:10:07.000Z</updated>
-        <summary type="html"><![CDATA[<p>In the <a href="https://bolinwu.blog/post/survivalanalysis-1/">Survival Analysis 1: Basic concepts and three fundamental functions</a> I<br>
-shared about the 3 basic blocks of survival analysis: density funciton,<br>
-survival function and hazard function.</p>
-<p>Next, it is natural to think about: now we know their meaning, but how<br>
-to estimate them? It brings to next topic of <strong>non-parametric estimation<br>
-of survival functions</strong>. The word non-parametric means there is <strong>no<br>
-assumption</strong> about the distribution of survival time T.</p>
+        <updated>2023-07-22T06:10:07.000Z</updated>
+        <summary type="html"><![CDATA[<p>This post talks about the concepts of survival function estimations and corresponding calculation both manually and in R.</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>In the <a href="https://bolinwu.blog/post/survivalanalysis-1/">Survival Analysis 1: Basic concepts and three fundamental functions</a> I<br>
-shared about the 3 basic blocks of survival analysis: density funciton,<br>
-survival function and hazard function.</p>
-<p>Next, it is natural to think about: now we know their meaning, but how<br>
-to estimate them? It brings to next topic of <strong>non-parametric estimation<br>
-of survival functions</strong>. The word non-parametric means there is <strong>no<br>
-assumption</strong> about the distribution of survival time T.</p>
+        <content type="html"><![CDATA[<p>This post talks about the concepts of survival function estimations and corresponding calculation both manually and in R.</p>
 ]]></content>
     </entry>
     <entry>
@@ -39,24 +27,10 @@ assumption</strong> about the distribution of survival time T.</p>
         <id>https://BolinWu-Gridea.github.io/post/survivalanalysis-1/</id>
         <link href="https://BolinWu-Gridea.github.io/post/survivalanalysis-1/">
         </link>
-        <updated>2023-05-28T19:05:32.000Z</updated>
-        <summary type="html"><![CDATA[<p><em>The cover picture is from <a href="https://opus1993.github.io/myTidyTuesday/Survival.html">Jim Gruman’s survival analysis post on<br>
-myTidyTuesday</a>.</em></p>
-<p>During February and March 2023, I attended the course <a href="https://www.su.se/english/search-courses-and-programmes/st303g-1.411706">Analysis of<br>
-Survival Data with Demographic<br>
-Applications</a><br>
-at Stockholm University by Prof. Gebrenegus Ghilagaber. After finishing<br>
-the exam, I am writing a series of posts to share what I learned from<br>
-this course and my thoughts on different subjects.</p>
+        <updated>2023-05-28T13:05:32.000Z</updated>
+        <summary type="html"><![CDATA[<p>Three pillows of survival analysis:  survivor function, density function, hazard function. This post covers their concepts and relationship among them.</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p><em>The cover picture is from <a href="https://opus1993.github.io/myTidyTuesday/Survival.html">Jim Gruman’s survival analysis post on<br>
-myTidyTuesday</a>.</em></p>
-<p>During February and March 2023, I attended the course <a href="https://www.su.se/english/search-courses-and-programmes/st303g-1.411706">Analysis of<br>
-Survival Data with Demographic<br>
-Applications</a><br>
-at Stockholm University by Prof. Gebrenegus Ghilagaber. After finishing<br>
-the exam, I am writing a series of posts to share what I learned from<br>
-this course and my thoughts on different subjects.</p>
+        <content type="html"><![CDATA[<p>Three pillows of survival analysis:  survivor function, density function, hazard function. This post covers their concepts and relationship among them.</p>
 ]]></content>
     </entry>
     <entry>
