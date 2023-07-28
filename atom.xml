@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2023-07-28T12:49:46.614Z</updated>
+    <updated>2023-07-28T14:44:36.770Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -11,6 +11,17 @@
     <logo>https://BolinWu-Gridea.github.io/images/avatar.png</logo>
     <icon>https://BolinWu-Gridea.github.io/favicon.ico</icon>
     <rights>All rights reserved 2023, Bolin Wu</rights>
+    <entry>
+        <title type="html"><![CDATA[Survival Analysis 3: Non-Parametric Comparison of Survival Functions]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/survival-analysis-3-non-parametric-comparison-of-survival-functions/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/survival-analysis-3-non-parametric-comparison-of-survival-functions/">
+        </link>
+        <updated>2023-07-27T20:34:25.000Z</updated>
+        <summary type="html"><![CDATA[<p>This post is to share the two common non-parametric tests of comparing the survival functions: <strong>Log-Rank Test</strong> &amp; <strong>Generalized Wilcoxon Test</strong>, as well as their corresponding calculations in the detailed process.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>This post is to share the two common non-parametric tests of comparing the survival functions: <strong>Log-Rank Test</strong> &amp; <strong>Generalized Wilcoxon Test</strong>, as well as their corresponding calculations in the detailed process.</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Survival Analysis 2: Non-Parametric Estimation of Survival Functions]]></title>
         <id>https://BolinWu-Gridea.github.io/post/survival-analysis-2-non-parametric-estimation-of-survival-functions/</id>
@@ -108,17 +119,6 @@
         <summary type="html"><![CDATA[<p>In this exercise, we'll be working with messy medical data and using <strong>RegEx</strong> in Python to extract dates of different formats. The goal of this exercise is to correctly identify all of the different date variants encoded in this dataset and to properly standardize and sort the dates.</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>In this exercise, we'll be working with messy medical data and using <strong>RegEx</strong> in Python to extract dates of different formats. The goal of this exercise is to correctly identify all of the different date variants encoded in this dataset and to properly standardize and sort the dates.</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Causal Inference 4: Instrumental variable]]></title>
-        <id>https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-4-instrumental-variable/</id>
-        <link href="https://BolinWu-Gridea.github.io/post/an-overview-of-causal-inference-part-4-instrumental-variable/">
-        </link>
-        <updated>2021-06-03T13:38:23.000Z</updated>
-        <summary type="html"><![CDATA[<p>Intromental variables (IV) is an alternative causal inference method that does not rely on the ignorability assumption.</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>Intromental variables (IV) is an alternative causal inference method that does not rely on the ignorability assumption.</p>
 ]]></content>
     </entry>
 </feed>
