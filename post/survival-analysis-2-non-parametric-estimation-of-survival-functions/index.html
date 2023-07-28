@@ -80,14 +80,14 @@ In the Su...">
 <!-- more -->
 <h1 id="introduction">Introduction</h1>
 <p>In the <a href="https://bolinwu.blog/post/survivalanalysis-1/">Survival Analysis 1: Basic concepts and three fundamental functions</a> I<br>
-shared about the 3 basic blocks of survival analysis: density funciton,<br>
+shared about the three basic blocks of survival analysis: density function,<br>
 survival function and hazard function.</p>
 <p>Next, it is natural to think about: now we know their meaning, but how<br>
-to estimate them? It brings to next topic of <strong>non-parametric estimation<br>
+to estimate them? It brings us to the next topic of <strong>non-parametric estimation<br>
 of survival functions</strong>. The word non-parametric means there is <strong>no<br>
 assumption</strong> about the distribution of survival time T.</p>
 <h2 id="a-simple-case-without-censoring">A simple case without censoring</h2>
-<p>No censoring indicates all samples are observed until they experience of<br>
+<p>No censoring indicates all samples are observed until they experience the event of<br>
 interest (e.g., death, unemployment, account deletion). Then we can<br>
 estimate survival function S(t) by:</p>
 <p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mover accent="true"><mi>S</mi><mo>^</mo></mover><msub><mi>t</mi><mi>i</mi></msub></msub><mo>=</mo><mfrac><mtext>number of individuals survived longer than t</mtext><mtext>total number of individuals in the sample</mtext></mfrac></mrow><annotation encoding="application/x-tex">\hat{S}_{t_{i}} = \frac{\text{number of individuals survived longer than t}}{\text{total number of individuals in the sample}}
@@ -122,13 +122,13 @@ estimate survival function S(t) by:</p>
 <h2 id="estimation-with-consoring">Estimation with consoring</h2>
 <p>The method above is applicable only in situations where all individuals<br>
 are observed until the events of interest occur (no censoring). However,<br>
-in real life such scenario is rare for the reason of unfeasible study<br>
-design or high expenses, etc. As a result, we have to adjust the risk<br>
-set accordingly when there’s new observations entering the study or<br>
-previous ones being censored. Two common methods are <strong>Life-Table<br>
+in real life, such a scenario is rare because of unfeasible study<br>
+design, high expenses, etc. As a result, we have to adjust the risk<br>
+set accordingly when new observations are entering the study or<br>
+previous ones are being censored. Two common methods are <strong>Life-Table<br>
 (Actuarial)</strong> and <strong>Product-Limit (Kaplan-Meier)</strong> methods.</p>
 <h1 id="the-life-table-actuarial-method">The Life-Table (Actuarial) method</h1>
-<p>This methods objectively defines the time intervals by split points and<br>
+<p>This method objectively defines the time intervals by split points and<br>
 assume the observations being censored within an interval were at risk<br>
 for half of the length of that interval. Let me first introduce some<br>
 jargon:</p>
@@ -604,12 +604,11 @@ the estimations, it could be a very long table.</li>
 </ol>
 <h1 id="end-thoughts">End thoughts</h1>
 <p>The derivation of life-table and Kaplan-Meier methods to estimate the<br>
-survival functions are pretty intuitive and simple. It does not involve<br>
+survival functions are intuitive and straightforward. It does not involve<br>
 complicated algebraic calculations. I feel the “statistical spices”<br>
 comes from the confidence interval and standard error estimation, which<br>
-are based on theory of sampling distribution of mean, with root in<br>
-central limit theorem.</p>
-<p>So now we know how to estimate the functions. In the next post we will take a look at the comparison of two survival functions.</p>
+are based on the theory of sampling distribution of the mean.</p>
+<p>So now we know how to estimate the functions. In the next post, we will look at the comparison of two survival functions.</p>
 
         </div>
         <!-- Share to Twitter, Weibo, Telegram -->
