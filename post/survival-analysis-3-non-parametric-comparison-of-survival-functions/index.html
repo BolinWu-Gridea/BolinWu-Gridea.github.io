@@ -51,7 +51,7 @@
         </h1>
         
         <div class="mb-8 flex flex-wrap">
-          <div class="text-gray-400 text-sm mr-4">2023-07-27 · 17 min read</div>
+          <div class="text-gray-400 text-sm mr-4">2023-07-27 · 19 min read</div>
           
             <a href="https://BolinWu-Gridea.github.io/tag/2FtU2ZTmt/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
               <i class="ri-hashtag"></i>
@@ -124,7 +124,7 @@ s76,-59,76,-59s76,-60,76,-60z M1001 80H40000v40H1012z'/></svg></span></span></sp
 <li>If you suspect the proportional hazards assumption is violated, but the separation pattern of the two curves is late, you can use the log-rank test. This suggestion may appear to be controversial. <em>Please see the explanation for the table 6 in the <a href="https://wmich.edu/sites/default/files/attachments/u730/2022/martinez.pdf">paper</a> mentioned above.</em></li>
 </ul>
 <h1 id="exercise">Exercise</h1>
-<p>The example data is from the <a href="https://www.su.se/english/search-courses-and-programmes/st303g-1.411706">SU survival analysis course</a>.</p>
+<p>The example data is from the <a href="https://www.su.se/english/search-courses-and-programmes/st303g-1.411706">SU survival analysis course</a>.  Before applying the <code>survival</code> R package, I would like to first dementrate the manual calculation.</p>
 <table>
 <thead>
 <tr>
@@ -1540,9 +1540,61 @@ The p-value is: 0.0176514662435399
 <li>Log-rank and Generalized Wilcoxon lead to different restult. Log-rank test is not significant whereas the other is significant.</li>
 <li>The reason is as previously mentioned, the Generalized Wilcoxon is weighed with <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>R</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">R_{t}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>. <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>R</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">R_{t}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is large at the beginning period and smaller in the end. Therefore if the difference of observed events and expected events is not uniform throughout the study period, then these two tests will lead to different results.</li>
 </ul>
+<h2 id="use-survival-r-package">Use <code>survival</code> R package</h2>
+<p>One can use <code>survdiff</code> from the R package <code>survival</code> to compare two<br>
+survival functions. A general process is below:</p>
+<ul>
+<li>Use the <code>Surv</code> function to create survival time object.</li>
+<li>To create KM estimation: Feed the <code>survfit</code> with survival time object<br>
+and group variable. One can use it for KM estimation.</li>
+<li>To make non-parametric comparison, feed the <code>survdiff</code> with survival<br>
+time object and group variable. The <code>rho</code> argument specifies which<br>
+method to apply: 0 = the log-rank test, 1 = Peto&amp;Peto modification of<br>
+the Wilcoxon test.</li>
+</ul>
+<pre><code class="language-r">library(survival)
+## create surv time object
+survtime_obj &lt;- Surv(two_group$Months, two_group$Status)
+## fit the KM estimate
+KM_estimate &lt;- survfit(survtime_obj ~ Group, data = two_group)
+## plot the KM
+plot(KM_estimate)
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://BolinWu-Gridea.github.io/post-images/1692106776523.png" alt="" loading="lazy"></figure>
+<pre><code class="language-r">## the log rank test
+logrank &lt;- survdiff(survtime_obj ~ Group, data = two_group, rho = 0) # log rank
+print(logrank)
+</code></pre>
+<pre><code>## Call:
+## survdiff(formula = survtime_obj ~ Group, data = two_group, rho = 0)
+## 
+##          N Observed Expected (O-E)^2/E (O-E)^2/V
+## Group=1 23       17     22.4      1.28      3.83
+## Group=2 23       18     12.6      2.27      3.83
+## 
+##  Chisq= 3.8  on 1 degrees of freedom, p= 0.05
+</code></pre>
+<pre><code class="language-r">## the Wilcoxon test
+wilcoxon&lt;-survdiff(survtime_obj ~ Group, data = two_group,rho=1) # Wilcoxon
+print(wilcoxon)
+</code></pre>
+<pre><code>## Call:
+## survdiff(formula = survtime_obj ~ Group, data = two_group, rho = 1)
+## 
+##          N Observed Expected (O-E)^2/E (O-E)^2/V
+## Group=1 23     8.84    13.35      1.52      5.49
+## Group=2 23    13.28     8.77      2.32      5.49
+## 
+##  Chisq= 5.5  on 1 degrees of freedom, p= 0.02
+</code></pre>
+<p>The results above is similar to the manual calculation ones.</p>
 <h1 id="end-thoughs">End thoughs</h1>
-<p>I hope you will find this post helpful in understanding the Log-Rank Test and Generalized Wilcoxon test. But please note that they are non-parametric tests which means there is no assumption on the survival time.</p>
-<p>In the future I will talk about the parametric estimation and comparison of the survival analysis.</p>
+<p>I hope you will find this post helpful in understanding the Log-Rank<br>
+Test and Generalized Wilcoxon test. Though in real life it is easy to<br>
+get the tests’ results by <code>survival</code> package, it is good to know the<br>
+calculations under the hood. Please note that they are non-parametric<br>
+tests which means there is no distribution assumption on the survival<br>
+time.</p>
 
         </div>
         <!-- Share to Twitter, Weibo, Telegram -->
@@ -1592,6 +1644,7 @@ The p-value is: 0.0176514662435399
 <li><a href="#the-log-rank-test-2">The Log-Rank Test</a></li>
 <li><a href="#generalized-wilcoxon-test-2">Generalized Wilcoxon test</a></li>
 <li><a href="#comparison">Comparison</a></li>
+<li><a href="#use-survival-r-package">Use <code>survival</code> R package</a></li>
 </ul>
 </li>
 <li><a href="#end-thoughs">End thoughs</a></li>
