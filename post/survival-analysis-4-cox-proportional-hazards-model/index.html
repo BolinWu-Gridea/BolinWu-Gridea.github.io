@@ -51,7 +51,7 @@
         </h1>
         
         <div class="mb-8 flex flex-wrap">
-          <div class="text-gray-400 text-sm mr-4">2023-08-30 · 13 min read</div>
+          <div class="text-gray-400 text-sm mr-4">2023-08-30 · 15 min read</div>
           
             <a href="https://BolinWu-Gridea.github.io/tag/2FtU2ZTmt/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
               <i class="ri-hashtag"></i>
@@ -65,7 +65,7 @@
           
         </div>
         <div class="markdown mb-8" v-pre>
-          <p>This post will briefly share the derivation, estimation, assumption and application of the <em>Cox proportional hazards (PH) model</em>.</p>
+          <p>This post will briefly share the derivation, estimation, assumption and application of the <em>Cox proportional hazards (PH) model</em>. In addition, it will also mention using ANOVA to test two nested models.</p>
 <!-- more -->
 <h1 id="model-derivation">Model derivation</h1>
 <ul>
@@ -321,8 +321,7 @@ survfit2(birth_time ~ as.factor(BirCoh), data = df) %&gt;%
 </code></pre>
 <figure data-type="image" tabindex="1"><img src="https://BolinWu-Gridea.github.io/post-images/1693506580168.png" alt="" loading="lazy"></figure>
 <h2 id="model-the-intensity-of-experiencing-the-event-of-interest-as-a-function-of-two-covariates-birth-cohort-and-residence-use-the-first-levels-of-the-covariates-as-baseline-reference-levels">Model the intensity of experiencing the event of interest as a function of two covariates (Birth Cohort and Residence). Use the first levels of the covariates as baseline (reference) levels.</h2>
-<pre><code class="language-r">cph_biroh_resid &lt;- coxph(birth_time ~ as.factor(BirCoh) + as.factor(Residence),
-  method = &quot;breslow&quot;, data = df
+<pre><code class="language-r">cph_biroh_resid &lt;- coxph(birth_time ~ as.factor(BirCoh) + as.factor(Residence), data = df
 )
 round(summary(cph_biroh_resid)$coefficients, 3) |&gt; kable()
 </code></pre>
@@ -426,6 +425,7 @@ round(summary(cph_biroh_resid)$coefficients, 3) |&gt; kable()
   add_confidence_interval()
 </code></pre>
 <figure data-type="image" tabindex="2"><img src="https://BolinWu-Gridea.github.io/post-images/1693506588070.png" alt="" loading="lazy"></figure>
+<h3 id="test-assumption">Test assumption</h3>
 <p>Please note that the code above is just for demonstration purpose. One can further use <code>cox.zph()</code> to test if the PH assumption is fulfilled. In fact, the example data does not fulfill the assumption.</p>
 <pre><code class="language-r">cox.zph(cph_biroh_resid)
 </code></pre>
@@ -440,6 +440,30 @@ round(summary(cph_biroh_resid)$coefficients, 3) |&gt; kable()
 ## as.factor(BirCoh)  24.4  6 0.00043
 ## GLOBAL             24.4  6 0.00043
 </code></pre>
+<h3 id="test-improvement">Test improvement</h3>
+<p>For the two cases above, one uses birth cohort only, the other uses both birth cohort and education level. Natually people would like to know whether adding the additional factor could improve the model performance. In this case, we can use ANOVA with setting below:</p>
+<ul>
+<li>We have model 1 with all variables, model 2 with restricted variables.</li>
+<li>The null hypothesis is that all the coefficients in model 1 are 0, except for the ones in model 2.</li>
+</ul>
+<p>In R, it looks like below:</p>
+<pre><code class="language-r">anova(cph_biroh_resid, cph_biroh)
+</code></pre>
+<pre><code>## Analysis of Deviance Table
+##  Cox model: response is  birth_time
+##  Model 1: ~ as.factor(BirCoh) + as.factor(Residence)
+##  Model 2: ~ as.factor(BirCoh)
+##   loglik  Chisq Df Pr(&gt;|Chi|)    
+## 1 -40265                         
+## 2 -40322 112.85  2  &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+</code></pre>
+<p>Result:</p>
+<ul>
+<li>The p-value is smaller than 0.05, therefore we reject the null hypothesis that all the coefficients except for the ones in model 2 are 0.</li>
+<li>The conclusion is that we need to take model 1: adding education level improves the model.</li>
+</ul>
 <h1 id="end">End</h1>
 <p>Thank you for reading this far. I hope you can get something useful from this post. In the next posts I will share the Accelerated Failure-time (AFT) models.</p>
 
@@ -490,7 +514,12 @@ round(summary(cph_biroh_resid)$coefficients, 3) |&gt; kable()
 *
 <ul>
 <li><a href="#model-the-intensity-of-experiencing-the-event-of-interest-as-a-function-of-one-covariate-birth-cohort-use-the-first-level-of-the-covariate-as-baseline-reference-level">Model the intensity of experiencing the event of interest as a function of one covariate (Birth Cohort). Use the first level of the covariate as baseline (reference) level.</a></li>
-<li><a href="#model-the-intensity-of-experiencing-the-event-of-interest-as-a-function-of-two-covariates-birth-cohort-and-residence-use-the-first-levels-of-the-covariates-as-baseline-reference-levels">Model the intensity of experiencing the event of interest as a function of two covariates (Birth Cohort and Residence). Use the first levels of the covariates as baseline (reference) levels.</a></li>
+<li><a href="#model-the-intensity-of-experiencing-the-event-of-interest-as-a-function-of-two-covariates-birth-cohort-and-residence-use-the-first-levels-of-the-covariates-as-baseline-reference-levels">Model the intensity of experiencing the event of interest as a function of two covariates (Birth Cohort and Residence). Use the first levels of the covariates as baseline (reference) levels.</a>
+<ul>
+<li><a href="#test-assumption">Test assumption</a></li>
+<li><a href="#test-improvement">Test improvement</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#end">End</a></li>
