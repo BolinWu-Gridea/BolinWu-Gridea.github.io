@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2023-09-08T07:15:30.907Z</updated>
+    <updated>2023-11-22T14:48:10.785Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -11,6 +11,17 @@
     <logo>https://BolinWu-Gridea.github.io/images/avatar.png</logo>
     <icon>https://BolinWu-Gridea.github.io/favicon.ico</icon>
     <rights>All rights reserved 2023, Bolin Wu</rights>
+    <entry>
+        <title type="html"><![CDATA[Survival Analysis 5: Accelerated Failure-time (AFT) model]]></title>
+        <id>https://BolinWu-Gridea.github.io/post/survival-analysis-5-accelerated-failure-time-aft-model/</id>
+        <link href="https://BolinWu-Gridea.github.io/post/survival-analysis-5-accelerated-failure-time-aft-model/">
+        </link>
+        <updated>2023-11-22T07:38:12.000Z</updated>
+        <summary type="html"><![CDATA[<p>If we want to find the relationship between hazard function and other variables, we can use the <strong>Cox proportional hazards (PH) model</strong>. However, what if we want to model the survival time itself? In this case we can use <strong>Accelerated Failure-time (AFT) models</strong>.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>If we want to find the relationship between hazard function and other variables, we can use the <strong>Cox proportional hazards (PH) model</strong>. However, what if we want to model the survival time itself? In this case we can use <strong>Accelerated Failure-time (AFT) models</strong>.</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Survival Analysis 4: Cox proportional hazards model]]></title>
         <id>https://BolinWu-Gridea.github.io/post/survival-analysis-4-cox-proportional-hazards-model/</id>
@@ -108,17 +119,6 @@
         <summary type="html"><![CDATA[<p>In the previous two posts, I have shared basic concepts and useful functions of <a href="https://bolinwu.blog/post/text-mining-in-python-p1-basics-of-regex/">text mining</a> and <a href="https://bolinwu.blog/post/basic-npl-task-with-nltk-in-python/">NLP</a>. In this third post of text mining in Python, we finally proceed to the advanced part of text mining, that is, to build text classification model. In this post I will share the main tasks of text classification. Two useful classification models, their implementation in Python and methods of improving classification performance.</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>In the previous two posts, I have shared basic concepts and useful functions of <a href="https://bolinwu.blog/post/text-mining-in-python-p1-basics-of-regex/">text mining</a> and <a href="https://bolinwu.blog/post/basic-npl-task-with-nltk-in-python/">NLP</a>. In this third post of text mining in Python, we finally proceed to the advanced part of text mining, that is, to build text classification model. In this post I will share the main tasks of text classification. Two useful classification models, their implementation in Python and methods of improving classification performance.</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[NLP 2: NLTK Basics in Python]]></title>
-        <id>https://BolinWu-Gridea.github.io/post/basic-npl-task-with-nltk-in-python/</id>
-        <link href="https://BolinWu-Gridea.github.io/post/basic-npl-task-with-nltk-in-python/">
-        </link>
-        <updated>2021-07-10T05:42:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>In this post I will share what are the basic NLP tasks and how to deal with different tasks by using the powerful NLTK library in Python.</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>In this post I will share what are the basic NLP tasks and how to deal with different tasks by using the powerful NLTK library in Python.</p>
 ]]></content>
     </entry>
 </feed>

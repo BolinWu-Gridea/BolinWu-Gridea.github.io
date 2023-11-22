@@ -1,0 +1,579 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Survival Analysis 5: Accelerated Failure-time (AFT) model - Bolin Wu</title>
+<link rel="shortcut icon" href="https://BolinWu-Gridea.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/tailwind.css">
+<link rel="stylesheet" href="https://BolinWu-Gridea.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Survival Analysis 5: Accelerated Failure-time (AFT) model - Bolin Wu - Atom Feed" href="https://BolinWu-Gridea.github.io/atom.xml">
+
+    
+
+  <meta name="description" content="If we want to find the relationship between hazard function and other variables, we can use the Cox proportional hazards..." />
+  <meta property="og:title" content="Survival Analysis 5: Accelerated Failure-time (AFT) model - Bolin Wu">
+  <meta property="og:description" content="If we want to find the relationship between hazard function and other variables, we can use the Cox proportional hazards..." />
+  <meta property="og:type" content="articles">
+  <meta property="og:url" content="https://BolinWu-Gridea.github.io/post/survival-analysis-5-accelerated-failure-time-aft-model/" />
+  <meta property="og:image" content="https://BolinWu-Gridea.github.io/images/avatar.png">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:width" content="1200">
+  <meta name="twitter:title" content="Survival Analysis 5: Accelerated Failure-time (AFT) model - Bolin Wu">
+  <meta name="twitter:description" content="If we want to find the relationship between hazard function and other variables, we can use the Cox proportional hazards...">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://BolinWu-Gridea.github.io/post/survival-analysis-5-accelerated-failure-time-aft-model/">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+ 
+  
+    <link rel="stylesheet" href="https://BolinWu-Gridea.github.io/media/css/prism-atom-dark.css">
+  
+
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+  
+</head>
+
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
+    <a href="https://BolinWu-Gridea.github.io" class="fixed top-0 left-0 mt-4 bg-black text-white dark:text-gray-700 dark:bg-yellow-50 dark:hover:bg-black dark:hover:text-white inline-flex p-2 pl-8 hover:text-gray-700 hover:bg-yellow-50 font-bold z-10 transition-fast animated fadeInLeft">
+      Bolin Wu
+    </a>
+    <div class="max-w-4xl w-full mx-auto">
+      <div class="shadow-box bg-white dark:bg-gray-600 rounded-lg pt-32 md:pt-64 px-4 md:px-8 pb-8 animated fadeIn mb-8">
+        <h1 class="text-5xl font-semibold leading-normal pb-8 mb-8 border-b-8 border-gray-700">
+          Survival Analysis 5: Accelerated Failure-time (AFT) model
+        </h1>
+        
+        <div class="mb-8 flex flex-wrap">
+          <div class="text-gray-400 text-sm mr-4">2023-11-22 · 17 min read</div>
+          
+        </div>
+        <div class="markdown mb-8" v-pre>
+          <p>If we want to find the relationship between hazard function and other variables, we can use the <strong>Cox proportional hazards (PH) model</strong>. However, what if we want to model the survival time itself? In this case we can use <strong>Accelerated Failure-time (AFT) models</strong>.</p>
+<!-- more -->
+<h1 id="introduction">Introduction</h1>
+<p>The AFT models is used to model the effect of the covariates on the survival time. Its rudimentary mathmatics form is as below:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>=</mo><msub><mi>T</mi><mn>0</mn></msub><mi>e</mi><mi>x</mi><mi>p</mi><mo>(</mo><mi>z</mi><mi>β</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T = T_{0}exp(z \beta)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">e</span><span class="mord mathdefault">x</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mclose">)</span></span></span></span></span></p>
+<p>or equivalently</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>n</mi><mi>T</mi><mo>=</mo><mi>l</mi><mi>n</mi><msub><mi>T</mi><mn>0</mn></msub><mo>+</mo><mi>z</mi><mi>β</mi></mrow><annotation encoding="application/x-tex">lnT = lnT_{0} + z \beta
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">n</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span></span></p>
+<ul>
+<li>T is a vector of survival times.</li>
+<li>z is a vector of covariates.</li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span> is a vector of unknown regression parameters.</li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>T</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">T_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the survival time distribution at baseline, when covariates z are zero. In AFT model, the <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>n</mi><msub><mi>T</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">lnT_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">n</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is treated as random variable.</li>
+</ul>
+<p>If we comepare with the Cox PH model</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>λ</mi><mo>(</mo><mi>t</mi><mi mathvariant="normal">∣</mi><mi>z</mi><mo>)</mo><mo>=</mo><msub><mi>λ</mi><mn>0</mn></msub><mo>(</mo><mi>t</mi><mo>)</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo>(</mo><mi>z</mi><mi>X</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\lambda (t|z) = \lambda_{0}(t) exp(z X) 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">λ</span><span class="mopen">(</span><span class="mord mathdefault">t</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault">λ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">t</span><span class="mclose">)</span><span class="mord mathdefault">e</span><span class="mord mathdefault">x</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose">)</span></span></span></span></span></p>
+<p>we can find that the interpretation of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span> is different. For PH model, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span> &gt; 0 implies an increased hazed, shorter survial time; whereas it is opposite for AFT models.</p>
+<h1 id="model-tuning">Model tuning</h1>
+<p>If we introduce intercept term <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span></span></span></span> and a <strong>scale parameter</strong> <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>δ</mi></mrow><annotation encoding="application/x-tex">\delta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03785em;">δ</span></span></span></span> to the model:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>n</mi><mi>T</mi><mo>=</mo><mi>α</mi><mo>+</mo><mi>z</mi><mi>β</mi><mo>+</mo><mi>δ</mi><mi>l</mi><mi>n</mi><msub><mi>T</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">lnT = \alpha + z\beta + \delta lnT_{0}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord mathdefault" style="margin-right:0.03785em;">δ</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">n</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p>The original failture time is in the form of</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>=</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo>(</mo><mi>α</mi><mo>+</mo><mi>z</mi><mi>β</mi><mo>+</mo><mi>δ</mi><mi>l</mi><mi>n</mi><msub><mi>T</mi><mn>0</mn></msub><mo>)</mo><mo>=</mo><msubsup><mi>T</mi><mn>0</mn><mi>δ</mi></msubsup><mi>e</mi><mi>x</mi><mi>p</mi><mo>(</mo><mi>α</mi><mo>)</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo>(</mo><mi>z</mi><mi>β</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T = exp(\alpha + z\beta + \delta lnT_{0}) = T_{0}^{\delta} exp(\alpha) exp (z\beta)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">e</span><span class="mord mathdefault">x</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03785em;">δ</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">n</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.1491079999999998em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8991079999999998em;"><span style="top:-2.4530000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03785em;">δ</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mord mathdefault">e</span><span class="mord mathdefault">x</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mclose">)</span><span class="mord mathdefault">e</span><span class="mord mathdefault">x</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mclose">)</span></span></span></span></span></p>
+<p>The effect of the intercept and scale is to power the survival time. In other words, the effect of covariates in AFT is to affect <strong>the scale</strong> but <strong>not the location</strong> of a baseline survival time distribution.</p>
+<p>Such model can also be rewritten more akin to linear regression model in the form of</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>n</mi><mi>T</mi><mo>=</mo><mi>z</mi><mi>β</mi><mo>+</mo><mi>δ</mi><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">lnT = z\beta + \delta \epsilon
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03785em;">δ</span><span class="mord mathdefault">ϵ</span></span></span></span></span></p>
+<ul>
+<li>where the intercept is incorporated in the coefficient vector <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span></span></span></span>.</li>
+</ul>
+<p>Here comes to the key point of all &quot;fuss&quot; of doing all the transformation above.</p>
+<p>We can further assume different distribution of the random error term by defining density function of the error term <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">ϵ</span></span></span></span>. It is also called extended generalized-gamma (EGG) model.</p>
+<ul>
+<li>When q = 0</li>
+</ul>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>q</mi><mo separator="true">,</mo><mi>ϵ</mi><mo>)</mo><mo>=</mo><mfrac><mn>1</mn><msqrt><mrow><mn>2</mn><mi>π</mi></mrow></msqrt></mfrac><mi>e</mi><mi>x</mi><mi>p</mi><mo>(</mo><mo>−</mo><mfrac><msup><mi>ϵ</mi><mn>2</mn></msup><mn>2</mn></mfrac><mo>)</mo></mrow><annotation encoding="application/x-tex">f(q, \epsilon) = \frac{1}{\sqrt{2 \pi}} exp (-\frac{\epsilon^{2}}{2})
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">ϵ</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.4211080000000003em;vertical-align:-0.93em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.2027799999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.90722em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord">2</span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span><span style="top:-2.86722em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,
+-10,-9.5,-14c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54c44.2,-33.3,65.8,
+-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10s173,378,173,378c0.7,0,
+35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429c69,-144,104.5,-217.7,106.5,
+-221c5.3,-9.3,12,-14,20,-14H400000v40H845.2724s-225.272,467,-225.272,467
+s-235,486,-235,486c-2.7,4.7,-9,7,-19,7c-6,0,-10,-1,-12,-3s-194,-422,-194,-422
+s-65,47,-65,47z M834 80H400000v40H845z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.13278em;"><span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.93em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathdefault">e</span><span class="mord mathdefault">x</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord">−</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.491108em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">ϵ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span></span></span></span></span></p>
+<ul>
+<li>When q <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">≠</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\neq = 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mrel"><span class="mrel"><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel"></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span><span class="mrel">=</span></span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span></li>
+</ul>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi mathvariant="normal">∣</mi><mi>q</mi><mi mathvariant="normal">∣</mi></mrow><mrow><mi mathvariant="normal">Γ</mi><mo>(</mo><msup><mi>q</mi><mrow><mo>−</mo><mn>2</mn></mrow></msup><mo>)</mo></mrow></mfrac><mo>(</mo><msup><mi>q</mi><mrow><mo>−</mo><mn>2</mn></mrow></msup><msup><mo>)</mo><msup><mi>q</mi><mrow><mo>−</mo><mn>2</mn></mrow></msup></msup><mi>e</mi><mi>x</mi><mi>p</mi><mo>[</mo><msup><mi>q</mi><mrow><mo>−</mo><mn>2</mn></mrow></msup><mo>(</mo><mi>q</mi><mi>ϵ</mi><mo>−</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo>(</mo><mi>q</mi><mi>ϵ</mi><mo>)</mo><mo>)</mo><mo>]</mo></mrow><annotation encoding="application/x-tex">\frac{|q|}{\Gamma(q^{-2})} (q^{-2})^{q^{-2}} exp[q^{-2}(q \epsilon - exp(q \epsilon))]
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.363em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">Γ</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.740108em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mord">∣</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.864108em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.0369199999999998em;"><span style="top:-3.1130000000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913142857142857em;"><span style="top:-2.931em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="mord mathdefault">e</span><span class="mord mathdefault">x</span><span class="mord mathdefault">p</span><span class="mopen">[</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.864108em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mord mathdefault">ϵ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">e</span><span class="mord mathdefault">x</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mord mathdefault">ϵ</span><span class="mclose">)</span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span></p>
+<p>The advantage of setting density function in such way is that when we set different values for <strong>shape parameter</strong> q, we can get different distribution for the error term.</p>
+<ul>
+<li>When q = 0, T has a log-normal distribution.</li>
+<li>When q = 1, T has a Weibull distribution.</li>
+<li>When q = 1 and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϵ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\epsilon = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">ϵ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>, T has a exponential distribution which is a special case of Weibull distribution.</li>
+<li>When q = -1 and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϵ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\epsilon = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">ϵ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>, T has a reciprocal-Weibull distribution.</li>
+<li>When <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϵ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\epsilon = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">ϵ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>, T has a ordinary gamma distribution.</li>
+</ul>
+<p>These 5 models above are special cases of the EGG model. Another model of interest, though not a special case of the EGG model, is the log-logistic model.</p>
+<p>In R, we can In R we can do Weibull, Exponential, Gaussian, Logistic, Lognormal. However, reciprocal-Weibull distribution and EGG are not available in R unfortunately.</p>
+<p>Understanding the setting above can also help us interpreting the R results properly.</p>
+<h1 id="practice-in-r">Practice in R</h1>
+<p>In R we can use the <code>survreg()</code> function in <code>survival</code> package to estimate the AFT model.</p>
+<p>If we have the example data as below (only printing the first 5 rows):</p>
+<pre><code>## # A tibble: 6 × 6
+##   Cluster BirCoh Residence  Educ ExpMonths FirstBirth
+##     &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1       1      2         3     0        27          0
+## 2       1      4         3     0        11          1
+## 3       1      4         3     0        63          0
+## 4       1      7         3     0         5          1
+## 5       1      1         3     0         4          1
+## 6       1      7         3     0        29          1
+</code></pre>
+<p>Suppose now we are interested in modeling the effect of the three covariates, birth cohort (1 indicating the youngest cohort and 7 the oldest cohort), residence and education on the time until event.</p>
+<p>Fit all possible models:</p>
+<pre><code class="language-r">library(survival)
+# create a survival object
+birth_time &lt;- Surv(df$ExpMonths, df$FirstBirth)
+</code></pre>
+<ul>
+<li>Weibull distribution</li>
+</ul>
+<pre><code class="language-r">weibull_m &lt;- survreg(birth_time ~ as.factor(BirCoh) + as.factor(Residence) + as.factor(Educ), 
+                     data = df, dist = &quot;weibull&quot;)
+summary(weibull_m)
+</code></pre>
+<pre><code>## 
+## Call:
+## survreg(formula = birth_time ~ as.factor(BirCoh) + as.factor(Residence) + 
+##     as.factor(Educ), data = df, dist = &quot;weibull&quot;)
+##                          Value Std. Error      z       p
+## (Intercept)            3.17399    0.06548  48.47 &lt; 2e-16
+## as.factor(BirCoh)2     0.25444    0.05901   4.31 1.6e-05
+## as.factor(BirCoh)3     0.45794    0.05733   7.99 1.4e-15
+## as.factor(BirCoh)4     0.66664    0.05870  11.36 &lt; 2e-16
+## as.factor(BirCoh)5     0.77122    0.05768  13.37 &lt; 2e-16
+## as.factor(BirCoh)6     0.96452    0.06093  15.83 &lt; 2e-16
+## as.factor(BirCoh)7     1.14638    0.06049  18.95 &lt; 2e-16
+## as.factor(Residence)2  0.00821    0.04360   0.19   0.851
+## as.factor(Residence)3  0.01026    0.04316   0.24   0.812
+## as.factor(Educ)1       0.07568    0.03138   2.41   0.016
+## as.factor(Educ)2       0.44000    0.03914  11.24 &lt; 2e-16
+## as.factor(Educ)3       0.59055    0.04497  13.13 &lt; 2e-16
+## as.factor(Educ)4       0.80628    0.11497   7.01 2.3e-12
+## Log(scale)            -0.14247    0.01040 -13.70 &lt; 2e-16
+## 
+## Scale= 0.867 
+## 
+## Weibull distribution
+## Loglik(model)= -25484.4   Loglik(intercept only)= -25987.8
+##  Chisq= 1006.8 on 12 degrees of freedom, p= 6.5e-208 
+## Number of Newton-Raphson Iterations: 5 
+## n= 7074
+</code></pre>
+<ul>
+<li>Exponential distribution</li>
+</ul>
+<pre><code class="language-r">exponential_m &lt;- survreg(birth_time ~ as.factor(BirCoh) + as.factor(Residence) + as.factor(Educ),
+                         data = df, dist = &quot;exponential&quot;)
+summary(exponential_m)
+</code></pre>
+<pre><code>## 
+## Call:
+## survreg(formula = birth_time ~ as.factor(BirCoh) + as.factor(Residence) + 
+##     as.factor(Educ), data = df, dist = &quot;exponential&quot;)
+##                         Value Std. Error     z       p
+## (Intercept)           3.14259    0.07548 41.64 &lt; 2e-16
+## as.factor(BirCoh)2    0.25450    0.06804  3.74 0.00018
+## as.factor(BirCoh)3    0.44630    0.06610  6.75 1.5e-11
+## as.factor(BirCoh)4    0.64899    0.06766  9.59 &lt; 2e-16
+## as.factor(BirCoh)5    0.75716    0.06649 11.39 &lt; 2e-16
+## as.factor(BirCoh)6    0.94785    0.07023 13.50 &lt; 2e-16
+## as.factor(BirCoh)7    1.12131    0.06971 16.09 &lt; 2e-16
+## as.factor(Residence)2 0.00673    0.05032  0.13 0.89362
+## as.factor(Residence)3 0.01391    0.04979  0.28 0.77988
+## as.factor(Educ)1      0.09174    0.03616  2.54 0.01118
+## as.factor(Educ)2      0.50488    0.04477 11.28 &lt; 2e-16
+## as.factor(Educ)3      0.68396    0.05141 13.30 &lt; 2e-16
+## as.factor(Educ)4      0.93782    0.13214  7.10 1.3e-12
+## 
+## Scale fixed at 1 
+## 
+## Exponential distribution
+## Loglik(model)= -25571.2   Loglik(intercept only)= -26008.6
+##  Chisq= 874.91 on 12 degrees of freedom, p= 1.4e-179 
+## Number of Newton-Raphson Iterations: 5 
+## n= 7074
+</code></pre>
+<ul>
+<li>Gaussian</li>
+</ul>
+<pre><code class="language-r">gaussian_m &lt;- survreg(birth_time ~ as.factor(BirCoh) + as.factor(Residence) + as.factor(Educ), data = df, dist = &quot;gaussian&quot;)
+summary(gaussian_m)
+</code></pre>
+<pre><code>## 
+## Call:
+## survreg(formula = birth_time ~ as.factor(BirCoh) + as.factor(Residence) + 
+##     as.factor(Educ), data = df, dist = &quot;gaussian&quot;)
+##                          Value Std. Error      z       p
+## (Intercept)           23.15082    3.38398   6.84 7.8e-12
+## as.factor(BirCoh)2     7.47071    3.07365   2.43   0.015
+## as.factor(BirCoh)3    13.27059    2.98868   4.44 9.0e-06
+## as.factor(BirCoh)4    21.00174    3.05946   6.86 6.7e-12
+## as.factor(BirCoh)5    25.63538    3.00421   8.53 &lt; 2e-16
+## as.factor(BirCoh)6    36.20501    3.17033  11.42 &lt; 2e-16
+## as.factor(BirCoh)7    47.04573    3.15927  14.89 &lt; 2e-16
+## as.factor(Residence)2  0.05391    2.13862   0.03   0.980
+## as.factor(Residence)3  0.40193    2.13717   0.19   0.851
+## as.factor(Educ)1       3.67763    1.67694   2.19   0.028
+## as.factor(Educ)2      19.95763    1.92443  10.37 &lt; 2e-16
+## as.factor(Educ)3      26.59970    2.16815  12.27 &lt; 2e-16
+## as.factor(Educ)4      34.57329    4.93346   7.01 2.4e-12
+## Log(scale)             3.89056    0.00983 395.89 &lt; 2e-16
+## 
+## Scale= 48.9 
+## 
+## Gaussian distribution
+## Loglik(model)= -28348.5   Loglik(intercept only)= -28719.8
+##  Chisq= 742.56 on 12 degrees of freedom, p= 3.4e-151 
+## Number of Newton-Raphson Iterations: 3 
+## n= 7074
+</code></pre>
+<ul>
+<li>Logistic</li>
+</ul>
+<pre><code class="language-r">logistic_m &lt;- survreg(birth_time ~ as.factor(BirCoh) + as.factor(Residence) + as.factor(Educ),
+                      data = df, dist = &quot;logistic&quot;)
+summary(logistic_m)
+</code></pre>
+<pre><code>## 
+## Call:
+## survreg(formula = birth_time ~ as.factor(BirCoh) + as.factor(Residence) + 
+##     as.factor(Educ), data = df, dist = &quot;logistic&quot;)
+##                         Value Std. Error      z       p
+## (Intercept)           20.7588     2.6293   7.90 2.9e-15
+## as.factor(BirCoh)2     6.6252     2.2948   2.89  0.0039
+## as.factor(BirCoh)3    10.7559     2.2493   4.78 1.7e-06
+## as.factor(BirCoh)4    16.1631     2.3335   6.93 4.3e-12
+## as.factor(BirCoh)5    19.5924     2.2943   8.54 &lt; 2e-16
+## as.factor(BirCoh)6    27.4171     2.5039  10.95 &lt; 2e-16
+## as.factor(BirCoh)7    34.3870     2.5433  13.52 &lt; 2e-16
+## as.factor(Residence)2  0.1172     1.8009   0.07  0.9481
+## as.factor(Residence)3  1.0303     1.7846   0.58  0.5637
+## as.factor(Educ)1       2.6881     1.3469   2.00  0.0460
+## as.factor(Educ)2      16.3524     1.6082  10.17 &lt; 2e-16
+## as.factor(Educ)3      22.7843     1.8429  12.36 &lt; 2e-16
+## as.factor(Educ)4      29.7262     4.3863   6.78 1.2e-11
+## Log(scale)             3.1674     0.0118 267.36 &lt; 2e-16
+## 
+## Scale= 23.7 
+## 
+## Logistic distribution
+## Loglik(model)= -27832.9   Loglik(intercept only)= -28151.1
+##  Chisq= 636.29 on 12 degrees of freedom, p= 1.9e-128 
+## Number of Newton-Raphson Iterations: 4 
+## n= 7074
+</code></pre>
+<ul>
+<li>Lognormal</li>
+</ul>
+<pre><code class="language-r">lognormal_m &lt;- survreg(birth_time ~ as.factor(BirCoh) + as.factor(Residence) + as.factor(Educ), 
+                       data = df, dist = &quot;lognormal&quot;)
+summary(lognormal_m)
+</code></pre>
+<pre><code>## 
+## Call:
+## survreg(formula = birth_time ~ as.factor(BirCoh) + as.factor(Residence) + 
+##     as.factor(Educ), data = df, dist = &quot;lognormal&quot;)
+##                         Value Std. Error     z       p
+## (Intercept)           2.77519    0.07169 38.71 &lt; 2e-16
+## as.factor(BirCoh)2    0.31046    0.06530  4.75 2.0e-06
+## as.factor(BirCoh)3    0.43949    0.06347  6.92 4.4e-12
+## as.factor(BirCoh)4    0.58090    0.06495  8.94 &lt; 2e-16
+## as.factor(BirCoh)5    0.69226    0.06373 10.86 &lt; 2e-16
+## as.factor(BirCoh)6    0.85346    0.06717 12.71 &lt; 2e-16
+## as.factor(BirCoh)7    0.96719    0.06692 14.45 &lt; 2e-16
+## as.factor(Residence)2 0.00270    0.04521  0.06 0.95241
+## as.factor(Residence)3 0.01486    0.04519  0.33 0.74223
+## as.factor(Educ)1      0.08764    0.03555  2.46 0.01370
+## as.factor(Educ)2      0.41984    0.04068 10.32 &lt; 2e-16
+## as.factor(Educ)3      0.58519    0.04585 12.76 &lt; 2e-16
+## as.factor(Educ)4      0.73771    0.10379  7.11 1.2e-12
+## Log(scale)            0.03719    0.00991  3.75 0.00018
+## 
+## Scale= 1.04 
+## 
+## Log Normal distribution
+## Loglik(model)= -25413.2   Loglik(intercept only)= -25747.2
+##  Chisq= 667.95 on 12 degrees of freedom, p= 3.2e-135 
+## Number of Newton-Raphson Iterations: 3 
+## n= 7074
+</code></pre>
+<ul>
+<li>Loglogistic</li>
+</ul>
+<pre><code class="language-r">loglogistic_m &lt;- survreg(birth_time ~ as.factor(BirCoh) + as.factor(Residence) + as.factor(Educ), 
+                         data = df, dist = &quot;loglogistic&quot;)
+summary(loglogistic_m)
+</code></pre>
+<pre><code>## 
+## Call:
+## survreg(formula = birth_time ~ as.factor(BirCoh) + as.factor(Residence) + 
+##     as.factor(Educ), data = df, dist = &quot;loglogistic&quot;)
+##                         Value Std. Error      z       p
+## (Intercept)            2.8516     0.0697  40.90 &lt; 2e-16
+## as.factor(BirCoh)2     0.2528     0.0629   4.02 5.8e-05
+## as.factor(BirCoh)3     0.3682     0.0615   5.99 2.1e-09
+## as.factor(BirCoh)4     0.5219     0.0632   8.25 &lt; 2e-16
+## as.factor(BirCoh)5     0.6217     0.0620  10.03 &lt; 2e-16
+## as.factor(BirCoh)6     0.7947     0.0659  12.07 &lt; 2e-16
+## as.factor(BirCoh)7     0.9377     0.0659  14.24 &lt; 2e-16
+## as.factor(Residence)2 -0.0050     0.0449  -0.11   0.911
+## as.factor(Residence)3  0.0138     0.0446   0.31   0.756
+## as.factor(Educ)1       0.0708     0.0347   2.04   0.041
+## as.factor(Educ)2       0.4203     0.0403  10.43 &lt; 2e-16
+## as.factor(Educ)3       0.5763     0.0457  12.62 &lt; 2e-16
+## as.factor(Educ)4       0.7488     0.1060   7.06 1.6e-12
+## Log(scale)            -0.5306     0.0114 -46.68 &lt; 2e-16
+## 
+## Scale= 0.588 
+## 
+## Log logistic distribution
+## Loglik(model)= -25397.8   Loglik(intercept only)= -25736.6
+##  Chisq= 677.55 on 12 degrees of freedom, p= 2.8e-137 
+## Number of Newton-Raphson Iterations: 4 
+## n= 7074
+</code></pre>
+<ul>
+<li>Result</li>
+</ul>
+<ol>
+<li>All variables are significant except for the two residence levels.</li>
+<li>According to the estimated coefficients, for all birth cohort, the higher levels are, the longer time to the event.</li>
+<li>For residence, when level = 2, the time to event takes shorter; when level = 3, loglogistic model's time to event takes longer, others take shorter time to event still.</li>
+<li>For education, higher levels are , the longer time to the event. From edu level = 1 to edu level = 2, it has a big increase.</li>
+</ol>
+<h1 id="model-estimation">Model estimation</h1>
+<p>In the <code>summary()</code> output you can see output of &quot;Newton-Raphson&quot;. &quot;Newton-Raphson&quot; is the method used for maximizing the likelihood. More specifically:</p>
+<ul>
+<li>Consider survival times of n individuals to be <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>t</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">t_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76508em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>t</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">t_{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76508em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>..., <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>t</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">t_{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76508em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and p covariates <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>z</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">z_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>z</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">z_{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, ...., <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>z</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">z_{p}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>.</li>
+<li>Let <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>d</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">d_{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> = 0 if <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>t</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">t_{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76508em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is consoring time and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>d</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">d_{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> = 1 if <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>t</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">t_{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76508em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is time to the event.</li>
+<li>The log-likelihood function <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>n</mi><mo>(</mo><mi>l</mi><mi>n</mi><mi>t</mi><mo separator="true">;</mo><mi>z</mi><mi>β</mi><mo separator="true">,</mo><mi>δ</mi><mo separator="true">,</mo><mi>q</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">ln(lnt;z\beta,\delta, q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">n</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">n</span><span class="mord mathdefault">t</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03785em;">δ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span> assumes a noninformative consoring mechanism thus it is proportional to</li>
+</ul>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><munderover><mo>∑</mo><mi>i</mi><mi>n</mi></munderover><msub><mi>d</mi><mi>i</mi></msub><mo>[</mo><mi>l</mi><mi>n</mi><mi>f</mi><mo>(</mo><mi>q</mi><mo separator="true">,</mo><msub><mi>ϵ</mi><mi>i</mi></msub><mo>)</mo><mo>−</mo><mi>l</mi><mi>n</mi><mi>δ</mi><mo>]</mo><mo>+</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mo>(</mo><mn>1</mn><mo>−</mo><msub><mi>d</mi><mi>i</mi></msub><mo>)</mo><mi>l</mi><mi>n</mi><mi>S</mi><mo>(</mo><mi>q</mi><mo separator="true">,</mo><msub><mi>ϵ</mi><mi>i</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">\sum_{i}^{n} d_{i} [lnf(q, \epsilon_{i}) - ln \delta] + \sum_{i = 1}^{n} (1 - d_{i}) lnS(q, \epsilon_{i})
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.929066em;vertical-align:-1.277669em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6513970000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">ϵ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.03785em;">δ</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:2.929066em;vertical-align:-1.277669em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6513970000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">ϵ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></p>
+<p>where <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>ϵ</mi><mi>i</mi></msub><mo>=</mo><mfrac><mrow><mi>l</mi><mi>n</mi><msub><mi>T</mi><mi>i</mi></msub><mo>−</mo><msub><mi>z</mi><mi>i</mi></msub><mi>β</mi></mrow><mi>δ</mi></mfrac></mrow><annotation encoding="application/x-tex">\epsilon_{i} = \frac{lnT_{i} - z_{i}\beta}{\delta}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">ϵ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.277216em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9322159999999999em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03785em;">δ</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.446108em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.01968em;">l</span><span class="mord mathdefault mtight">n</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:-0.13889em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mbin mtight">−</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:-0.04398em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mord mathdefault mtight" style="margin-right:0.05278em;">β</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>S</mi><mo>(</mo><mi>ϵ</mi><mo separator="true">,</mo><mi>q</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">S(\epsilon, q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mopen">(</span><span class="mord mathdefault">ϵ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span> is the corresponding survivor function. And &quot;Newton-Raphson&quot; is the method used for maximizing the likelihood for the equation above. One can see Allison (2010) about carrying out the algorithm in SAS.</p>
+<h1 id="ending">Ending</h1>
+<p>I remember that at the beginning of learning the AFT models' mathematics part, I was wondering why do we need to make those many formula transformations and adding terms like scale and shape parameters. After applying the model in R I realize the necessity of understanding the derivation process. It is interesting to incorporate theory and application.</p>
+
+        </div>
+        <!-- Share to Twitter, Weibo, Telegram -->
+        <div class="flex items-center">
+          <div class="mr-4 flex items-center">
+            <i class="ri-share-forward-line text-gray-500"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTwitter">
+            <i class="ri-twitter-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-red-500 hover:bg-red-100 dark:hover:bg-gray-600 inline-flex" @click="shareToWeibo">
+            <i class="ri-weibo-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-indigo-500 hover:bg-indigo-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTelegram">
+            <i class="ri-telegram-line"></i>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Prudence is a fountain of life to the prudent.
+</footer>
+    </div>
+
+    <!-- TOC Container -->
+    <div class="fixed right-0 bottom-0 mb-16 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white dark:bg-gray-500 dark:text-gray-200 hover:shadow-lg transition-all animated fadeInRight" @click="showToc = true">
+      <i class="ri-file-list-line"></i>
+    </div>
+
+    <div class="fixed right-0 top-0 bottom-0 overflow-y-auto w-64 bg-white dark:bg-gray-800 p-4 border-l border-gray-100 dark:border-gray-600 z-10 transition-fast" :class="{ '-mr-64': !showToc }">
+      <div class="flex mb-4 justify-end">
+        <div class="w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast" @click="showToc = false">
+          <i class="ri-close-line text-lg"></i>
+        </div>
+      </div>
+      <div class="post-toc-container">
+        <ul class="markdownIt-TOC">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#model-tuning">Model tuning</a></li>
+<li><a href="#practice-in-r">Practice in R</a></li>
+<li><a href="#model-estimation">Model estimation</a></li>
+<li><a href="#ending">Ending</a></li>
+</ul>
+
+      </div>
+    </div>
+
+    <!-- Back to top -->
+    <div class="fixed right-0 bottom-0 mb-4 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white hover:shadow-lg transition-all dark:bg-gray-500 dark:text-gray-200" @click="backToUp" v-show="scrolled">
+      <i class="ri-arrow-up-line"></i>
+    </div>
+  </div>
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Background of PhotoSwipe. 
+        It's a separate element as animating opacity is faster than rgba(). -->
+  <div class="pswp__bg">
+  </div>
+  <!-- Slides wrapper with overflow:hidden. -->
+  <div class="pswp__scroll-wrap">
+    <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+    <div class="pswp__container">
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+    </div>
+    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <!--  Controls are self-explanatory. Order can be changed. -->
+        <div class="pswp__counter">
+        </div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+        <!-- element will get class pswp__preloader--active when preloader is running -->
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip">
+        </div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://BolinWu-Gridea.github.io/media/scripts/main.js"></script>
+  
+  <!-- Code Highlight -->
+  
+    <script src="https://BolinWu-Gridea.github.io/media/prism.js"></script>
+    <script>
+      Prism.highlightAll()
+    </script>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+  <script>
+    //拿到预览框架，也就是上面的html代码
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    //定义图片数组变量
+    var imgitems;
+    /**
+    * 用于显示预览界面
+    * @param index 图片数组下标
+    */
+    function viewImg(index) {
+      //其它选项这里不做过多阐述，详情见官网
+      var pswpoptions = {
+        index: parseInt(index, 10), // 开始幻灯片索引。0是第一张幻灯片。必须是整数，而不是字符串。
+        bgOpacity: 0.7, // 背景透明度，0-1
+        maxSpreadZoom: 3, // 缩放级别，不要太大
+      };
+      //初始化并打开PhotoSwipe，pswpElement对应上面预览框架，PhotoSwipeUI_Default为皮肤，imgitems为图片数组，pswpoptions为选项
+      var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, imgitems, pswpoptions);
+      gallery.init()
+    }
+    /**
+    * 用于添加图片点击事件
+    * @param img 图片元素
+    * @param index 所属下标（在imgitems中的位置）
+    */
+    function addImgClick(img, index) {
+      img.onclick = function() {
+        viewImg(index)
+      }
+    }
+    /**
+    * 轮询所有图片，获取src、width、height等数据，加入imgitems，并给图片元素添加事件
+    * 最好在onload中执行该方法，本站因放在最底部，所以直接初始化
+    * 异步加载图片可在图片元素创建完成后调用此方法
+    */
+    function initImg() {
+      //重置图片数组
+      imgitems = [];
+      //查找class:markdown 下的所有img元素并遍历
+      var imgs = document.querySelectorAll('.markdown img');
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        //本站相册初始为loading图片，真实图片放在data-src
+        var ds = img.getAttribute("data-src");
+        //创建image对象，用于获取图片宽高
+        var imgtemp = new Image();
+        //判断是否存在data-src
+        if (ds != null && ds.length > 0) {
+          imgtemp.src = ds
+        } else {
+          imgtemp.src = img.src
+        }
+        //判断是否存在缓存
+        if (imgtemp.complete) {
+          var imgobj = {
+            "src": imgtemp.src,
+            "w": imgtemp.width,
+            "h": imgtemp.height,
+          };
+          imgitems[i] = imgobj;
+          addImgClick(img, i);
+        } else {
+          console.log('进来了2')
+          imgtemp.index = i;
+          imgtemp.img = img;
+          imgtemp.onload = function() {
+            var imgobj = {
+              "src": this.src,
+              "w": this.width,
+              "h": this.height,
+            };
+            //不要使用push，因为onload前后顺序会不同
+            imgitems[this.index] = imgobj
+            //添加点击事件
+            addImgClick(this.img, this.index);
+          }
+        }
+      }
+    }
+    //初始化
+    initImg();
+  </script>
+  
+  
+</body>
+
+</html>
