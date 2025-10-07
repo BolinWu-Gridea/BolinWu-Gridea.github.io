@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://BolinWu-Gridea.github.io</id>
     <title>Bolin Wu</title>
-    <updated>2023-11-22T14:48:10.785Z</updated>
+    <updated>2025-10-07T14:09:40.241Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://BolinWu-Gridea.github.io"/>
     <link rel="self" href="https://BolinWu-Gridea.github.io/atom.xml"/>
@@ -10,7 +10,7 @@
 </subtitle>
     <logo>https://BolinWu-Gridea.github.io/images/avatar.png</logo>
     <icon>https://BolinWu-Gridea.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2023, Bolin Wu</rights>
+    <rights>All rights reserved 2025, Bolin Wu</rights>
     <entry>
         <title type="html"><![CDATA[Survival Analysis 5: Accelerated Failure-time (AFT) model]]></title>
         <id>https://BolinWu-Gridea.github.io/post/survival-analysis-5-accelerated-failure-time-aft-model/</id>
@@ -60,7 +60,7 @@
         <id>https://BolinWu-Gridea.github.io/post/survivalanalysis-1/</id>
         <link href="https://BolinWu-Gridea.github.io/post/survivalanalysis-1/">
         </link>
-        <updated>2023-05-28T07:05:32.000Z</updated>
+        <updated>2023-05-28T01:05:32.000Z</updated>
         <summary type="html"><![CDATA[<p>This post covers their concepts and relationship among the three pillows of survival analysis:  survivor function, density function, hazard function.</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>This post covers their concepts and relationship among the three pillows of survival analysis:  survivor function, density function, hazard function.</p>
